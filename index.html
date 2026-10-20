@@ -824,7 +824,8 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 /* formulário dentro da gaveta */
 .form-gaveta{display:grid;gap:16px}
 .form-gaveta .duas{gap:12px}
-.tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tres{display:grid;grid-template-columns:minmax(164px,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:12px}
+.tres input,.tres select{height:48.85px}
 @media (max-width:520px){.tres,.form-gaveta .duas{grid-template-columns:1fr}}
 .escolha-alunos{display:grid;gap:6px;max-height:200px;overflow:auto;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-input)}
 .escolha-alunos label{display:flex;gap:8px;align-items:center;font-size:14.5px;font-weight:400}

@@ -1550,7 +1550,7 @@ async function abrirEstudo(id) {
   if (m.tipo === 'youtube') {
     const yt = idYoutube(m.url);
     box.innerHTML = yt
-      ? `<div class="video-yt"><iframe src="https://www.youtube-nocookie.com/embed/${yt}?rel=0&modestbranding=1&playsinline=1" title="${esc(m.titulo)}" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
+      ? `<div class="video-yt"><iframe src="https://www.youtube-nocookie.com/embed/${yt}?rel=0&modestbranding=1&playsinline=1" title="${esc(m.titulo)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
       : `<div class="caixa-aviso erro">O link deste vídeo não é do YouTube. Avise o Pedro.</div>`;
   } else if (m.tipo === 'audio') {
     const url = await tentar(() => db.urlArquivo(m.arquivo_path));

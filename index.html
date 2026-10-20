@@ -16,8 +16,8 @@
 :root{
   --marinho:#1F2B58; --marinho-2:#172047; --bege:#CBC397; --offwhite:#F0EDE4; --grafite:#252526; --amarelo:#ECC159; --dourado:#D4A94F;
   --bg:#F0EDE4; --surface:#FBFAF6; --surface-2:#E7E2D4; --fg:#1A2142; --fg-2:#555C78; --line:rgba(31,43,88,.16); --line-2:rgba(31,43,88,.08);
-  --ok:#2B7553; --ok-bg:rgba(43,117,83,.12); --alerta:#9A5A0C; --alerta-bg:rgba(168,100,18,.13); --erro:#A5352F; --erro-bg:rgba(168,58,52,.11);
-  --btn-bg:#1F2B58; --btn-fg:#F0EDE4; --hoje-bg:#1F2B58; --hoje-fg:#F0EDE4; --enfase:#1F2B58;
+  --ok:#1F6244; --ok-bg:rgba(43,117,83,.12); --alerta:#804A08; --alerta-bg:rgba(168,100,18,.13); --erro:#A5352F; --erro-bg:rgba(168,58,52,.11);
+  --btn-bg:#1F2B58; --btn-fg:#F0EDE4; --hoje-bg:#1F2B58; --hoje-fg:#F0EDE4; --enfase:#1F2B58; --op-fora:.4; --op-realizada:1; --rz-bg:transparent; --rz-borda:var(--line); --rz-hora:var(--fg-2); --dourado-txt:#85600F;
   --sombra:0 0 0 1px rgba(31,43,88,.07),0 1px 2px -1px rgba(31,43,88,.08),0 10px 28px -16px rgba(31,43,88,.22);
   --serif:"Times New Roman",Tinos,Times,serif; --sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   --ease-out:cubic-bezier(.22,1,.36,1); --ease-gaveta:cubic-bezier(.32,.72,0,1);
@@ -27,14 +27,14 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0E1430; --surface:#161E42; --surface-2:#1E2853; --fg:#EEEBE2; --fg-2:#A9ADC3; --line:rgba(240,237,228,.16); --line-2:rgba(240,237,228,.08);
   --ok:#72C79F; --ok-bg:rgba(114,199,159,.14); --alerta:#E6AE5E; --alerta-bg:rgba(230,174,94,.14); --erro:#EC8E86; --erro-bg:rgba(236,142,134,.14);
-  --btn-bg:#F0EDE4; --btn-fg:#1A2142; --hoje-bg:#ECC159; --hoje-fg:#1A2142; --enfase:#CBC397;
+  --btn-bg:#F0EDE4; --btn-fg:#1A2142; --hoje-bg:#ECC159; --hoje-fg:#1A2142; --enfase:#CBC397; --op-fora:.75; --op-realizada:.8; --rz-bg:var(--surface-2); --rz-borda:transparent; --rz-hora:currentColor; --dourado-txt:var(--dourado);
   --sombra:0 0 0 1px rgba(240,237,228,.08),0 14px 34px -18px rgba(0,0,0,.7);
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --bg:#0E1430; --surface:#161E42; --surface-2:#1E2853; --fg:#EEEBE2; --fg-2:#A9ADC3; --line:rgba(240,237,228,.16); --line-2:rgba(240,237,228,.08);
   --ok:#72C79F; --ok-bg:rgba(114,199,159,.14); --alerta:#E6AE5E; --alerta-bg:rgba(230,174,94,.14); --erro:#EC8E86; --erro-bg:rgba(236,142,134,.14);
-  --btn-bg:#F0EDE4; --btn-fg:#1A2142; --hoje-bg:#ECC159; --hoje-fg:#1A2142; --enfase:#CBC397;
+  --btn-bg:#F0EDE4; --btn-fg:#1A2142; --hoje-bg:#ECC159; --hoje-fg:#1A2142; --enfase:#CBC397; --op-fora:.75; --op-realizada:.8; --rz-bg:var(--surface-2); --rz-borda:transparent; --rz-hora:currentColor; --dourado-txt:var(--dourado);
   --sombra:0 0 0 1px rgba(240,237,228,.08),0 14px 34px -18px rgba(0,0,0,.7);
   color-scheme:dark;
 }
@@ -355,8 +355,8 @@ img.avatar{object-fit:cover}
 .depois li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:start;font-size:15px;line-height:1.55;color:rgba(240,237,228,.78)}
 .depois li::before{counter-increment:d;content:counter(d,decimal-leading-zero);font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.1;color:var(--dourado)}
 .depois b{display:block;margin-bottom:2px;font-weight:600;color:#F0EDE4}
-.sinal{display:flex;gap:12px;align-items:flex-start;margin:28px 0 0;padding:14px 16px;border-radius:14px;background:rgba(236,193,89,.12);box-shadow:inset 0 0 0 1px rgba(236,193,89,.3);font-size:14.5px;line-height:1.55;color:rgba(240,237,228,.86)}
-.sinal .ico{width:22px;height:22px;color:var(--amarelo);margin-top:1px}
+.sinal{display:flex;gap:12px;align-items:flex-start;margin:28px 0 0;padding:14px 16px;border-radius:14px;background:rgba(203,195,151,.1);box-shadow:inset 0 0 0 1px rgba(203,195,151,.3);font-size:14.5px;line-height:1.55;color:rgba(240,237,228,.86)}
+.sinal .ico{width:22px;height:22px;color:var(--dourado);margin-top:1px}
 .sinal b{color:#F0EDE4}
 .agenda-exp{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(76px,1fr);gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
 .agenda-dia{display:grid;gap:6px;align-content:start;min-width:0}
@@ -405,7 +405,7 @@ img.avatar{object-fit:cover}
 .sociais a{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(240,237,228,.08);transition:background-color .2s}
 .sociais a:hover{background:rgba(240,237,228,.16)}
 .sociais .ico{width:20px;height:20px}
-.rodape-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 20px;padding-block:18px 28px;border-top:1px solid rgba(240,237,228,.1);font-size:13px;color:rgba(240,237,228,.5)}
+.rodape-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 20px;padding-block:18px 28px;border-top:1px solid rgba(240,237,228,.1);font-size:13px;color:rgba(240,237,228,.56)}
 @media (max-width:860px){.rodape-grade{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.rodape-grade{grid-template-columns:1fr;gap:28px}}
 
@@ -484,7 +484,7 @@ img.avatar{object-fit:cover}
 .dia{min-height:124px;min-width:0;padding:7px;display:flex;flex-direction:column;gap:5px;border-top:1px solid var(--line-2);border-left:1px solid var(--line-2)}
 .dia:nth-child(7n+1){border-left:0}
 .dia-num{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;font-size:13px;color:var(--fg-2);font-variant-numeric:tabular-nums}
-.dia.fora .dia-num{opacity:.4}
+.dia.fora .dia-num{opacity:var(--op-fora)}
 .dia.hoje .dia-num{background:var(--hoje-bg);color:var(--hoje-fg);font-weight:700}
 .chip-aula{display:grid;gap:4px;width:100%;min-width:0;padding:5px;border:0;border-radius:9px;background:var(--surface-2);text-align:left;font-size:12px;line-height:1.25;transition:background-color .15s,box-shadow .15s}
 .chip-aula:hover{box-shadow:0 0 0 1px var(--line)}
@@ -492,7 +492,9 @@ img.avatar{object-fit:cover}
 .chip-aula img{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:none}
 .chip-aula .hora{font-weight:700;font-variant-numeric:tabular-nums}
 .chip-aula .ttl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--fg-2)}
-.chip-aula.realizada{opacity:.6}
+.chip-aula.realizada{opacity:var(--op-realizada);background:var(--rz-bg,var(--surface-2))}
+.chip-aula.realizada:not(:hover){box-shadow:inset 0 0 0 1px var(--rz-borda,transparent)}
+.chip-aula.realizada .hora{color:var(--rz-hora,currentColor)}
 .chip-aula.remarcada .chip-l1{color:var(--alerta)}
 .chip-aula .ico.mini{margin-left:auto}
 .chip-licao{display:flex;align-items:center;gap:5px;width:100%;min-width:0;padding:3px 5px;border:0;border-radius:7px;background:transparent;font-size:11.5px;color:var(--fg-2);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -509,7 +511,7 @@ img.avatar{object-fit:cover}
 .lm-data{text-align:center}
 .lm-data b{display:block;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
 .lm-data span{font-size:12px;color:var(--fg-2);text-transform:uppercase;letter-spacing:.06em}
-.lm-dia.hoje .lm-data b{color:var(--dourado)}
+.lm-dia.hoje .lm-data b{color:var(--dourado-txt,var(--dourado))}
 .lm-itens{display:grid;gap:6px;min-width:0;align-content:start}
 .lm-itens .chip-aula{grid-template-columns:auto 1fr;display:grid;align-items:center}
 .lm-vazio{padding:20px 4px;color:var(--fg-2);font-size:14px}
@@ -527,7 +529,7 @@ img.avatar{object-fit:cover}
 .prox-capa{position:relative}
 .prox-capa img{width:100%;aspect-ratio:16/9;object-fit:cover}
 .prox-corpo{padding:18px 20px 20px;display:grid;gap:4px}
-.prox-quando{font-size:13px;font-weight:600;color:var(--dourado);letter-spacing:.04em;text-transform:uppercase}
+.prox-quando{font-size:13px;font-weight:600;color:var(--dourado-txt,var(--dourado));letter-spacing:.04em;text-transform:uppercase}
 .prox-corpo h3{margin:0;font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.15}
 .prox-corpo .ajuda{margin-top:2px}
 .prox-acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
@@ -1241,16 +1243,17 @@ const db = {
   async excluirTarefa(id) { ok(await sb.from('tarefas').delete().eq('id', id)); },
 
   /* ---------- biblioteca ---------- */
-  // o arquivo sobe primeiro; se o material não gravar, o arquivo sai junto
+  // a linha do material grava primeiro, com o caminho do arquivo já definido; se o envio falhar, a linha sai
   async criarMaterial(linha, arquivo, alunos) {
-    let caminho = null;
-    if (arquivo) {
-      caminho = `${crypto.randomUUID()}.${(arquivo.name.split('.').pop() || 'pdf').toLowerCase()}`;
-      ok(await sb.storage.from('materiais').upload(caminho, arquivo, { contentType: arquivo.type || 'application/pdf' }));
+    const caminho = arquivo ? `${crypto.randomUUID()}.${(arquivo.name.split('.').pop() || 'pdf').toLowerCase()}` : null;
+    const data = ok(await sb.from('midias').insert({ ...linha, arquivo_path: caminho }).select().single());
+    try {
+      if (arquivo) ok(await sb.storage.from('materiais').upload(caminho, arquivo, { contentType: arquivo.type || 'application/pdf' }));
+      if (alunos.length) ok(await sb.from('midia_alunos').insert(alunos.map(a => ({ midia_id: data.id, aluno_id: a }))));
+    } catch (e) {
+      await sb.from('midias').delete().eq('id', data.id);
+      throw e;
     }
-    const { data, error } = await sb.from('midias').insert({ ...linha, arquivo_path: caminho }).select().single();
-    if (error) { if (caminho) await sb.storage.from('materiais').remove([caminho]); throw new Error(traduzirErro(error)); }
-    if (alunos.length) ok(await sb.from('midia_alunos').insert(alunos.map(a => ({ midia_id: data.id, aluno_id: a }))));
     return data;
   },
   async editarMaterial(id, campos, alunos) {
@@ -1907,7 +1910,8 @@ async function excluirLicao(id) {
 /* ---------- biblioteca ---------- */
 function paraQuem(m) {
   const ids = eq.midiaAlunos.filter(x => x.midia_id === m.id).map(x => x.aluno_id);
-  return ids.length ? `Só para ${ids.map(i => primeiroNome(nomeDe(i))).join(', ')}` : 'Todos os alunos';
+  if (m.oficial) return 'Todos os alunos';
+  return ids.length ? `Só para ${ids.map(i => primeiroNome(nomeDe(i))).join(', ')}` : 'Sem aluno escolhido';
 }
 function renderBibliotecaEquipe() {
   const blocos = eq.fileiras.map(f => {
@@ -1925,6 +1929,7 @@ function renderBibliotecaEquipe() {
 function formMaterial(id) {
   const m = id ? eq.midias.find(x => x.id === id) : null;
   const escolhidos = new Set(m ? eq.midiaAlunos.filter(x => x.midia_id === m.id).map(x => x.aluno_id) : []);
+  const todos = ehAdmin() && (m ? !!m.oficial : true);
   const g = gavetaForm('Biblioteca', m ? 'Editar material' : 'Novo material', `
     <form class="form-gaveta" novalidate>
       <div class="duas">
@@ -1940,8 +1945,8 @@ function formMaterial(id) {
       </div>
       <div class="campo"><label for="ma-desc">Descrição (opcional)</label><textarea id="ma-desc" style="min-height:80px">${esc(m?.descricao || '')}</textarea></div>
       <div class="campo"><span class="rotulo">Quem vê</span>
-        <div class="escolha-alunos"><label><input type="radio" name="ma-para" value="todos" ${escolhidos.size ? '' : 'checked'}>Todos os alunos (biblioteca da Forward)</label><label><input type="radio" name="ma-para" value="alguns" ${escolhidos.size ? 'checked' : ''}>Só os alunos escolhidos</label></div>
-        <div class="escolha-alunos" id="ma-alunos" ${escolhidos.size ? '' : 'hidden'}>${alunos().map(a => `<label><input type="checkbox" value="${a.id}" ${escolhidos.has(a.id) ? 'checked' : ''}>${esc(a.nome)}</label>`).join('') || '<span class="ajuda">Nenhum aluno cadastrado.</span>'}</div>
+        ${ehAdmin() ? `<div class="escolha-alunos"><label><input type="radio" name="ma-para" value="todos" ${todos ? 'checked' : ''}>Todos os alunos (biblioteca da Forward)</label><label><input type="radio" name="ma-para" value="alguns" ${todos ? '' : 'checked'}>Só os alunos escolhidos</label></div>` : '<span class="ajuda">Escolha os alunos que vão ver este material.</span>'}
+        <div class="escolha-alunos" id="ma-alunos" ${todos ? 'hidden' : ''}>${alunos().map(a => `<label><input type="checkbox" value="${a.id}" ${escolhidos.has(a.id) ? 'checked' : ''}>${esc(a.nome)}</label>`).join('') || '<span class="ajuda">Nenhum aluno cadastrado.</span>'}</div>
       </div>
       <span class="erro-msg" id="ma-erro" role="alert"></span>
     </form>`, [`<button class="btn btn-primario btn-g" id="ma-salvar">${m ? 'Salvar' : 'Pôr na biblioteca'}</button>`]);
@@ -1951,16 +1956,16 @@ function formMaterial(id) {
   g.addEventListener('change', ev => { if (ev.target.name === 'ma-para') $('#ma-alunos').hidden = ev.target.value !== 'alguns'; });
   $('#ma-salvar', g).addEventListener('click', async () => {
     const t = tipo(); const titulo = $('#ma-titulo').value.trim(); const url = $('#ma-url').value.trim(); const arquivo = $('#ma-arquivo').files[0];
-    const alguns = $('input[name=ma-para]:checked', g).value === 'alguns';
+    const alguns = !ehAdmin() || $('input[name=ma-para]:checked', g).value === 'alguns';
     const lista = alguns ? $$('#ma-alunos input:checked', g).map(c => c.value) : [];
     let erro = !titulo ? 'Dê um título.' : '';
     if (!erro && t === 'pdf' && !m && !arquivo) erro = 'Escolha o arquivo PDF.';
     if (!erro && t === 'pdf' && arquivo && arquivo.size > 50 * 1024 * 1024) erro = 'O PDF passa de 50 MB. Comprima e tente de novo.';
     if (!erro && t !== 'pdf' && !/^https:\/\//i.test(url)) erro = 'O link precisa começar com https://';
     if (!erro && t === 'youtube' && !idYoutube(url)) erro = 'Esse link não é de um vídeo do YouTube.';
-    if (!erro && alguns && !lista.length) erro = 'Marque pelo menos um aluno, ou escolha “Todos os alunos”.';
+    if (!erro && alguns && !lista.length) erro = (ehAdmin() ? 'Marque pelo menos um aluno, ou escolha “Todos os alunos”.' : 'Marque pelo menos um aluno.');
     $('#ma-erro').textContent = erro; if (erro) return;
-    const campos = { titulo, fileira_id: $('#ma-fileira').value, nivel: $('#ma-nivel').value || null, fonte: $('#ma-fonte').value.trim() || null, descricao: $('#ma-desc').value.trim() || null, url: t === 'pdf' ? null : url };
+    const campos = { titulo, fileira_id: $('#ma-fileira').value, nivel: $('#ma-nivel').value || null, fonte: $('#ma-fonte').value.trim() || null, descricao: $('#ma-desc').value.trim() || null, url: t === 'pdf' ? null : url, oficial: !alguns };
     $('#ma-salvar').disabled = true; $('#ma-salvar').textContent = arquivo ? 'Enviando…' : 'Salvando…';
     const feito = m
       ? await tentar(() => db.editarMaterial(m.id, campos, lista), 'Material salvo.')

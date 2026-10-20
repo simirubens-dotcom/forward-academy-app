@@ -803,10 +803,22 @@ img.avatar{object-fit:cover}
 .entrar-logo{width:44px;height:auto}
 .entrar-caixa .btn{justify-self:start}
 
+/* campos e seleção: contorno, texto de exemplo e caixa marcada */
+:root{--campo-borda:#767C93}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--campo-borda:#6E7699}}
+:root[data-theme="dark"]{--campo-borda:#6E7699}
+.campo input,.campo select,.campo textarea,.dia-chip,.nivel-chip{border-color:var(--campo-borda)}
+.busca{box-shadow:0 0 0 1px var(--campo-borda),var(--sombra)}
+input::placeholder,textarea::placeholder{color:var(--fg-2);opacity:1}
+input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
+
+.chip-aula.cancelada{text-decoration:line-through}
+.chip-aula.cancelada .hora,.chip-aula.cancelada .nome{color:var(--fg-2)}
+
 .secao-topo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
 .secao-topo h2{margin:0;font-family:var(--serif);font-weight:400;font-size:28px}
 .lista .acoes-linha{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.lista li.inativo .quem{opacity:.55}
+.lista li.inativo .quem b{color:var(--fg-2)}
 .lista .vazio-linha{color:var(--fg-2);font-size:14px}
 
 /* formulário dentro da gaveta */
@@ -816,7 +828,7 @@ img.avatar{object-fit:cover}
 @media (max-width:520px){.tres,.form-gaveta .duas{grid-template-columns:1fr}}
 .escolha-alunos{display:grid;gap:6px;max-height:200px;overflow:auto;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-input)}
 .escolha-alunos label{display:flex;gap:8px;align-items:center;font-size:14.5px;font-weight:400}
-.campo .escolha-alunos input{width:auto;flex:none;padding:0;border:0;box-shadow:none;accent-color:var(--marinho)}
+.campo .escolha-alunos input{width:auto;flex:none;padding:0;border:0;box-shadow:none}
 .caixa-aviso{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--fg-2)}
 .caixa-aviso.erro{background:var(--erro-bg);color:var(--erro)}
 .senha-gerada{font-family:ui-monospace,Consolas,monospace;font-size:16px;font-weight:600;letter-spacing:.04em;color:var(--fg)}
@@ -1725,7 +1737,7 @@ async function excluirPessoa(id) {
 /* ---------- agenda ---------- */
 function chipAulaEquipe(a) {
   const ini = new Date(a.inicio); const cancelada = a.status === 'cancelada';
-  return `<button class="chip-aula chip-prof${new Date(a.fim) <= new Date() ? ' realizada' : ''}" data-aula-equipe="${a.id}" style="--cor:${corDe(a.aluno_id)}${cancelada ? ';text-decoration:line-through;opacity:.5' : ''}" aria-label="${esc(nomeDe(a.aluno_id))}, ${fData(ini)} às ${fHora(ini)}${cancelada ? ', cancelada' : ''}"><span class="hora">${fHora(ini)}</span><span class="nome">${esc(primeiroNome(nomeDe(a.aluno_id)))}</span></button>`;
+  return `<button class="chip-aula chip-prof${new Date(a.fim) <= new Date() ? ' realizada' : ''}${cancelada ? ' cancelada' : ''}" data-aula-equipe="${a.id}" style="--cor:${corDe(a.aluno_id)}" aria-label="${esc(nomeDe(a.aluno_id))}, ${fData(ini)} às ${fHora(ini)}${cancelada ? ', cancelada' : ''}"><span class="hora">${fHora(ini)}</span><span class="nome">${esc(primeiroNome(nomeDe(a.aluno_id)))}</span></button>`;
 }
 function renderAgendaEquipe() {
   const ano = eq.mes.getFullYear(), m = eq.mes.getMonth();
@@ -2090,9 +2102,10 @@ $('#form-entrar').addEventListener('submit', async ev => {
   abrirSessao();
 });
 // sair recarrega a página: nada do usuário anterior fica na memória
-$('#sair').addEventListener('click', async () => { await db.sair(); location.reload(); });
+let saindo = false;
+$('#sair').addEventListener('click', async () => { saindo = true; await db.sair(); location.reload(); });
 // saiu em outra aba (ou a sessão caiu) com a área aberta: volta para o login
-sb.auth.onAuthStateChange(evento => { if (evento === 'SIGNED_OUT' && $('#tela-entrar').hidden) location.reload(); });
+sb.auth.onAuthStateChange(evento => { if (evento === 'SIGNED_OUT' && !saindo && $('#tela-entrar').hidden) location.reload(); });
 
 hidratar();
 abrirSessao();

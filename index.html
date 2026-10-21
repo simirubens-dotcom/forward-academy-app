@@ -872,7 +872,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
   .estudo-yt{grid-template-areas:"video" "legenda" "lado" "transc";grid-template-rows:none}
   .estudo-yt>.estudo-lado{max-height:none;overflow:visible}
 }
-.dic{scroll-margin:120px 0 96px}
+.dic{scroll-margin:120px 0 96px;min-width:0;overflow-wrap:anywhere}
 .dic .prof-ia{padding-top:0}
 .dic-aviso::first-letter{text-transform:uppercase}
 .prof-ia h3.dic-palavra{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1;letter-spacing:0;text-transform:none;color:var(--fg);overflow-wrap:anywhere}
@@ -1937,7 +1937,7 @@ function desenharDic() {
     ${classes.map(c => `<div><h3>${esc(c.classe)}</h3><ol class="dic-defs">${c.definicoes.map(x => `<li><span lang="en">${esc(x?.texto)}</span>${x?.exemplo ? `<span class="dic-ex" lang="en">${esc(x.exemplo)}</span>` : ''}</li>`).join('')}</ol></div>`).join('')}
     ${chips('Sinônimos', textosDe(r.sinonimos))}${chips('Antônimos', textosDe(r.antonimos))}
     ${linha && !d.carregando ? `<div><h3>Na frase</h3><p class="ia-frase" lang="en">${fraseMarcada(linha.texto, d.i)}</p>${typeof r.frase_traducao === 'string' && r.frase_traducao ? `<p class="ajuda dic-frase-pt">${esc(r.frase_traducao)}</p>` : ''}</div>` : ''}
-    ${achou ? `<button class="btn btn-primario" id="dic-salvar" ${salva ? 'disabled' : ''}>${ico(salva ? 'check' : 'bookmark-simple')}${salva ? 'Já está no seu vocabulário' : 'Salvar no meu vocabulário'}</button>` : ''}
+    ${achou && (classes.length || !(typeof r.aviso === 'string' && r.aviso)) ? `<button class="btn btn-primario" id="dic-salvar" ${salva ? 'disabled' : ''}>${ico(salva ? 'check' : 'bookmark-simple')}${salva ? 'Já está no seu vocabulário' : 'Salvar no meu vocabulário'}</button>` : ''}
     ${lema ? `<p class="dic-credito">Dicionário: <a href="${esc(`https://en.wiktionary.org/wiki/${encodeURIComponent(lema)}`)}" target="_blank" rel="noopener">Wiktionary (CC BY-SA)</a>${pagAudio ? ` · áudio: <a href="${esc(pagAudio)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : ''}</p>` : ''}`;
 }
 function falar(texto) {

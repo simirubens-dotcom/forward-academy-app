@@ -803,6 +803,20 @@ img.avatar{object-fit:cover}
 .entrar-logo{width:44px;height:auto}
 .entrar-caixa .btn{justify-self:start}
 
+/* aviso de privacidade: página pública, rodapé das áreas e camada do primeiro acesso */
+.priv-tela{min-height:calc(100dvh - 54px);display:grid;justify-items:center;align-content:start;padding:28px 16px 48px}
+.priv{width:min(720px,100%);padding:clamp(22px,4vw,40px);display:grid;gap:20px;min-width:0}
+.priv h1{margin:0;font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1}
+.priv-texto{display:grid;gap:18px;line-height:1.6;overflow-wrap:anywhere}
+.priv-texto p,.priv-texto ul{margin:0}
+.priv-texto ul{padding-left:20px;display:grid;gap:6px}
+.priv-texto h2{margin:0 0 4px;font-family:inherit;font-size:16px;font-weight:600;line-height:1.35;color:var(--fg)}
+.priv-versao{font-size:13px;color:var(--fg-2)}
+.app-rodape{margin-top:40px;padding-top:16px;border-top:1px solid var(--line-2);font-size:13px;color:var(--fg-2)}
+.aviso-priv{display:flex;flex-direction:column;max-height:calc(100dvh - 48px)}
+.priv-rolo{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px;border:1px solid var(--line);border-radius:12px;font-size:15px}
+.aviso-priv .modal-acoes{flex:none}
+
 /* campos e seleção: contorno, texto de exemplo e caixa marcada */
 :root{--campo-borda:#767C93}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--campo-borda:#6E7699}}
@@ -830,6 +844,10 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .escolha-alunos{display:grid;gap:6px;max-height:200px;overflow:auto;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-input)}
 .escolha-alunos label{display:flex;gap:8px;align-items:center;font-size:14.5px;font-weight:400}
 .campo .escolha-alunos input{width:auto;flex:none;padding:0;border:0;box-shadow:none}
+.menor-bloco{display:grid;gap:12px}
+.menor-bloco .check{font-size:14.5px;color:var(--fg)}
+.resp-bloco{display:grid;gap:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r-input)}
+.fatos-resp dd{min-width:0;overflow-wrap:anywhere}
 .caixa-aviso{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--fg-2)}
 .caixa-aviso.erro{background:var(--erro-bg);color:var(--erro)}
 .senha-gerada{font-family:ui-monospace,Consolas,monospace;font-size:16px;font-weight:600;letter-spacing:.04em;color:var(--fg)}
@@ -935,10 +953,54 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
     <span class="erro-msg" id="en-erro" role="alert"></span>
     <button class="btn btn-primario btn-g" type="submit" id="en-enviar">Entrar <span class="btn-bolha" style="background:rgba(240,237,228,.14)" data-icone="arrow-right"></span></button>
     <p class="ajuda">Esqueceu a senha? Peça uma nova ao Pedro.</p>
+    <p class="ajuda"><a href="#privacidade">Aviso de privacidade</a></p>
   </form>
 </main>
 
 <main id="tela-carregando" class="entrar" aria-busy="true"><p class="ajuda">Carregando…</p></main>
+
+<!-- ================= AVISO DE PRIVACIDADE (público) ================= -->
+<main id="tela-privacidade" class="priv-tela" hidden>
+  <div class="painel priv">
+    <h1>Aviso de privacidade</h1>
+    <div class="priv-texto" id="priv-texto" data-versao="1">
+      <p>Este aviso explica, em poucas palavras, que dados a plataforma da Forward Academy guarda e o que faz com eles.</p>
+      <section>
+        <h2>Quem cuida dos seus dados</h2>
+        <p>A responsável pelos seus dados (a controladora, como diz a LGPD) é a Forward Academy, escola de inglês do professor Pedro Simi. Para falar com o Pedro sobre os seus dados, escreva para <a href="mailto:contato@forward-academy-institute.com">contato@forward-academy-institute.com</a>.</p>
+      </section>
+      <section>
+        <h2>Que dados guardamos</h2>
+        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, e as palavras que você salva no vocabulário. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
+      </section>
+      <section>
+        <h2>Para quê</h2>
+        <p>Para dar as aulas e acompanhar o seu aprendizado.</p>
+      </section>
+      <section>
+        <h2>Onde ficam</h2>
+        <p>No Supabase, com servidores em São Paulo.</p>
+      </section>
+      <section>
+        <h2>Quem mais recebe alguma coisa</h2>
+        <ul>
+          <li>O YouTube, quando você toca um vídeo.</li>
+          <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Por quanto tempo</h2>
+        <p>Enquanto você for aluno ativo da escola. Se quiser que os seus dados sejam apagados, peça pelo e-mail acima: o Pedro atende o pedido.</p>
+      </section>
+      <section>
+        <h2>Os seus direitos</h2>
+        <p>Você pode pedir para ver os dados que temos sobre você, corrigir o que estiver errado e apagar os seus dados. É só escrever para o e-mail acima.</p>
+      </section>
+      <p class="priv-versao">Versão 1, de 20 de outubro de 2026.</p>
+    </div>
+    <div><button class="btn btn-linha" type="button" id="priv-voltar">Voltar</button></div>
+  </div>
+</main>
 
 <!-- ================= ALUNO ================= -->
 <main id="tela-aluno" class="tela app" hidden>
@@ -996,6 +1058,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
     </section>
 
     <section class="vista" id="v-estudo" aria-label="Estudo" hidden></section>
+    <footer class="app-rodape"><a href="#privacidade">Aviso de privacidade</a></footer>
   </div>
 </main>
 
@@ -1061,6 +1124,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
     </section>
 
     <section class="vista" id="e-legenda" aria-label="Legenda do vídeo" hidden></section>
+    <footer class="app-rodape"><a href="#privacidade">Aviso de privacidade</a></footer>
   </div>
 </main>
 
@@ -1398,6 +1462,7 @@ const db = {
     ok(await sb.rpc('senha_trocada'));
   },
   async meuProfessor() { return (ok(await sb.rpc('meu_professor')) || [])[0] || null; },
+  async aceitarPrivacidade(versao) { ok(await sb.rpc('aceitar_privacidade', { versao })); },
 
   /* ---------- leitura (a RLS decide o que cada um vê) ---------- */
   async pessoas() { return ok(await sb.from('perfis').select('*').order('nome')); },
@@ -2106,7 +2171,7 @@ function renderAlunos() {
   const lista = ehAdmin() ? eq.pessoas.filter(p => p.id !== eq.perfil.id) : alunos();
   $('#lista-alunos').innerHTML = lista.length ? lista.map(p => `<li class="${p.ativo ? '' : 'inativo'}" data-pessoa-linha="${p.id}">
       <span class="avatar${p.papel === 'aluno' ? '' : ' p'}" aria-hidden="true">${esc(iniciais(p.nome))}</span>
-      <span class="quem"><b>${esc(p.nome)}</b><small>${esc(p.email)} · ${p.papel === 'aluno' ? (p.nivel ? `nível ${esc(p.nivel)}` : 'sem nível') : esc(p.papel)}${p.ativo ? '' : ' · desativado'}</small></span>
+      <span class="quem"><b>${esc(p.nome)}</b><small>${esc(p.email)} · ${p.papel === 'aluno' ? (p.nivel ? `nível ${esc(p.nivel)}` : 'sem nível') : esc(p.papel)}${p.menor ? ` · <span class="menor-tag">menor</span>${p.responsavel_nome ? ` · responsável: ${esc(p.responsavel_nome)}` : ''}` : ''}${p.ativo ? '' : ' · desativado'}</small></span>
       <span class="acoes-linha">
         ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button>` : ''}
         <button class="btn btn-linha" data-editar-pessoa="${p.id}">Editar</button>
@@ -2126,15 +2191,23 @@ function formNovaPessoa() {
         <div class="campo"><label for="pe-nivel">Nível</label><select id="pe-nivel">${opcoesNivel(null)}</select></div>
         ${ehAdmin() ? `<div class="campo"><label for="pe-papel">Papel</label><select id="pe-papel"><option value="aluno">Aluno</option><option value="professor">Professor</option></select></div>` : ''}
       </div>
+      ${blocoMenor('pe')}
       <div class="campo"><label for="pe-senha">Senha provisória</label><input id="pe-senha" value="${senha}" autocomplete="off"><span class="ajuda">No primeiro acesso a pessoa troca por uma dela.</span></div>
       <span class="erro-msg" id="pe-erro" role="alert"></span>
     </form>`, [`<button class="btn btn-primario btn-g" id="pe-salvar">Cadastrar</button>`]);
+  ligarMenor(g, 'pe');
+  $('#pe-papel', g)?.addEventListener('change', ev => { $('#pe-menor-bloco', g).hidden = ev.target.value !== 'aluno'; });
   $('#pe-salvar', g).addEventListener('click', async () => {
     const dados = { nome: $('#pe-nome').value.trim(), email: $('#pe-email').value.trim().toLowerCase(), nivel: $('#pe-nivel').value || null, senha: $('#pe-senha').value, papel: $('#pe-papel')?.value || 'aluno' };
-    const erro = !dados.nome || dados.nome.length < 2 ? 'Escreva o nome completo.' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email) ? 'E-mail inválido.' : dados.senha.length < 8 ? 'A senha precisa ter 8 caracteres ou mais.' : '';
+    let erro = !dados.nome || dados.nome.length < 2 ? 'Escreva o nome completo.' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email) ? 'E-mail inválido.' : dados.senha.length < 8 ? 'A senha precisa ter 8 caracteres ou mais.' : '';
+    if (!erro && dados.papel === 'aluno' && $('#pe-menor', g).checked) {
+      const r = lerMenor(g, 'pe');
+      erro = faltaResponsavel(r);
+      Object.assign(dados, { menor: true, responsavel_nome: r.nome, responsavel_email: r.email, consentimento: r.autorizou });
+    }
     $('#pe-erro').textContent = erro; if (erro) return;
     $('#pe-salvar').disabled = true;
-    const r = await tentar(() => db.pessoa('criar', dados));
+    const r = await tentar(() => db.pessoa('criar', dados).catch(e => { $('#pe-erro').textContent = e.message; throw e; }));
     $('#pe-salvar').disabled = false;
     if (!r) return;
     await recarregar('pessoas');
@@ -2150,17 +2223,70 @@ function mostrarAcesso(nome, email, senha, titulo) {
 }
 function formEditarPessoa(id) {
   const p = pessoa(id); if (!p) return;
+  const aluno = p.papel === 'aluno';
   const g = gavetaForm(p.email, 'Editar', `
     <form class="form-gaveta" novalidate>
       <div class="campo"><label for="ed-nome">Nome completo</label><input id="ed-nome" value="${esc(p.nome)}" data-foco></div>
       <div class="campo"><label for="ed-nivel">Nível</label><select id="ed-nivel">${opcoesNivel(p.nivel)}</select></div>
+      ${aluno && p.menor ? `<div><h3>Responsável</h3><dl class="fatos fatos-resp">
+        <dt>Nome</dt><dd>${esc(p.responsavel_nome)}</dd>
+        <dt>E-mail</dt><dd>${esc(p.responsavel_email)}</dd>
+        <dt>Autorizou em</dt><dd>${p.consentimento_responsavel_em ? esc(dataSP(p.consentimento_responsavel_em)) : 'sem data'}</dd>
+      </dl></div>` : ''}
+      ${aluno ? blocoMenor('ed', p) : ''}
       <span class="erro-msg" id="ed-erro" role="alert"></span>
     </form>`, [`<button class="btn btn-primario btn-g" id="ed-salvar">Salvar</button>`]);
+  // a data da autorização só é regravada quando a caixa é marcada de novo
+  let renovar = !p.menor;
+  if (aluno) {
+    ligarMenor(g, 'ed');
+    $('#ed-consent', g).addEventListener('change', ev => { if (ev.target.checked) renovar = true; });
+  }
   $('#ed-salvar', g).addEventListener('click', async () => {
     const nome = $('#ed-nome').value.trim();
     if (nome.length < 2) { $('#ed-erro').textContent = 'Escreva o nome completo.'; return; }
-    if (await tentar(() => db.editarAluno(id, { nome, nivel: $('#ed-nivel').value || null }), 'Dados salvos.')) { fecharCamadas(); recarregar('pessoas'); }
+    const campos = { nome, nivel: $('#ed-nivel').value || null };
+    if (aluno && $('#ed-menor', g).checked) {
+      const r = lerMenor(g, 'ed');
+      const erro = faltaResponsavel(r);
+      if (erro) { $('#ed-erro').textContent = erro; return; }
+      if (renovar) Object.assign(campos, { menor: true, responsavel_nome: r.nome, responsavel_email: r.email, consentimento_responsavel_em: new Date().toISOString() });
+    } else if (aluno && p.menor) campos.menor = false;
+    $('#ed-erro').textContent = '';
+    if (await tentar(() => db.editarAluno(id, campos).catch(e => { $('#ed-erro').textContent = e.message; throw e; }), 'Dados salvos.')) { fecharCamadas(); recarregar('pessoas'); }
   });
+}
+/* aluno menor: responsável e autorização */
+const dataSP = iso => new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(iso));
+function blocoMenor(pre, p = {}) {
+  return `<div class="menor-bloco" id="${pre}-menor-bloco">
+    <label class="check"><input type="checkbox" id="${pre}-menor" ${p.menor ? 'checked' : ''}>Menor de idade</label>
+    <div class="resp-bloco" id="${pre}-resp" ${p.menor ? '' : 'hidden'}>
+      <div class="campo"><label for="${pre}-resp-nome">Nome do responsável</label><input id="${pre}-resp-nome" value="${esc(p.responsavel_nome)}" maxlength="120" autocomplete="off"></div>
+      <div class="campo"><label for="${pre}-resp-email">E-mail do responsável</label><input id="${pre}-resp-email" type="email" value="${esc(p.responsavel_email)}" maxlength="254" autocomplete="off" inputmode="email"></div>
+      <label class="check"><input type="checkbox" id="${pre}-consent" ${p.menor ? 'checked' : ''}>O responsável autorizou o uso dos dados do aluno na plataforma</label>
+    </div>
+  </div>`;
+}
+function ligarMenor(g, pre) {
+  const marca = $(`#${pre}-menor`, g), consent = $(`#${pre}-consent`, g);
+  const campos = [$(`#${pre}-resp-nome`, g), $(`#${pre}-resp-email`, g)];
+  marca.addEventListener('change', () => {
+    $(`#${pre}-resp`, g).hidden = !marca.checked;
+    if (!marca.checked) { campos.forEach(c => { c.value = ''; }); consent.checked = false; }
+  });
+  // outro responsável precisa autorizar de novo
+  campos.forEach(c => c.addEventListener('input', () => { consent.checked = false; }));
+}
+const lerMenor = (g, pre) => ({ nome: $(`#${pre}-resp-nome`, g).value.trim(), email: $(`#${pre}-resp-email`, g).value.trim().toLowerCase(), autorizou: $(`#${pre}-consent`, g).checked });
+// mesma redação da recusa do servidor
+function faltaResponsavel({ nome, email, autorizou }) {
+  const falta = [!nome && 'o nome do responsável', !email && 'o e-mail do responsável', !autorizou && 'a autorização do responsável'].filter(Boolean);
+  if (falta.length === 1) return `Falta ${falta[0]}.`;
+  if (falta.length) return `Faltam ${falta.slice(0, -1).join(', ')} e ${falta[falta.length - 1]}.`;
+  if (nome.length > 120) return 'O nome do responsável pode ter até 120 caracteres.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'O e-mail do responsável não é válido.';
+  return '';
 }
 async function novaSenha(id) {
   const p = pessoa(id); if (!p) return;
@@ -2654,8 +2780,10 @@ document.addEventListener('click', ev => {
 </script>
 <script>
 /* entrada: sessão, troca da senha provisória e qual área abrir. Sem sessão válida nunca mostra dado de exemplo. */
-const TELAS = ['entrar', 'carregando', 'aluno', 'equipe'];
-const mostrarTela = t => TELAS.forEach(x => { $(`#tela-${x}`).hidden = x !== t; });
+const TELAS = ['entrar', 'carregando', 'aluno', 'equipe', 'privacidade'];
+let telaAtual = 'carregando', telaAntesPriv = null;
+const mostrarTela = t => { telaAtual = t; TELAS.forEach(x => { $(`#tela-${x}`).hidden = x !== t; }); };
+const PRIVACIDADE_VERSAO = Number($('#priv-texto').dataset.versao);
 
 function telaEntrar(msg = '') {
   $('#barra-sessao').hidden = true;
@@ -2693,6 +2821,48 @@ function pedirSenhaNova() {
   });
 }
 
+// o texto do aviso é o mesmo da página pública
+function pedirAceitePrivacidade() {
+  return new Promise(resolve => {
+    camadaObrigatoria = true;
+    $('#modal').innerHTML = `
+      <form class="modal-corpo aviso-priv" id="form-priv" novalidate>
+        <h2 id="modal-titulo">Aviso de privacidade</h2>
+        <p>Antes de continuar, leia como a Forward cuida dos seus dados.</p>
+        <div class="priv-rolo" id="priv-rolo" tabindex="0" role="region" aria-label="Texto do aviso de privacidade" data-foco></div>
+        <span class="erro-msg" id="priv-erro" role="alert"></span>
+        <div class="modal-acoes"><button class="btn btn-primario" type="submit" id="priv-ok">Li e concordo</button></div>
+      </form>`;
+    const texto = $('#priv-texto').cloneNode(true);
+    texto.removeAttribute('id');
+    $('#priv-rolo').append(texto);
+    abrirCamada($('#modal'));
+    $('#form-priv').addEventListener('submit', async ev => {
+      ev.preventDefault();
+      $('#priv-ok').disabled = true; $('#priv-erro').textContent = '';
+      try { await db.aceitarPrivacidade(PRIVACIDADE_VERSAO); } catch (e) { $('#priv-erro').textContent = e.message; $('#priv-ok').disabled = false; return; }
+      camadaObrigatoria = false; fecharCamadas();
+      resolve();
+    });
+  });
+}
+
+// a página do aviso abre pelo endereço #privacidade, com ou sem sessão
+function rotaPrivacidade() {
+  const naPagina = location.hash === '#privacidade';
+  if (naPagina && telaAtual !== 'privacidade') { telaAntesPriv = telaAtual; mostrarTela('privacidade'); window.scrollTo(0, 0); }
+  else if (!naPagina && telaAtual === 'privacidade') {
+    const antes = telaAntesPriv; telaAntesPriv = null;
+    if (antes) mostrarTela(antes); else abrirSessao();
+  }
+}
+window.addEventListener('hashchange', rotaPrivacidade);
+$('#priv-voltar').addEventListener('click', () => {
+  if (telaAntesPriv) { history.back(); return; }
+  history.replaceState(null, '', location.pathname + location.search);
+  rotaPrivacidade();
+});
+
 async function abrirSessao() {
   mostrarTela('carregando');
   try {
@@ -2703,6 +2873,7 @@ async function abrirSessao() {
     $('#barra-nome').textContent = perfil.nome;
     $('#barra-sessao').hidden = false;
     if (perfil.trocar_senha) await pedirSenhaNova();
+    if (perfil.privacidade_versao !== PRIVACIDADE_VERSAO) await pedirAceitePrivacidade();
     if (perfil.papel === 'aluno') { await carregarAluno(perfil); mostrarTela('aluno'); vistaAluno('agenda'); }
     else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('hoje'); }
     hidratar();
@@ -2723,12 +2894,16 @@ $('#form-entrar').addEventListener('submit', async ev => {
 });
 // sair recarrega a página: nada do usuário anterior fica na memória
 let saindo = false;
-$('#sair').addEventListener('click', async () => { saindo = true; await db.sair(); location.reload(); });
+$('#sair').addEventListener('click', async () => {
+  saindo = true; await db.sair();
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  location.reload();
+});
 // saiu em outra aba (ou a sessão caiu) com a área aberta: volta para o login
 sb.auth.onAuthStateChange(evento => { if (evento === 'SIGNED_OUT' && !saindo && $('#tela-entrar').hidden) location.reload(); });
 
 hidratar();
-abrirSessao();
+if (location.hash === '#privacidade') mostrarTela('privacidade'); else abrirSessao();
 
 </script>
 

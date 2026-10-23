@@ -985,7 +985,8 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
         <h2>Quem mais recebe alguma coisa</h2>
         <ul>
           <li>O YouTube, quando você toca um vídeo.</li>
-          <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons.</li>
+          <li>O Google, que fornece as fontes das letras das páginas: ao abrir o app, ele recebe o endereço de internet (IP) do seu aparelho.</li>
+          <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons, que recebe o endereço de internet (IP) do seu aparelho.</li>
         </ul>
       </section>
       <section>
@@ -2815,7 +2816,7 @@ function pedirSenhaNova() {
       $('#ns-erro').textContent = erro; if (erro) return;
       $('#ns-salvar').disabled = true;
       try { await db.trocarSenha(a); } catch (e) { $('#ns-erro').textContent = e.message; $('#ns-salvar').disabled = false; return; }
-      camadaObrigatoria = false; fecharCamadas(); avisar('Senha criada. Use ela das próximas vezes.');
+      camadaObrigatoria = false; fecharCamadas();
       resolve();
     });
   });
@@ -2874,6 +2875,7 @@ async function abrirSessao() {
     $('#barra-sessao').hidden = false;
     if (perfil.trocar_senha) await pedirSenhaNova();
     if (perfil.privacidade_versao !== PRIVACIDADE_VERSAO) await pedirAceitePrivacidade();
+    if (perfil.trocar_senha) avisar('Senha criada. Use ela das próximas vezes.');
     if (perfil.papel === 'aluno') { await carregarAluno(perfil); mostrarTela('aluno'); vistaAluno('agenda'); }
     else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('hoje'); }
     hidratar();

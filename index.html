@@ -865,6 +865,20 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .leitor-pdf canvas{width:100%;height:auto;max-width:900px;border-radius:8px;background:#fff;box-shadow:var(--sombra)}
 .leitor-pdf .pagina{width:100%;max-width:900px;display:grid;gap:6px}
 .leitor-pdf .pagina small{justify-self:center;color:var(--fg-2);font-size:12.5px}
+/* PDF: camada de texto transparente sobre o canvas; a seleção continua e cada palavra abre a caixa */
+.folha-pdf{position:relative}
+.folha-pdf canvas{display:block}
+.camada-texto{position:absolute;left:0;top:0;overflow:hidden;line-height:1;text-align:initial;letter-spacing:0;word-spacing:0;text-rendering:auto;-webkit-text-size-adjust:none;text-size-adjust:none;forced-color-adjust:none}
+.camada-texto>span,.camada-texto>br{position:absolute;color:transparent;white-space:pre;cursor:text;transform-origin:0 0}
+.camada-texto ::selection{background:rgba(31,43,88,.3)}
+.camada-texto br::selection{background:transparent}
+/* 1 px a mais de alvo de cada lado, sem mover o texto; o relative põe esse alvo acima do espaço vizinho */
+.pdf-pal{position:relative;margin:0 -1px;padding:0 1px;border-radius:2px;cursor:pointer}
+.pdf-pal[aria-pressed="true"]{background:rgba(236,193,89,.5)}
+@media (hover:hover){.pdf-pal:hover{background:rgba(236,193,89,.35)}}
+.pdf-pal:focus-visible{outline-offset:1px;border-radius:2px}
+.pdf-aviso{margin:0 0 16px}
+.leitor-pdf>.estudo-lado{width:100%;max-width:900px}
 .nota-estudo{margin-top:16px}
 .estudo-video{max-width:760px;display:grid;gap:12px}
 /* em tela baixa o player cabe inteiro entre a barra do topo e o trilho de baixo */
@@ -884,11 +898,12 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .estudo-yt>.estudo-video{grid-area:video}
 .estudo-yt>.estudo-legenda{grid-area:legenda;max-width:760px}
 .estudo-yt>.estudo-transc{grid-area:transc;min-width:0;max-width:760px}
-.estudo-yt>.estudo-lado{grid-area:lado;max-height:calc(100dvh - 96px);overflow-y:auto;overscroll-behavior:contain;padding:4px;margin:-4px}
+.estudo-yt>.estudo-lado{grid-area:lado}
+.estudo-yt>.estudo-lado,.estudo-pdf>.estudo-lado{max-height:calc(100dvh - 96px);overflow-y:auto;overscroll-behavior:contain;padding:4px;margin:-4px}
 .estudo-transc .transcricao{margin-top:0}
 @media (max-width:1180px){
   .estudo-yt{grid-template-areas:"video" "legenda" "lado" "transc";grid-template-rows:none}
-  .estudo-yt>.estudo-lado{max-height:none;overflow:visible}
+  .estudo-yt>.estudo-lado,.estudo-pdf>.estudo-lado{max-height:none;overflow:visible}
 }
 .dic{scroll-margin:120px 0 96px;min-width:0;overflow-wrap:anywhere}
 .dic .prof-ia{padding-top:0}
@@ -1826,13 +1841,24 @@ function carregarPdfJs() {
   });
   return pdfjsPronto;
 }
+const AVISO_PDF_IMAGEM = 'Este PDF é imagem: a leitura palavra a palavra precisa de texto';
+const temTexto = conteudo => conteudo.items.some(x => typeof x.str === 'string' && x.str.trim());
 async function abrirPdf(m, box) {
   box.innerHTML = `<p class="ajuda">Abrindo o PDF…</p>`;
   await carregarPdfJs();
   const url = await db.urlArquivo(m.arquivo_path);
   window.__pdfOpcoes = { url, ...PDFJS.opcoes };   // o conferir_app.py confere que o eval está desligado
   const doc = await pdfjsLib.getDocument(window.__pdfOpcoes).promise;
-  box.innerHTML = `<div class="leitor-pdf">${Array.from({ length: doc.numPages }, (_, i) => `<div class="pagina"><canvas data-pagina="${i + 1}" aria-label="Página ${i + 1}"></canvas><small>${i + 1} / ${doc.numPages}</small></div>`).join('')}</div>`;
+  box.innerHTML = `<div id="pdf-aviso"></div>
+    <div class="estudo estudo-pdf" id="estudo-pdf">
+      <div class="leitor-pdf">${Array.from({ length: doc.numPages }, (_, i) => `<div class="pagina"><div class="folha-pdf"><canvas data-pagina="${i + 1}" aria-label="Página ${i + 1}"></canvas></div><small>${i + 1} / ${doc.numPages}</small></div>`).join('')}</div>
+      <aside class="estudo-lado" id="pdf-lado">${CAIXA_DIC}</aside>
+    </div>`;
+  const dic = $('#dic', box);
+  const textos = new Map();
+  const redim = new ResizeObserver(ent => ent.forEach(e => ajustarEscala(e.target.parentElement)));
+  Object.assign(es, { midia: m.id, textos, redim });
+  desenharDic(); carregarVocab();
   // cada página só é desenhada quando chega perto da tela
   const desenhar = async canvas => {
     if (canvas.dataset.feita) return; canvas.dataset.feita = '1';
@@ -1843,13 +1869,109 @@ async function abrirPdf(m, box) {
     const vp = pag.getViewport({ scale: escala });
     canvas.width = vp.width; canvas.height = vp.height;
     await pag.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+    const conteudo = await pag.getTextContent();
+    if (!temTexto(conteudo)) return;
+    dic.hidden = false;
+    textos.set(Number(canvas.dataset.pagina), await camadaDeTexto(pag, canvas, conteudo));
+    redim.observe(canvas);
   };
-  const obs = new IntersectionObserver(ent => ent.forEach(e => { if (e.isIntersecting) { obs.unobserve(e.target); desenhar(e.target); } }), { rootMargin: '600px' });
+  const obs = new IntersectionObserver(ent => ent.forEach(e => { if (e.isIntersecting) { obs.unobserve(e.target); desenhar(e.target).catch(err => console.warn(err)); } }), { rootMargin: '600px' });
   $$('canvas[data-pagina]', box).forEach(c => obs.observe(c));
+  avisarSeForImagem(doc, dic, $('#pdf-aviso', box)).catch(err => console.warn(err));
+}
+async function avisarSeForImagem(doc, dic, lugar) {
+  for (let n = 1; n <= doc.numPages; n++) {
+    if (temTexto(await (await doc.getPage(n)).getTextContent())) { dic.hidden = false; return; }
+  }
+  const aviso = document.createElement('p');
+  aviso.className = 'caixa-aviso pdf-aviso'; aviso.setAttribute('role', 'status'); aviso.textContent = AVISO_PDF_IMAGEM;
+  lugar.append(aviso);
+}
+// o pdf.js posiciona a camada pela variável --scale-factor; ela acompanha a largura do canvas
+function ajustarEscala(folha) {
+  const escala = folha.firstElementChild.getBoundingClientRect().width / Number(folha.dataset.larguraPt);
+  if (escala) folha.style.setProperty('--scale-factor', String(escala));
+  return escala;
+}
+// devolve o texto da página, com as posições que as palavras da camada guardam em data-ini
+async function camadaDeTexto(pag, canvas, conteudo) {
+  const folha = canvas.parentElement;
+  folha.dataset.larguraPt = pag.getViewport({ scale: 1 }).width;
+  const escala = ajustarEscala(folha);
+  const camada = document.createElement('div');
+  camada.className = 'camada-texto'; camada.dataset.pagina = canvas.dataset.pagina;
+  folha.append(camada);
+  const divs = [];
+  await pdfjsLib.renderTextLayer({ textContentSource: conteudo, container: camada, viewport: pag.getViewport({ scale: escala }), textDivs: divs }).promise;
+  let texto = '', k = 0;
+  for (const item of conteudo.items) {
+    if (typeof item.str !== 'string') continue;
+    const span = divs[k++];
+    if (span && item.str) palavrasTocaveis(span, item.str, texto.length);
+    texto += item.str + (item.hasEOL ? '\n' : '');
+  }
+  return texto;
+}
+function palavrasTocaveis(span, str, ini) {
+  const frag = document.createDocumentFragment();
+  let resto = 0;
+  for (const m of str.matchAll(RE_PALAVRA)) {
+    frag.append(str.slice(resto, m.index));
+    const p = document.createElement('span');
+    p.className = 'pdf-pal'; p.setAttribute('role', 'button'); p.tabIndex = 0; p.setAttribute('aria-pressed', 'false');
+    p.dataset.ini = ini + m.index; p.textContent = m[0];
+    frag.append(p);
+    resto = m.index + m[0].length;
+  }
+  frag.append(str.slice(resto));
+  span.replaceChildren(frag);
+}
+const RE_FIM_FRASE = /(\b(?:Mr|Mrs|Ms|Dr|St))?[.!?…]+["'”’)\]]*(?=\s)/g;
+// a frase da página que contém a posição, sem quebra de linha e com até 500 caracteres
+function fraseNaPagina(texto, pos) {
+  let ini = 0, fim = texto.length;
+  for (const m of texto.matchAll(RE_FIM_FRASE)) {
+    if (m[1]) continue;
+    const f = m.index + m[0].length;
+    if (f <= pos) ini = f; else { fim = f; break; }
+  }
+  const bruto = texto.slice(ini, fim);
+  let i = 0, palavra = '';
+  for (const m of bruto.matchAll(RE_PALAVRA)) {
+    if (ini + m.index + m[0].length > pos) { if (ini + m.index <= pos) palavra = m[0]; break; }
+    i++;
+  }
+  if (!palavra) return null;
+  let frase = bruto.replace(/\s+/g, ' ').trim();
+  if (frase.length > 500) {
+    const onde = [...frase.matchAll(RE_PALAVRA)][i].index;
+    const corte = frase.lastIndexOf(' ', Math.max(0, onde - 200)) + 1;
+    frase = frase.slice(corte, corte + 500).replace(/\s\S*$/, '');
+    i = [...frase.slice(0, onde - corte).matchAll(RE_PALAVRA)].length;
+  }
+  return { palavra, frase, i };
+}
+const telaEstreita = matchMedia('(max-width:1180px)');
+// até 1180 px a caixa entra logo abaixo da página da palavra, sem cobrir o desenho
+function colocarDicPdf() {
+  const lado = $('#pdf-lado'); if (!lado) return;
+  const pagina = telaEstreita.matches && $('#v-estudo .pdf-pal[aria-pressed="true"]')?.closest('.pagina');
+  if (pagina) { if (pagina.nextElementSibling !== lado) pagina.after(lado); }
+  else if (lado.parentElement !== $('#estudo-pdf')) $('#estudo-pdf').append(lado);
+}
+telaEstreita.addEventListener('change', colocarDicPdf);
+function tocarPalavraPdf(el) {
+  const texto = es.textos?.get(Number(el.closest('.camada-texto')?.dataset.pagina));
+  const achada = typeof texto === 'string' && fraseNaPagina(texto, Number(el.dataset.ini));
+  if (!achada) return;
+  $$('#v-estudo .pdf-pal[aria-pressed="true"]').forEach(x => x.setAttribute('aria-pressed', 'false'));
+  el.setAttribute('aria-pressed', 'true');
+  colocarDicPdf();
+  consultarPalavra(achada.palavra, achada.frase, achada.i);
 }
 
 /* vídeo do YouTube: player no fluxo da página; legenda e transcrição abaixo dele */
-const es = { player: null, linhas: [], atual: -1, timer: null, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null };
+const es = { player: null, linhas: [], atual: -1, timer: null, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null };
 const fRelogio = s => { const t = Math.floor(s), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h ? `${h}:${d2(m)}:${d2(t % 60)}` : `${m}:${d2(t % 60)}`; };
 const linhaNoTempo = t => es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s);
 
@@ -1858,7 +1980,8 @@ function fecharEstudo() {
   pararRelogio();
   if (es.player) es.player.destruir();
   if (es.som) es.som.pause();
-  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null });
+  if (es.redim) es.redim.disconnect();
+  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null });
 }
 function desenharLegenda() {
   const en = $('#legenda-texto'), pt = $('#legenda-traducao'); if (!en) return;
@@ -1892,7 +2015,7 @@ async function abrirVideo(m, yt, box) {
       </div>
       <div class="estudo-legenda" id="estudo-legenda"><p class="ajuda">Carregando a legenda…</p></div>
       <aside class="estudo-lado">
-        <article class="painel dic" id="dic" aria-labelledby="dic-titulo" hidden><div class="painel-topo"><h2 id="dic-titulo">Dicionário</h2></div><div class="prof-ia" id="dic-corpo" aria-live="polite"></div></article>
+        ${CAIXA_DIC}
         <article class="painel" id="vocab"></article>
       </aside>
       <div class="estudo-transc" id="estudo-transc"></div>
@@ -1928,6 +2051,7 @@ async function abrirVideo(m, yt, box) {
 }
 
 /* caixa do dicionário e "Meu vocabulário" */
+const CAIXA_DIC = '<article class="painel dic" id="dic" aria-labelledby="dic-titulo" hidden><div class="painel-topo"><h2 id="dic-titulo">Dicionário</h2></div><div class="prof-ia" id="dic-corpo" aria-live="polite"></div></article>';
 const RE_PALAVRA = /\p{L}+(?:['’]\p{L}+)*/gu;
 function palavrasEmBotao(texto, n) {
   let html = '', resto = 0, i = 0;
@@ -1967,22 +2091,25 @@ async function abrirPalavra(n, i, texto) {
   es.sel = { n, i };
   $$('#v-estudo .pal[aria-pressed="true"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
   $$(`#v-estudo .pal[data-pal-n="${n}"][data-pal-i="${i}"]`).forEach(b => b.setAttribute('aria-pressed', 'true'));
+  return consultarPalavra(texto, linha.texto, i);
+}
+// i é a posição da palavra entre as palavras da frase, para marcá-la na caixa
+async function consultarPalavra(texto, frase, i) {
   const pedido = ++es.pedido;
-  es.dic = { n, i, texto, carregando: true };
+  es.dic = { texto, frase, i, carregando: true };
   desenharDic();
-  if (matchMedia('(max-width:1180px)').matches) $('#dic').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'nearest' });
+  if (telaEstreita.matches) $('#dic').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'nearest' });
   let r = null, erro = '';
-  try { r = await db.palavra(texto, linha.texto.slice(0, 500)); } catch (e) { console.warn(e); erro = e.message || DICIONARIO_FORA; }
+  try { r = await db.palavra(texto, frase.slice(0, 500)); } catch (e) { console.warn(e); erro = e.message || DICIONARIO_FORA; }
   if (pedido !== es.pedido) return;
-  es.dic = { n, i, texto, r, erro };
+  es.dic = { texto, frase, i, r, erro };
   desenharDic();
 }
 function desenharDic() {
   const box = $('#dic-corpo'); if (!box) return;
   const d = es.dic;
-  if (!d) { box.innerHTML = '<p class="ajuda">Toque numa palavra da legenda ou da transcrição: o vídeo pausa e o significado aparece aqui.</p>'; return; }
+  if (!d) { box.innerHTML = `<p class="ajuda">${es.textos ? 'Toque numa palavra do texto: o significado aparece aqui.' : 'Toque numa palavra da legenda ou da transcrição: o vídeo pausa e o significado aparece aqui.'}</p>`; return; }
   const r = d.r || {};
-  const linha = es.linhas[d.n];
   const achou = typeof r.palavra === 'string' && r.palavra;
   const lema = typeof r.lema === 'string' ? r.lema : '';
   const salva = achou && al.vocab.some(v => v.palavra === r.palavra);
@@ -2002,7 +2129,7 @@ function desenharDic() {
     ${typeof r.traducao === 'string' && r.traducao ? `<p class="ia-pt">${esc(r.traducao)}</p>` : ''}
     ${classes.map(c => `<div><h3>${esc(c.classe)}</h3><ol class="dic-defs">${c.definicoes.map(x => `<li><span lang="en">${esc(x?.texto)}</span>${x?.exemplo ? `<span class="dic-ex" lang="en">${esc(x.exemplo)}</span>` : ''}</li>`).join('')}</ol></div>`).join('')}
     ${chips('Sinônimos', textosDe(r.sinonimos))}${chips('Antônimos', textosDe(r.antonimos))}
-    ${linha && !d.carregando ? `<div><h3>Na frase</h3><p class="ia-frase" lang="en">${fraseMarcada(linha.texto, d.i)}</p>${typeof r.frase_traducao === 'string' && r.frase_traducao ? `<p class="ajuda dic-frase-pt">${esc(r.frase_traducao)}</p>` : ''}</div>` : ''}
+    ${d.frase && !d.carregando ? `<div><h3>Na frase</h3><p class="ia-frase" lang="en">${fraseMarcada(d.frase, d.i)}</p>${typeof r.frase_traducao === 'string' && r.frase_traducao ? `<p class="ajuda dic-frase-pt">${esc(r.frase_traducao)}</p>` : ''}</div>` : ''}
     ${achou && (classes.length || !(typeof r.aviso === 'string' && r.aviso)) ? `<button class="btn btn-primario" id="dic-salvar" ${salva ? 'disabled' : ''}>${ico(salva ? 'check' : 'bookmark-simple')}${salva ? 'Já está no seu vocabulário' : 'Salvar no meu vocabulário'}</button>` : ''}
     ${lema ? `<p class="dic-credito">Dicionário: <a href="${esc(`https://en.wiktionary.org/wiki/${encodeURIComponent(lema)}`)}" target="_blank" rel="noopener">Wiktionary (CC BY-SA)</a>${pagAudio ? ` · áudio: <a href="${esc(pagAudio)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : ''}</p>` : ''}`;
 }
@@ -2035,11 +2162,11 @@ function desenharVocab(erro = '') {
         : '<p class="ajuda vocab-vazio">As palavras que você salvar ficam aqui, com a frase de onde vieram. Seu professor também vê.</p>');
 }
 async function salvarPalavra() {
-  const d = es.dic; const r = d?.r; const linha = d && es.linhas[d.n];
-  if (!r?.palavra || !linha) return;
+  const d = es.dic; const r = d?.r;
+  if (!r?.palavra || !d.frase) return;
   $('#dic-salvar').disabled = true;
   try {
-    const nova = await db.salvarPalavra({ palavra: r.palavra, traducao: typeof r.traducao === 'string' && r.traducao ? r.traducao.slice(0, 500) : null, frase: linha.texto.slice(0, 500), midia_id: es.midia });
+    const nova = await db.salvarPalavra({ palavra: r.palavra, traducao: typeof r.traducao === 'string' && r.traducao ? r.traducao.slice(0, 500) : null, frase: d.frase.slice(0, 500), midia_id: es.midia });
     if (nova) { al.vocab.unshift(nova); avisar(`“${r.palavra}” foi para o seu vocabulário.`); }
     else { avisar('Esta palavra já está no seu vocabulário.'); al.vocab = await db.vocabulario(); }
   } catch (e) { console.warn(e); avisar(e.message || 'Não deu para salvar. Tente de novo.', true); }
@@ -2082,6 +2209,9 @@ async function abrirEstudo(id) {
 
 /* ---------- eventos da área do aluno ---------- */
 $('#tela-aluno').addEventListener('click', ev => {
+  const pp = ev.target.closest('.pdf-pal');
+  // arrastar para selecionar texto não abre a caixa
+  if (pp) { if (!String(getSelection()).trim()) tocarPalavraPdf(pp); return; }
   const b = ev.target.closest('button, a'); if (!b) return;
   const ds = b.dataset;
   if (ds.vistaAluno) return vistaAluno(ds.vistaAluno);
@@ -2103,6 +2233,17 @@ $('#tela-aluno').addEventListener('click', ev => {
   if (b.id === 'legenda-traduzir') { es.traducao = !es.traducao; b.setAttribute('aria-pressed', String(es.traducao)); return desenharLegenda(); }
   if (b.id === 'alternar-licoes') { al.listaLicoes = !al.listaLicoes; return renderLicoes(); }
   if (b.id === 'voltar-lista') { al.listaLicoes = true; renderLicoes(); $('#licoes-lista').scrollIntoView({ block: 'start' }); }
+});
+// o Chromium não começa a seleção arrastando a partir de elemento com tabindex: ele sai no toque e volta em seguida
+$('#tela-aluno').addEventListener('pointerdown', ev => {
+  const pp = ev.target.closest?.('.pdf-pal'); if (!pp) return;
+  pp.removeAttribute('tabindex');
+  const volta = () => { removeEventListener('pointerup', volta); removeEventListener('pointercancel', volta); setTimeout(() => { pp.tabIndex = 0; }); };
+  addEventListener('pointerup', volta); addEventListener('pointercancel', volta);
+});
+$('#tela-aluno').addEventListener('keydown', ev => {
+  const pp = ev.target.closest?.('.pdf-pal');
+  if (pp && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); tocarPalavraPdf(pp); }
 });
 // botões que aparecem na gaveta e no modal (fora da tela do aluno)
 document.addEventListener('click', ev => {

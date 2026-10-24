@@ -1,0 +1,19 @@
+name: ping do Supabase
+
+# o plano grátis pausa o projeto depois de 7 dias sem uso (as férias vão de 15/12 a 15/01)
+on:
+  schedule:
+    - cron: "17 12 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: chama a função ping
+        run: |
+          curl -fsS -X POST "https://xxlxuxilbgkwaaawnpov.supabase.co/rest/v1/rpc/ping" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{}'

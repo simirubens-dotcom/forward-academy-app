@@ -980,6 +980,21 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .mat-linha{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center}
 .mat-linha .mat-ico{width:44px;height:44px;border-radius:12px;background:var(--surface-2)}
 .para-quem{font-size:12.5px;color:var(--fg-2)}
+.bib-equipe .quem b,.bib-equipe .quem small,.prog-equipe .quem b,.prog-equipe .quem small{white-space:normal;overflow-wrap:anywhere}
+@media (max-width:520px){.bib-equipe .acoes-linha{grid-column:1/-1}}
+@media (max-width:720px){#lista-alunos li{flex-wrap:wrap}#lista-alunos .acoes-linha{flex-basis:100%}}
+.estudo-topo .btn-texto{min-height:24px}
+
+/* biblioteca pessoal do aluno e visto */
+.form-link{display:grid;gap:14px;padding:18px 20px;margin-bottom:18px}
+.form-link p{margin:0}
+.form-link-campos{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}
+.form-link-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+@media (max-width:640px){.form-link-campos{grid-template-columns:1fr}.form-link{padding:16px}}
+.minha-vazia{margin:0}
+.selo-visto{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);font-size:12.5px;font-weight:600}
+.selo-visto .ico{width:14px;height:14px}
+.btn-visto[aria-pressed="true"]{color:var(--ok);box-shadow:inset 0 0 0 1px currentColor}
 
 /* editor de legenda: o player fica no fluxo, nada por cima dele */
 .leg-player{max-width:760px;display:grid;gap:12px;margin-bottom:16px}
@@ -1097,7 +1112,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1110,7 +1125,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
       <section>
         <h2>Quem mais recebe alguma coisa</h2>
         <ul>
-          <li>O YouTube, quando você toca um vídeo.</li>
+          <li>O YouTube recebe o endereço de internet (IP) do seu aparelho quando a Biblioteca mostra a capa de um vídeo e quando você toca um vídeo.</li>
           <li>O Google, que fornece as fontes das letras das páginas: ao abrir o app, ele recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons, que recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>Quando você usa “Ler em voz alta”, quem reconhece a sua fala é o navegador, e ele envia o áudio da sua voz para o serviço da empresa dele: o Chrome envia ao Google, e o Edge, à Microsoft. A Forward recebe só o texto reconhecido.</li>
@@ -1175,6 +1190,18 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
         <div class="niveis" role="group" aria-label="Filtrar por nível" id="bib-niveis"></div>
       </div>
       <div id="bib-conteudo"></div>
+      <section class="fileira minha" aria-labelledby="minha-titulo">
+        <div class="fileira-topo"><h3 id="minha-titulo">Minha biblioteca</h3><span id="minha-conta"></span></div>
+        <form class="painel form-link" id="form-link" novalidate>
+          <p class="ajuda">Guarde aqui vídeos do YouTube e páginas que você achar. O vídeo abre no estudo; a página abre fora do app. O seu professor e a escola também veem os seus links.</p>
+          <div class="form-link-campos">
+            <div class="campo"><label for="link-url">Link</label><input id="link-url" type="url" inputmode="url" autocomplete="off" placeholder="https://" aria-describedby="link-url-erro"><span class="erro-msg" id="link-url-erro"></span></div>
+            <div class="campo"><label for="link-titulo">Título</label><input id="link-titulo" autocomplete="off" placeholder="Como você quer chamar este link" aria-describedby="link-titulo-erro"><span class="erro-msg" id="link-titulo-erro"></span></div>
+          </div>
+          <div class="form-link-acoes"><button class="btn btn-primario" id="link-guardar" type="submit"><span data-icone="plus"></span>Guardar link</button><span class="erro-msg" id="link-erro" role="alert"></span></div>
+        </form>
+        <div id="minha-links"></div>
+      </section>
     </section>
 
     <section class="vista" id="v-licoes" aria-label="Lições" hidden>
@@ -1589,6 +1616,17 @@ function erroAnexo(e) {
   if (/403|row-level security|AccessDenied/i.test(m)) return 'Não deu para pôr o anexo: a lição precisa estar para fazer e ter menos de 5 arquivos.';
   return traduzirErro(e);
 }
+// recusa do link da biblioteca pessoal: o banco diz no texto qual regra falhou
+function erroLink(e) {
+  const m = String(e?.message || '');
+  if (e?.code === '23514' && /midias_pessoal_url/.test(m)) return 'O link precisa começar com https://, ter um domínio (como www.exemplo.com), não ter espaço e ter até 2.048 caracteres.';
+  if (e?.code === '23514' && /midias_pessoal_youtube/.test(m)) return 'Esse endereço não é de um vídeo do YouTube.';
+  if (e?.code === '23514' && /midias_titulo_check/.test(m)) return 'O título precisa ter de 1 a 160 caracteres.';
+  if (e?.code === '23514') return 'O banco recusou este link.';
+  if (e?.code === '23502') return 'Falta o título ou o link.';
+  if (e?.code === '42501') return 'Sem permissão para guardar este link.';
+  return traduzirErro(e);
+}
 
 const db = {
   /* ---------- sessão ---------- */
@@ -1697,6 +1735,40 @@ const db = {
     const { signedUrl } = ok(await sb.storage.from('materiais').createSignedUrl(caminho, 3600));
     this._urls.set(caminho, { url: signedUrl, expira: Date.now() + 3600 * 1000 });
     return signedUrl;
+  },
+
+  /* ---------- biblioteca pessoal: o aluno guarda, muda e apaga os seus links; a equipe dele lê e apaga ---------- */
+  async guardarLink(linha) {
+    const { data, error } = await sb.from('midias').insert(linha).select().single();
+    if (error) throw new Error(erroLink(error));
+    return data;
+  },
+  async alterarLink(id, campos) {
+    const { data, error } = await sb.from('midias').update(campos).eq('id', id).select();
+    if (error) throw new Error(erroLink(error));
+    if (!data.length) throw new Error('Este link não foi alterado: ele não é seu ou já saiu da biblioteca.');
+    return data[0];
+  },
+  // sem permissão a API responde 200 com a lista vazia
+  async apagarLink(id) {
+    if (!ok(await sb.from('midias').delete().eq('id', id).select('id')).length) throw new Error('Este link não foi apagado: ele já tinha saído ou você não tem permissão.');
+  },
+  async linksDoAluno(aluno) {
+    return ok(await sb.from('midias').select('id,tipo,titulo,url,criado_em').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
+  },
+
+  /* ---------- visto: o aluno marca e desmarca o seu; a equipe só lê ---------- */
+  async vistos(aluno) { return ok(await sb.from('progresso').select('midia_id,visto_em').eq('aluno_id', aluno)); },
+  // devolve null quando o material já estava visto
+  async marcarVisto(midia) {
+    const { data, error } = await sb.from('progresso').insert({ midia_id: midia }).select('midia_id,visto_em').single();
+    if (error?.code === '23505') return null;
+    if (error?.code === '42501') throw new Error('Este material não pode ser marcado como visto.');
+    return ok({ data, error });
+  },
+  async desmarcarVisto(midia, aluno) { ok(await sb.from('progresso').delete().eq('midia_id', midia).eq('aluno_id', aluno).select('midia_id')); },
+  async progressoDoAluno(aluno) {
+    return ok(await sb.from('progresso').select('midia_id,visto_em,midias(titulo,tipo,pessoal_de)').eq('aluno_id', aluno).order('visto_em', { ascending: false }));
   },
 
   /* ---------- legenda: grava só pela função salvar_legendas ---------- */
@@ -2621,16 +2693,16 @@ async function abrirAnexo(c) {
 </script>
 <script>
 /* área do aluno com dado real: agenda, lições, biblioteca e estudo */
-const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], meus: new Set(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
+const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], meus: new Set(), vistos: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
 const VISTAS_ALUNO = ['agenda', 'biblioteca', 'licoes', 'estudo'];
 
 async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [aulas, tarefas, fileiras, midias, meus, professor] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(),
+  const [aulas, tarefas, fileiras, midias, meus, professor, vistos] = await Promise.all([
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id),
   ]);
-  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, meus: new Set(meus.map(x => x.midia_id)) });
+  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])) });
   renderAluno();
 }
 function renderAluno() {
@@ -2801,33 +2873,111 @@ function renderDetalheLicao() {
 }
 
 /* ---------- biblioteca ---------- */
+const doAluno = m => !!m.pessoal_de;
+const contaVistos = itens => `${itens.filter(m => al.vistos.has(m.id)).length} de ${itens.length} vistos`;
+const dominio = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return 'Link'; } };
+const rotuloVisto = visto => (visto ? `${ico('check')}Visto` : 'Marcar como visto');
+const botaoVisto = id => `<button class="btn btn-linha btn-visto" data-visto="${id}" aria-pressed="${al.vistos.has(id)}">${rotuloVisto(al.vistos.has(id))}</button>`;
 function cardMaterial(m) {
   return `<button class="card" data-material="${m.id}">
     <span class="card-capa">${capaMaterial(m)}</span>
     <span class="card-titulo">${esc(m.titulo)}</span>
-    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(m.fonte || 'Forward')}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
+    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(doAluno(m) ? dominio(m.url) : m.fonte || 'Forward')}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
+    ${al.vistos.has(m.id) ? `<span class="selo-visto">${ico('check')}Visto</span>` : ''}
   </button>`;
 }
-function fileiraHtml(titulo, itens, extra) {
+function fileiraHtml(titulo, itens) {
   if (!itens.length) return '';
-  return `<section class="fileira"><div class="fileira-topo"><h3>${esc(titulo)}</h3><span>${extra || itens.length + (itens.length === 1 ? ' item' : ' itens')}</span></div><div class="trilha">${itens.map(cardMaterial).join('')}</div></section>`;
+  return `<section class="fileira"><div class="fileira-topo"><h3>${esc(titulo)}</h3><span>${contaVistos(itens)}</span></div><div class="trilha">${itens.map(cardMaterial).join('')}</div></section>`;
 }
 function renderBibliotecaAluno() {
   $('#bib-niveis').innerHTML = NIVEIS.map(n => `<button class="nivel-chip" data-nivel="${n}" aria-pressed="${al.nivel === n}">${n}</button>`).join('');
+  const escola = al.midias.filter(m => !doAluno(m));
   const q = al.busca.trim().toLowerCase();
   const passa = m => (!al.nivel || m.nivel === al.nivel) && (!q || m.titulo.toLowerCase().includes(q) || (m.fonte || '').toLowerCase().includes(q));
-  const lista = al.midias.filter(passa);
+  const lista = escola.filter(passa);
   const paraMim = lista.filter(m => al.meus.has(m.id));
-  const blocos = fileiraHtml(`Do ${primeiroNome(al.professor?.nome) || 'professor'} para você`, paraMim, 'Escolhido para você')
+  const blocos = fileiraHtml(`Do ${primeiroNome(al.professor?.nome) || 'professor'} para você`, paraMim)
     + al.fileiras.map(f => fileiraHtml(f.titulo, lista.filter(m => m.fileira_id === f.id && !al.meus.has(m.id)))).join('');
-  $('#bib-conteudo').innerHTML = blocos || (al.midias.length
+  $('#bib-conteudo').innerHTML = blocos || (escola.length
     ? `<div class="vazio">${ico('magnifying-glass')}<b>Nada encontrado</b><span>Tente outro termo ou limpe o filtro de nível.</span></div>`
     : `<div class="vazio">${ico('books')}<b>A biblioteca ainda está vazia</b><span>Os materiais que o Pedro puser aparecem aqui.</span></div>`);
+  const links = al.midias.filter(doAluno).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
+  $('#minha-conta').textContent = links.length ? contaVistos(links) : '';
+  $('#minha-links').innerHTML = links.length
+    ? `<div class="trilha">${links.map(cardMaterial).join('')}</div>`
+    : `<p class="ajuda minha-vazia">Nenhum link guardado ainda. Cole acima o link de um vídeo do YouTube ou de uma página que comece com https://, dê um título e toque em “Guardar link”.</p>`;
+}
+
+/* link da biblioteca pessoal: as mesmas regras do banco */
+const RE_LINK = /^https:\/\/[^\/?#\s]+\.[^\/?#\s]+([\/?#]|$)/;
+const RE_LINK_YOUTUBE = /^https:\/\/((www\.|m\.)?youtube\.com\/(watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})([?&#]|$)/;
+const caracteres = s => [...s].length;
+// esquema e domínio em minúsculas; o caminho fica como foi colado
+function normalizarLink(txt) {
+  const s = String(txt || '').trim();
+  const m = s.match(/^([A-Za-z][A-Za-z0-9+.-]*:\/\/)([^\/?#]*)(.*)$/);
+  return m ? m[1].toLowerCase() + m[2].toLowerCase() + m[3] : s;
+}
+const tipoDoLink = url => (RE_LINK_YOUTUBE.test(url) ? 'youtube' : 'link');
+function erroDoLink(url) {
+  if (!url) return 'Cole o link.';
+  if (!url.startsWith('https://')) return 'Cole um link completo, começando com https://';
+  if (/\s/.test(url)) return 'O link não pode ter espaço.';
+  if (caracteres(url) > 2048) return 'O link passa de 2.048 caracteres.';
+  if (!RE_LINK.test(url)) return 'O link precisa ter um domínio, como https://www.exemplo.com';
+  return '';
+}
+function erroDoTitulo(titulo) {
+  if (!titulo) return 'Dê um título ao link.';
+  if (caracteres(titulo) > 160) return `O título pode ter até 160 caracteres (este tem ${caracteres(titulo)}).`;
+  return '';
+}
+async function guardarLink() {
+  const campoUrl = $('#link-url'), campoTitulo = $('#link-titulo'), botao = $('#link-guardar');
+  const url = normalizarLink(campoUrl.value), titulo = campoTitulo.value.trim();
+  const erroUrl = erroDoLink(url), erroTitulo = erroDoTitulo(titulo);
+  campoUrl.setAttribute('aria-invalid', String(!!erroUrl));
+  campoTitulo.setAttribute('aria-invalid', String(!!erroTitulo));
+  $('#link-url-erro').textContent = erroUrl;
+  $('#link-titulo-erro').textContent = erroTitulo;
+  $('#link-erro').textContent = '';
+  if (erroUrl || erroTitulo) return (erroUrl ? campoUrl : campoTitulo).focus();
+  botao.disabled = true;
+  try {
+    al.midias.push(await db.guardarLink({ tipo: tipoDoLink(url), titulo, url, pessoal_de: al.perfil.id }));
+    campoUrl.value = ''; campoTitulo.value = '';
+    renderBibliotecaAluno();
+    avisar('Link guardado na sua biblioteca.');
+  } catch (e) {
+    $('#link-erro').textContent = e.message;
+  } finally { botao.disabled = false; }
+}
+async function apagarLink(id) {
+  const m = al.midias.find(x => x.id === id); if (!m) return;
+  if (!confirm(`Apagar “${m.titulo}” da sua biblioteca? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
+  if (!await tentar(() => db.apagarLink(id), 'Link apagado.')) return;
+  al.midias = al.midias.filter(x => x.id !== id);
+  al.vistos.delete(id);
+  fecharCamadas();
+  renderBibliotecaAluno();
+}
+async function alternarVisto(b) {
+  const id = b.dataset.visto, visto = al.vistos.has(id);
+  if (b.dataset.ocupado) return;
+  b.dataset.ocupado = '1';
+  const feito = await tentar(() => (visto ? db.desmarcarVisto(id, al.perfil.id) : db.marcarVisto(id)));
+  delete b.dataset.ocupado;
+  if (!feito) return;
+  if (visto) al.vistos.delete(id); else al.vistos.set(id, feito.visto_em || new Date().toISOString());
+  $$(`[data-visto="${id}"]`).forEach(x => { x.setAttribute('aria-pressed', String(!visto)); x.innerHTML = rotuloVisto(!visto); });
+  renderBibliotecaAluno();
 }
 function abrirMaterialAluno(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
+  const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null;
   const principal = m.tipo === 'link'
-    ? `<a class="btn btn-primario" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ico('arrow-square-out')}Abrir o link</a>`
+    ? (url ? `<a class="btn btn-primario" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${ico('arrow-square-out')}Abrir o link</a>` : '')
     : `<button class="btn btn-primario" data-estudar="${m.id}">${ico(m.tipo === 'pdf' ? 'books' : 'play')}Estudar aqui</button>`;
   $('#modal').innerHTML = `
     <div class="modal-capa">${capaMaterial(m)}<button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button></div>
@@ -2835,7 +2985,7 @@ function abrirMaterialAluno(id) {
       <h2 id="modal-titulo">${esc(m.titulo)}</h2>
       <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span>${m.fonte ? `<span class="etq">${esc(m.fonte)}</span>` : ''}</div>
       ${m.descricao ? `<p>${esc(m.descricao)}</p>` : ''}
-      <div class="modal-acoes">${principal}</div>
+      <div class="modal-acoes">${principal}${botaoVisto(m.id)}${doAluno(m) ? `<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
     </div>`;
   abrirCamada($('#modal'));
 }
@@ -3295,6 +3445,7 @@ async function abrirEstudo(id) {
       <button class="btn-texto" data-vista-aluno="biblioteca">${ico('caret-left')}Biblioteca</button>
       <h2>${esc(m.titulo)}</h2>
       <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
+      ${botaoVisto(m.id)}
     </div>
     <div id="estudo-conteudo"></div>
     ${m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
@@ -3369,9 +3520,12 @@ document.addEventListener('click', ev => {
   if (b.dataset.confirmar) return confirmarAula(b.dataset.confirmar);
   if (b.dataset.entrar) return entrarNaAula(b.dataset.entrar);
   if (b.dataset.estudar) return abrirEstudo(b.dataset.estudar);
+  if (b.dataset.visto) return alternarVisto(b);
+  if (b.dataset.apagarLink) return apagarLink(b.dataset.apagarLink);
   if (b.dataset.tarefa && b.closest('#gaveta')) { fecharCamadas(); al.licaoSel = b.dataset.tarefa; vistaAluno('licoes'); renderLicoes(); }
 });
 $('#bib-busca').addEventListener('input', ev => { al.busca = ev.target.value; renderBibliotecaAluno(); });
+$('#form-link').addEventListener('submit', ev => { ev.preventDefault(); guardarLink(); });
 
 </script>
 <script>
@@ -3550,7 +3704,7 @@ function renderAlunos() {
       <span class="avatar${p.papel === 'aluno' ? '' : ' p'}" aria-hidden="true">${esc(iniciais(p.nome))}</span>
       <span class="quem"><b>${esc(p.nome)}</b><small>${esc(p.email)} · ${p.papel === 'aluno' ? (p.nivel ? `nível ${esc(p.nivel)}` : 'sem nível') : esc(p.papel)}${p.menor ? ` · <span class="menor-tag">menor</span>${p.responsavel_nome ? ` · responsável: ${esc(p.responsavel_nome)}` : ''}` : ''}${p.ativo ? '' : ' · desativado'}</small></span>
       <span class="acoes-linha">
-        ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button><button class="btn btn-linha" data-pron-pessoa="${p.id}">Pronúncia</button><button class="btn btn-linha" data-dit-pessoa="${p.id}">Ditado</button><button class="btn btn-linha" data-anot-pessoa="${p.id}">Lousa</button>` : ''}
+        ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button><button class="btn btn-linha" data-pron-pessoa="${p.id}">Pronúncia</button><button class="btn btn-linha" data-dit-pessoa="${p.id}">Ditado</button><button class="btn btn-linha" data-anot-pessoa="${p.id}">Lousa</button><button class="btn btn-linha" data-bib-pessoa="${p.id}">Biblioteca</button><button class="btn btn-linha" data-prog-pessoa="${p.id}">Progresso</button>` : ''}
         <button class="btn btn-linha" data-editar-pessoa="${p.id}">Editar</button>
         <button class="btn btn-linha" data-senha-pessoa="${p.id}">Nova senha</button>
         <button class="btn btn-linha" data-ativo-pessoa="${p.id}">${p.ativo ? 'Desativar' : 'Reativar'}</button>
@@ -3760,6 +3914,55 @@ async function verAnotacao(i) {
   }
 }
 function voltarAnotacoes(i) { fecharLousaGaveta(); listarAnotacoes(i); }
+const bibAluno = { aluno: null, links: [] };
+async function verBibliotecaAluno(id) {
+  const p = pessoa(id); if (!p) return;
+  const links = await tentar(() => db.linksDoAluno(id));
+  if (!links) return;
+  Object.assign(bibAluno, { aluno: p, links });
+  gavetaForm(p.nome, 'Biblioteca', '<div id="bib-aluno"></div>', [`<button class="btn btn-primario" data-fechar>Fechar</button>`]);
+  listarLinksAluno();
+}
+function listarLinksAluno() {
+  const box = $('#bib-aluno'); if (!box) return;
+  const { aluno: p, links } = bibAluno;
+  const abrir = l => (l.tipo === 'youtube'
+    ? `<button class="btn btn-linha" data-ver-link="${l.id}" aria-label="Ver ${esc(l.titulo)}">Ver</button>`
+    : /^https:\/\//.test(l.url || '') ? `<a class="btn btn-linha" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${esc(l.titulo)} em outra aba">Abrir</a>` : '');
+  box.innerHTML = links.length
+    ? `<p class="ajuda">${links.length} ${links.length === 1 ? 'link guardado' : 'links guardados'} por ${esc(primeiroNome(p.nome))}</p>
+      <ul class="lista bib-equipe">${links.map(l => `<li class="mat-linha">
+        <span class="mat-ico">${ico(ICONE_TIPO[l.tipo] || 'link-simple')}</span>
+        <span class="quem"><b>${esc(l.titulo)}</b><small>${esc(NOME_TIPO[l.tipo])} · ${dataSP(l.criado_em)}</small></span>
+        <span class="acoes-linha">${abrir(l)}<button class="btn btn-linha" data-tirar-link="${l.id}" aria-label="Apagar ${esc(l.titulo)}">Apagar</button></span>
+      </li>`).join('')}</ul>`
+    : `<div class="caixa-aviso">${esc(primeiroNome(p.nome))} ainda não guardou nenhum link.</div>`;
+}
+function verLinkAluno(id) {
+  const l = bibAluno.links.find(x => x.id === id); const yt = l && idYoutube(l.url);
+  if (!yt) return;
+  fecharCamadas();
+  estudarMaterial(l, yt, 'alunos');
+}
+async function tirarLinkAluno(id) {
+  const l = bibAluno.links.find(x => x.id === id), p = bibAluno.aluno; if (!l || !p) return;
+  if (!confirm(`Apagar “${l.titulo}” da biblioteca de ${primeiroNome(p.nome)}? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
+  if (!await tentar(() => db.apagarLink(id), 'Link apagado.')) return;
+  bibAluno.links = bibAluno.links.filter(x => x.id !== id);
+  eq.midias = eq.midias.filter(x => x.id !== id);
+  listarLinksAluno();
+  ($('#bib-aluno [data-tirar-link]') || $('#gaveta [data-fechar]'))?.focus();
+}
+async function verProgressoAluno(id) {
+  const p = pessoa(id); if (!p) return;
+  const lista = await tentar(() => db.progressoDoAluno(id));
+  if (!lista) return;
+  gavetaForm(p.nome, 'Progresso', lista.length
+    ? `<p class="ajuda">${lista.length} ${lista.length === 1 ? 'material visto' : 'materiais vistos'}</p>
+      <ul class="lista prog-equipe">${lista.map(v => `<li><span class="quem"><b>${esc(v.midias?.titulo || 'Material fora da sua biblioteca')}</b><small>${v.midias ? `${esc(NOME_TIPO[v.midias.tipo] || '')}${v.midias.pessoal_de ? ' da biblioteca pessoal' : ''} · ` : ''}visto em ${dataSP(v.visto_em)}</small></span></li>`).join('')}</ul>`
+    : `<div class="caixa-aviso">${esc(primeiroNome(p.nome))} ainda não marcou nenhum material como visto.</div>`,
+  [`<button class="btn btn-primario" data-fechar>Fechar</button>`]);
+}
 async function excluirPessoa(id) {
   const p = pessoa(id); if (!p) return;
   if (!confirm(`Excluir ${p.nome} de vez? Aulas, lições e o acesso dela são apagados. Não dá para desfazer.`)) return;
@@ -3961,7 +4164,7 @@ function paraQuem(m) {
 }
 function renderBibliotecaEquipe() {
   const blocos = eq.fileiras.map(f => {
-    const itens = eq.midias.filter(m => m.fileira_id === f.id);
+    const itens = eq.midias.filter(m => m.fileira_id === f.id && !m.pessoal_de);
     if (!itens.length) return '';
     return `<section class="fileira" style="margin-top:22px"><div class="fileira-topo"><h3>${esc(f.titulo)}</h3><span>${itens.length} ${itens.length === 1 ? 'item' : 'itens'}</span></div>
       <article class="painel"><ul class="lista">${itens.map(m => `<li class="mat-linha">
@@ -4037,13 +4240,13 @@ function avisoEstudoEquipe(msg) {
   const a = $('#eq-estudo-aviso');
   if (a) a.innerHTML = `<div class="caixa-aviso erro" role="alert">${esc(msg)}</div>`;
 }
-async function estudarMaterial(m, yt) {
+async function estudarMaterial(m, yt, volta = 'biblioteca') {
   fecharEstudoEquipe();
   vistaEquipe('estudo');
   const pedido = ee.pedido;
   $('#e-estudo').innerHTML = `
     <div class="estudo-topo">
-      <button class="btn-texto" data-vista-equipe="biblioteca">${ico('caret-left')}Biblioteca</button>
+      <button class="btn-texto" data-vista-equipe="${volta}">${ico('caret-left')}${volta === 'alunos' ? 'Alunos' : 'Biblioteca'}</button>
       <h2>${esc(m.titulo)}</h2>
       <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
     </div>
@@ -4268,6 +4471,10 @@ document.addEventListener('click', ev => {
   if (ds.anotPessoa) return verLousa(ds.anotPessoa);
   if (ds.anotVer !== undefined) return verAnotacao(Number(ds.anotVer));
   if (ds.anotLista !== undefined) return voltarAnotacoes(Number(ds.anotLista));
+  if (ds.bibPessoa) return verBibliotecaAluno(ds.bibPessoa);
+  if (ds.progPessoa) return verProgressoAluno(ds.progPessoa);
+  if (ds.verLink) return verLinkAluno(ds.verLink);
+  if (ds.tirarLink) return tirarLinkAluno(ds.tirarLink);
   if (ds.editarPessoa) return formEditarPessoa(ds.editarPessoa);
   if (ds.senhaPessoa) return novaSenha(ds.senhaPessoa);
   if (ds.ativoPessoa) return alternarAtivo(ds.ativoPessoa);

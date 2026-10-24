@@ -1003,6 +1003,32 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
   .leg-acoes{grid-column:2;display:flex;flex-wrap:wrap;padding-top:0}
 }
 
+/* lousa: camada de desenho sobre cada página do PDF e folha pautada; o papel é claro nos dois temas, como a página */
+.lousa-lugar{display:grid;gap:12px;min-width:0}
+.lousa-lugar-pdf{margin-bottom:14px}
+.lousa-barra{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.lousa-grupo{display:flex;flex-wrap:wrap;gap:6px}
+.lousa-barra .icone-btn,.lousa-tinta,.lousa-pilula{border-color:var(--campo-borda);color:var(--fg)}
+.lousa-pilula{display:inline-flex;align-items:center;gap:6px}
+.lousa-tinta{width:40px;height:40px;border-radius:11px;border:1px solid var(--campo-borda);background:transparent;display:grid;place-items:center;transition:background-color .15s}
+.lousa-tinta>span{width:24px;height:24px;border-radius:50%;background:#FFFDF7 radial-gradient(circle,var(--tinta) 0 6px,transparent 6.5px);box-shadow:inset 0 0 0 1px rgba(31,43,88,.25)}
+.lousa-marca>span{background:#FFFDF7 linear-gradient(rgba(255,208,0,.55),rgba(255,208,0,.55)) center/16px 10px no-repeat}
+.lousa-barra [aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg);border-color:transparent}
+.lousa-barra .icone-btn:disabled{opacity:.45;cursor:default}
+.lousa-linha{display:block;width:18px;border-radius:3px;background:currentColor}
+.lousa-linha.fina{height:2px}
+.lousa-linha.grossa{height:6px}
+.lousa-camada{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;-webkit-user-select:none;user-select:none}
+.lousa-camada.ligada{pointer-events:auto;touch-action:none;cursor:crosshair}
+.lousa-folha{position:relative;width:100%;max-width:560px;justify-self:center;aspect-ratio:210/297;border-radius:8px;box-shadow:var(--sombra);
+  background:linear-gradient(to right,transparent 9%,rgba(198,40,40,.35) 9%,rgba(198,40,40,.35) calc(9% + 1px),transparent calc(9% + 1px)),
+    repeating-linear-gradient(to bottom,transparent 0,transparent calc(100% / 32 - 1px),#A9B4D2 calc(100% / 32 - 1px),#A9B4D2 calc(100% / 32)),#FFFDF7}
+.anot-vista{display:grid;gap:14px;min-width:0}
+.anot-equipe .quem b,.anot-equipe .quem small{white-space:normal;overflow-wrap:anywhere}
+.anot-voltar{display:inline-flex;align-items:center;gap:4px;justify-self:start}
+.anot-titulo b,.anot-titulo small{display:block;overflow-wrap:anywhere}
+.anot-titulo small{font-size:13px;color:var(--fg-2)}
+
 </style>
 
 <div class="barra">
@@ -1045,7 +1071,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, as palavras que você salva no vocabulário e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). O áudio da sua voz não é guardado. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). O áudio da sua voz não é guardado. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1200,6 +1226,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
     </section>
 
     <section class="vista" id="e-legenda" aria-label="Legenda do vídeo" hidden></section>
+    <section class="vista" id="e-estudo" aria-label="Estudo" hidden></section>
     <footer class="app-rodape"><a href="#privacidade">Aviso de privacidade</a></footer>
   </div>
 </main>
@@ -1213,7 +1240,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 <script src="supabase-2.49.4.js"></script>
 <script>
 const CONFIG = {"url": "https://xxlxuxilbgkwaaawnpov.supabase.co", "anon": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4bHh1eGlsYmdrd2FhYXducG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1MDM5MTcsImV4cCI6MjEwODA3OTkxN30.oCaFMixlluPtT4cKSOuK8XjKxSgTx53BAHOQ_8xR6Ug"};
-const ICONES = {"arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
+const ICONES = {"arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
 </script>
 <script>
 /* base: utilidades de tela, sem banco. Mesmas funções do protótipo, sem o relógio fixo da demonstração. */
@@ -1687,8 +1714,390 @@ const db = {
     if (error && ['23514', '23502'].includes(error.code)) throw new Error('A tentativa não foi gravada: a resposta está vazia ou é longa demais.');
     return ok({ data, error });
   },
+
+  /* ---------- lousa: cada pessoa grava e apaga as suas anotações; a equipe lê as dos seus alunos ---------- */
+  // o filtro por dono é obrigatório: a RLS também entrega à equipe as anotações dos alunos dela
+  async anotacoes(midia, dono) {
+    return ok(await sb.from('anotacoes').select('pagina,tracos,atualizado_em').eq('midia_id', midia).eq('dono_id', dono));
+  },
+  async anotacoesDoAluno(aluno) {
+    return ok(await sb.from('anotacoes').select('midia_id,pagina,atualizado_em,midias(titulo,tipo,arquivo_path)').eq('dono_id', aluno).order('atualizado_em', { ascending: false }));
+  },
+  async anotacao(dono, midia, pagina) {
+    return ok(await sb.from('anotacoes').select('pagina,tracos').eq('dono_id', dono).eq('midia_id', midia).eq('pagina', pagina));
+  },
+  async gravarAnotacao(linha) {
+    const { error } = await sb.from('anotacoes').upsert(linha, { onConflict: 'dono_id,midia_id,pagina' });
+    if (error?.code === '23514' && /anotacoes_tracos_tamanho/.test(error.message)) throw new Error(LIMITE_ANOTACOES);
+    if (error && ['23514', '23502'].includes(error.code)) throw new Error('O banco recusou o formato dos traços.');
+    ok({ error });
+  },
+  // ao sair da página só pedido com keepalive chega ao servidor, e ele não pode esperar a sessão
+  gravarAnotacaoNaSaida(corpo) {
+    if (!tokenAtual) return null;
+    return fetch(`${CONFIG.url}/rest/v1/anotacoes?on_conflict=dono_id,midia_id,pagina`, {
+      method: 'POST', keepalive: true, body: corpo,
+      headers: { apikey: CONFIG.anon, Authorization: `Bearer ${tokenAtual}`, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
+    });
+  },
+  async limparAnotacao(dono, midia, pagina) {
+    ok(await sb.from('anotacoes').delete().eq('dono_id', dono).eq('midia_id', midia).eq('pagina', pagina));
+  },
 };
 const DICIONARIO_FORA = 'o dicionário não respondeu agora; tente de novo';
+const LIMITE_ANOTACOES = 'Esta página chegou ao limite de anotações.';
+let tokenAtual = null;
+sb.auth.onAuthStateChange((_, s) => { tokenAtual = s?.access_token || null; });
+
+</script>
+<script>
+/* lousa: traços sobre as páginas do PDF e na folha pautada, gravados por pessoa, material e página.
+   Pontos em fração (0 a 1) da página; espessura em fração da largura, para o traço acompanhar o tamanho da tela. */
+const LOUSA_TINTA = { vermelha: '#C62828', azul: '#1E56C8', preta: '#1B1B1F', amarela: '#FFD000' };
+const LOUSA_LARGURA = { caneta: { fina: 0.003, grossa: 0.009 }, marca: { fina: 0.015, grossa: 0.03 } };
+const LOUSA_TETO = 1048576;
+const LOUSA_PAGINA = /^(folha|[1-9][0-9]{0,3})$/;
+const LOUSA_ESPERA = 2000;
+// o navegador soma os corpos dos pedidos com keepalive em voo e recusa acima de 64 KiB
+const LOUSA_VERBA_SAIDA = 60000;
+const LOUSA_ESTREITA = matchMedia('(max-width:1180px)');
+const lousasAbertas = new Set();
+
+const lousaFracao = n => Math.round(Math.min(1, Math.max(0, n)) * 1e4) / 1e4;
+function tracoValido(t) {
+  if (!t || typeof t !== 'object' || Array.isArray(t)) return false;
+  if (Object.keys(t).sort().join() !== 'cor,espessura,ferramenta,pontos') return false;
+  const corOk = t.ferramenta === 'caneta' ? ['vermelha', 'azul', 'preta'].includes(t.cor) : t.ferramenta === 'marca' && t.cor === 'amarela';
+  return corOk && ['fina', 'grossa'].includes(t.espessura) && Array.isArray(t.pontos) && t.pontos.length > 0
+    && t.pontos.every(p => Array.isArray(p) && p.length === 2 && p.every(n => typeof n === 'number' && n >= 0 && n <= 1));
+}
+const tracosValidos = l => Array.isArray(l) && l.every(tracoValido);
+// o banco mede a forma texto do jsonb, que põe um espaço depois de cada vírgula e de cada dois-pontos
+function tamanhoDosTracos(l) {
+  const s = JSON.stringify(l);
+  return new TextEncoder().encode(s).length + (s.match(/[,:]/g) || []).length;
+}
+function distanciaAoSegmento(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
+  const t = l2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / l2)) : 0;
+  return Math.hypot(px - ax - t * dx, py - ay - t * dy);
+}
+// a camada é um SVG de 1000 unidades de largura e altura na proporção da página: o navegador escala o traço
+const LOUSA_UNIDADE = 1000;
+const lousaXY = ([x, y], alto) => `${Math.round(x * LOUSA_UNIDADE * 10) / 10},${Math.round(y * alto * 10) / 10}`;
+function elementoDoTraco(t, alto) {
+  const largura = LOUSA_LARGURA[t.ferramenta][t.espessura] * LOUSA_UNIDADE, um = t.pontos.length === 1;
+  const el = document.createElementNS('http://www.w3.org/2000/svg', um ? 'circle' : 'polyline');
+  if (um) {
+    const [cx, cy] = lousaXY(t.pontos[0], alto).split(',');
+    Object.entries({ cx, cy, r: largura / 2, fill: LOUSA_TINTA[t.cor] }).forEach(([k, v]) => el.setAttribute(k, v));
+  } else {
+    el.setAttribute('points', t.pontos.map(p => lousaXY(p, alto)).join(' '));
+    Object.entries({ fill: 'none', stroke: LOUSA_TINTA[t.cor], 'stroke-width': largura, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }).forEach(([k, v]) => el.setAttribute(k, v));
+  }
+  if (t.ferramenta === 'marca') el.setAttribute('opacity', '0.4');
+  return el;
+}
+
+const LOUSA_BARRA = comLousa => `
+  ${comLousa ? `<button class="pilula lousa-pilula" type="button" data-lousa="ligar" aria-pressed="false">${ico('pencil-simple-line')}Lousa</button>` : ''}
+  <div class="lousa-grupo" role="group" aria-label="Caneta e marca-texto">
+    <button class="lousa-tinta" type="button" data-lousa-caneta="vermelha" aria-pressed="true" aria-label="Caneta vermelha" title="Caneta vermelha"><span style="--tinta:${LOUSA_TINTA.vermelha}"></span></button>
+    <button class="lousa-tinta" type="button" data-lousa-caneta="azul" aria-pressed="false" aria-label="Caneta azul" title="Caneta azul"><span style="--tinta:${LOUSA_TINTA.azul}"></span></button>
+    <button class="lousa-tinta" type="button" data-lousa-caneta="preta" aria-pressed="false" aria-label="Caneta preta" title="Caneta preta"><span style="--tinta:${LOUSA_TINTA.preta}"></span></button>
+    <button class="lousa-tinta lousa-marca" type="button" data-lousa="marca" aria-pressed="false" aria-label="Marca-texto amarelo" title="Marca-texto amarelo"><span></span></button>
+    <button class="icone-btn lousa-btn" type="button" data-lousa="borracha" aria-pressed="false" aria-label="Borracha" title="Borracha">${ico('eraser')}</button>
+  </div>
+  <div class="lousa-grupo" role="group" aria-label="Espessura">
+    <button class="icone-btn lousa-btn" type="button" data-lousa-espessura="fina" aria-pressed="true" aria-label="Traço fino" title="Traço fino"><span class="lousa-linha fina"></span></button>
+    <button class="icone-btn lousa-btn" type="button" data-lousa-espessura="grossa" aria-pressed="false" aria-label="Traço grosso" title="Traço grosso"><span class="lousa-linha grossa"></span></button>
+  </div>
+  <div class="lousa-grupo">
+    <button class="icone-btn lousa-btn" type="button" data-lousa="desfazer" aria-label="Desfazer" title="Desfazer" disabled>${ico('arrow-counter-clockwise')}</button>
+    <button class="icone-btn lousa-btn" type="button" data-lousa="limpar" aria-label="Limpar a página" title="Limpar a página">${ico('trash')}</button>
+  </div>
+  <button class="pilula lousa-pilula" type="button" data-lousa="folha" aria-pressed="false">${ico('notepad')}Folha</button>`;
+
+class Lousa {
+  constructor({ midia, dono, soLeitura = false }) {
+    Object.assign(this, {
+      midia, dono, soLeitura, dados: new Map(), camadas: new Map(), versao: new Map(), enviada: new Map(), filas: new Map(),
+      pilha: [], ferramenta: 'caneta', cor: 'vermelha', espessura: 'fina', ligada: false, ativa: null, espera: null,
+      fechada: false, pronta: false, risco: null, quadro: 0, barraEl: null, folhaEl: null, colocarFolha: null,
+    });
+    this.redim = new ResizeObserver(ent => ent.forEach(e => { const c = e.target.querySelector(':scope > .lousa-camada'); if (c) this.ajustar(c); }));
+    if (!soLeitura) lousasAbertas.add(this);
+  }
+
+  async carregar() {
+    try { this.usar(await db.anotacoes(this.midia, this.dono)); }
+    catch (e) { if (!this.fechada) avisar('Não deu para abrir as suas anotações. Recarregue a página para usar a lousa.', true); }
+  }
+  // só depois de receber o que já está gravado a lousa aceita traço: gravar antes apagaria o que existe
+  usar(linhas) {
+    if (this.fechada) return;
+    for (const r of linhas) if (LOUSA_PAGINA.test(r.pagina) && tracosValidos(r.tracos)) this.dados.set(r.pagina, r.tracos);
+    this.pronta = true;
+    this.camadas.forEach((_, p) => this.desenhar(p));
+  }
+
+  /* ---------- camadas: uma por página e uma na folha ---------- */
+  // caixa: elemento com position:relative do tamanho exato do desenho da página
+  pagina(caixa, pagina) {
+    if (this.fechada || !LOUSA_PAGINA.test(pagina)) return null;
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    c.setAttribute('class', 'lousa-camada'); c.setAttribute('preserveAspectRatio', 'none'); c.setAttribute('aria-hidden', 'true');
+    c.dataset.lousaPagina = pagina;
+    if (!this.soLeitura && (pagina === 'folha' || this.ligada)) c.classList.add('ligada');
+    caixa.append(c);
+    this.camadas.set(pagina, c);
+    if (!this.soLeitura) {
+      c.addEventListener('pointerdown', ev => this.comecar(ev, c));
+      c.addEventListener('pointermove', ev => this.mover(ev, c));
+      c.addEventListener('pointerup', ev => this.terminar(ev));
+      c.addEventListener('pointercancel', ev => this.terminar(ev));
+    }
+    this.redim.observe(caixa);
+    this.ajustar(c);
+    return c;
+  }
+  // mudou a proporção da caixa: a altura do viewBox acompanha e o traço é refeito a partir dos pontos
+  ajustar(c) {
+    const r = c.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const alto = Math.round(LOUSA_UNIDADE * r.height / r.width * 10) / 10;
+    if (Number(c.dataset.alto) === alto) return;
+    c.dataset.alto = alto;
+    c.setAttribute('viewBox', `0 0 ${LOUSA_UNIDADE} ${alto}`);
+    this.desenhar(c.dataset.lousaPagina);
+  }
+  desenhar(p) {
+    const c = this.camadas.get(p); if (!c || !c.dataset.alto) return;
+    const alto = Number(c.dataset.alto);
+    c.replaceChildren(...(this.dados.get(p) || []).map(t => elementoDoTraco(t, alto)));
+    if (this.risco?.pagina === p && this.risco.traco) { this.risco.el = null; this.desenharRisco(); }
+  }
+  desenharRisco() {
+    const r = this.risco, c = r && this.camadas.get(r.pagina);
+    if (!r?.traco || !c?.dataset.alto) return;
+    const novo = elementoDoTraco(r.traco, Number(c.dataset.alto));
+    if (r.el?.isConnected) r.el.replaceWith(novo); else c.append(novo);
+    r.el = novo;
+  }
+
+  /* ---------- ponteiro: mouse, dedo e caneta ---------- */
+  ponto(ev, c) {
+    const r = c.getBoundingClientRect();
+    return [lousaFracao((ev.clientX - r.left) / r.width), lousaFracao((ev.clientY - r.top) / r.height)];
+  }
+  comecar(ev, c) {
+    if (this.fechada || this.risco || !ev.isPrimary || (ev.pointerType === 'mouse' && ev.button !== 0) || !c.classList.contains('ligada')) return;
+    ev.preventDefault();
+    if (!this.pronta) return avisar('A lousa ainda está abrindo as suas anotações.', true);
+    c.setPointerCapture(ev.pointerId);
+    clearTimeout(this.espera);
+    const p = c.dataset.lousaPagina, pt = this.ponto(ev, c);
+    const traco = this.ferramenta === 'borracha' ? null
+      : { ferramenta: this.ferramenta, cor: this.ferramenta === 'marca' ? 'amarela' : this.cor, espessura: this.espessura, pontos: [pt] };
+    this.ativa = p;
+    this.risco = { pagina: p, id: ev.pointerId, c, ult: pt, traco, el: null };
+    if (traco) this.desenharRisco(); else this.apagarEm(pt);
+  }
+  mover(ev, c) {
+    const r = this.risco; if (!r || r.id !== ev.pointerId) return;
+    const caixa = c.getBoundingClientRect(), juntos = ev.getCoalescedEvents?.();
+    for (const e of juntos?.length ? juntos : [ev]) {
+      const pt = this.ponto(e, c);
+      const passo = Math.hypot((pt[0] - r.ult[0]) * caixa.width, (pt[1] - r.ult[1]) * caixa.height);
+      if (passo < (r.traco ? 1.5 : 3)) continue;
+      if (r.traco) r.traco.pontos.push(pt);
+      else for (let k = 1, n = Math.ceil(passo / 3); k <= n; k++) this.apagarEm([r.ult[0] + (pt[0] - r.ult[0]) * k / n, r.ult[1] + (pt[1] - r.ult[1]) * k / n]);
+      r.ult = pt;
+    }
+    if (r.traco && !this.quadro) this.quadro = requestAnimationFrame(() => { this.quadro = 0; this.desenharRisco(); });
+  }
+  terminar(ev) {
+    const r = this.risco; if (!r || r.id !== ev.pointerId) return;
+    this.risco = null;
+    cancelAnimationFrame(this.quadro); this.quadro = 0;
+    if (r.traco) {
+      const lista = [...(this.dados.get(r.pagina) || []), r.traco];
+      if (tamanhoDosTracos(lista) > LOUSA_TETO) avisar(LIMITE_ANOTACOES, true);
+      else {
+        this.dados.set(r.pagina, lista);
+        this.pilha.push({ pagina: r.pagina, traco: r.traco, indice: lista.length - 1, apagou: false });
+        this.mudou(r.pagina);
+      }
+      this.desenhar(r.pagina);
+    }
+    this.agendar();
+  }
+  // borracha de traço: tira o traço inteiro que passa perto do ponto
+  apagarEm(pt) {
+    const { pagina: p, c } = this.risco, caixa = c.getBoundingClientRect(), w = caixa.width, h = caixa.height;
+    const x = pt[0] * w, y = pt[1] * h, lista = this.dados.get(p) || [];
+    const i = lista.findLastIndex(t => {
+      const tol = 8 + LOUSA_LARGURA[t.ferramenta][t.espessura] * w / 2;
+      return t.pontos.some((q, k) => { const s = t.pontos[k + 1] || q; return distanciaAoSegmento(x, y, q[0] * w, q[1] * h, s[0] * w, s[1] * h) <= tol; });
+    });
+    if (i < 0) return;
+    this.pilha.push({ pagina: p, traco: lista[i], indice: i, apagou: true });
+    this.dados.set(p, lista.filter((_, k) => k !== i));
+    this.mudou(p);
+    this.desenhar(p);
+  }
+
+  /* ---------- desfazer, limpar e ligar ---------- */
+  desfazer() {
+    const a = this.pilha.pop(); if (!a) return;
+    const lista = [...(this.dados.get(a.pagina) || [])];
+    if (a.apagou) lista.splice(Math.min(a.indice, lista.length), 0, a.traco);
+    else { const i = lista.lastIndexOf(a.traco); if (i >= 0) lista.splice(i, 1); }
+    this.dados.set(a.pagina, lista);
+    this.mudou(a.pagina);
+    this.desenhar(a.pagina);
+    this.agendar();
+  }
+  visivel(p) { const c = this.camadas.get(p); return !!c && c.getClientRects().length > 0; }
+  maisVisivel() {
+    let melhor = null, area = 0;
+    this.camadas.forEach((c, p) => {
+      const r = c.getBoundingClientRect();
+      const a = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0)) * Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0));
+      if (a > area) { area = a; melhor = p; }
+    });
+    return melhor;
+  }
+  limpar() {
+    if (!this.pronta) return;
+    const p = this.ativa && this.visivel(this.ativa) ? this.ativa : this.maisVisivel();
+    if (!p) return;
+    if (!confirm(`Apagar todas as anotações ${p === 'folha' ? 'da folha' : `da página ${p}`}? Não dá para desfazer.`)) return;
+    this.dados.set(p, []);
+    this.versao.delete(p); this.enviada.delete(p);
+    this.pilha = this.pilha.filter(a => a.pagina !== p);
+    this.desenhar(p);
+    this.atualizarBarra();
+    const fila = (this.filas.get(p) || Promise.resolve())
+      .then(() => db.limparAnotacao(this.dono, this.midia, p))
+      .catch(e => avisar(`As anotações não foram apagadas. ${e.message}`, true));
+    this.filas.set(p, fila);
+  }
+  ligar(v) {
+    this.ligada = v;
+    this.camadas.forEach((c, p) => { if (p !== 'folha') c.classList.toggle('ligada', v); });
+    if (v) getSelection()?.removeAllRanges();
+    this.atualizarBarra();
+  }
+  mostrarFolha(v) {
+    if (!this.folhaEl) return;
+    this.folhaEl.hidden = !v;
+    this.atualizarBarra();
+  }
+
+  /* ---------- barra e folha ---------- */
+  barra(lugar, { comLousa = false } = {}) {
+    if (this.fechada || this.soLeitura) return null;
+    const el = this.barraEl = document.createElement('div');
+    el.className = 'lousa-barra'; el.setAttribute('role', 'group'); el.setAttribute('aria-label', 'Ferramentas da lousa');
+    el.innerHTML = LOUSA_BARRA(comLousa);
+    el.addEventListener('click', ev => this.botao(ev.target.closest('button')));
+    lugar.append(el);
+    this.atualizarBarra();
+    return el;
+  }
+  botao(b) {
+    if (!b) return;
+    const d = b.dataset;
+    if (d.lousaCaneta) Object.assign(this, { ferramenta: 'caneta', cor: d.lousaCaneta });
+    else if (d.lousaEspessura) this.espessura = d.lousaEspessura;
+    else if (d.lousa === 'marca' || d.lousa === 'borracha') this.ferramenta = d.lousa;
+    else if (d.lousa === 'ligar') return this.ligar(!this.ligada);
+    else if (d.lousa === 'folha') return this.mostrarFolha(!!this.folhaEl?.hidden);
+    else if (d.lousa === 'desfazer') this.desfazer();
+    else if (d.lousa === 'limpar') this.limpar();
+    this.atualizarBarra();
+  }
+  atualizarBarra() {
+    const b = this.barraEl; if (!b) return;
+    const estado = (el, v) => el && el.setAttribute('aria-pressed', String(v));
+    $$('[data-lousa-caneta]', b).forEach(x => estado(x, this.ferramenta === 'caneta' && this.cor === x.dataset.lousaCaneta));
+    $$('[data-lousa-espessura]', b).forEach(x => estado(x, this.espessura === x.dataset.lousaEspessura));
+    estado($('[data-lousa="marca"]', b), this.ferramenta === 'marca');
+    estado($('[data-lousa="borracha"]', b), this.ferramenta === 'borracha');
+    estado($('[data-lousa="ligar"]', b), this.ligada);
+    estado($('[data-lousa="folha"]', b), !!this.folhaEl && !this.folhaEl.hidden);
+    $('[data-lousa="desfazer"]', b).disabled = !this.pilha.length;
+  }
+  // a folha fica em "estreito" (logo depois da barra) até 1180 px e em "largo" (ao lado das páginas) acima disso
+  folha(estreito, largo = estreito) {
+    if (this.fechada) return null;
+    const f = this.folhaEl = document.createElement('div');
+    f.className = 'lousa-folha'; f.hidden = !this.soLeitura;
+    f.setAttribute('role', 'img'); f.setAttribute('aria-label', 'Folha pautada');
+    this.colocarFolha = () => {
+      if (largo !== estreito && !LOUSA_ESTREITA.matches) { if (f.parentElement !== largo) largo.prepend(f); }
+      else if (f.parentElement !== estreito) estreito.append(f);
+    };
+    this.colocarFolha();
+    LOUSA_ESTREITA.addEventListener('change', this.colocarFolha);
+    this.pagina(f, 'folha');
+    this.atualizarBarra();
+    return f;
+  }
+
+  /* ---------- gravação: 2 s depois do último traço, e na hora ao sair ---------- */
+  mudou(p) { this.versao.set(p, (this.versao.get(p) || 0) + 1); this.atualizarBarra(); }
+  agendar() { clearTimeout(this.espera); this.espera = setTimeout(() => this.gravarAgora(), LOUSA_ESPERA); }
+  gravarAgora(verba = null) {
+    clearTimeout(this.espera); this.espera = null;
+    if (this.soLeitura) return Promise.resolve();
+    const pendentes = [...this.versao].filter(([p, v]) => this.enviada.get(p) !== v).map(([p]) => p);
+    return Promise.all(pendentes.map(p => this.enviar(p, verba)));
+  }
+  // verba: o que ainda cabe em keepalive nesta saída; página maior vai pelo pedido normal
+  enviar(p, verba) {
+    const v = this.versao.get(p), antes = this.enviada.get(p), tracos = this.dados.get(p) || [];
+    this.enviada.set(p, v);
+    if (!LOUSA_PAGINA.test(p) || !tracosValidos(tracos)) return avisar('As anotações não foram gravadas: há um traço fora do formato.', true);
+    if (tamanhoDosTracos(tracos) > LOUSA_TETO) return avisar(LIMITE_ANOTACOES, true);
+    const volta = msg => { if (this.enviada.get(p) === v) this.enviada.set(p, antes); if (msg) avisar(msg, true); };
+    const linha = { dono_id: this.dono, midia_id: this.midia, pagina: p, tracos };
+    if (verba) {
+      const corpo = JSON.stringify(linha), bytes = new TextEncoder().encode(corpo).length;
+      const pedido = bytes <= verba.resto && db.gravarAnotacaoNaSaida(corpo);
+      if (pedido) {
+        verba.resto -= bytes;
+        return pedido.then(r => { if (!r.ok) throw new Error(String(r.status)); }).catch(() => volta());
+      }
+    }
+    const fila = (this.filas.get(p) || Promise.resolve())
+      .then(() => db.gravarAnotacao(linha))
+      .catch(e => volta(`As anotações não foram gravadas. ${e.message}`));
+    this.filas.set(p, fila);
+    return fila;
+  }
+  fechar() {
+    if (this.fechada) return Promise.resolve();
+    const fim = this.gravarAgora();
+    this.fechada = true;
+    lousasAbertas.delete(this);
+    this.redim.disconnect();
+    cancelAnimationFrame(this.quadro);
+    if (this.colocarFolha) LOUSA_ESTREITA.removeEventListener('change', this.colocarFolha);
+    return fim;
+  }
+}
+
+let lousaVerbaSaida = null;
+const gravarLousasNaSaida = verba => lousasAbertas.forEach(l => l.gravarAgora(verba));
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden') return;
+  lousaVerbaSaida = { resto: LOUSA_VERBA_SAIDA };
+  gravarLousasNaSaida(lousaVerbaSaida);
+});
+addEventListener('pagehide', () => gravarLousasNaSaida(lousaVerbaSaida || { resto: LOUSA_VERBA_SAIDA }));
+const fecharLousas = () => Promise.all([...lousasAbertas].map(l => l.fechar()));
 
 </script>
 <script>
@@ -2150,33 +2559,51 @@ function carregarPdfJs() {
 }
 const AVISO_PDF_IMAGEM = 'Este PDF é imagem: a leitura palavra a palavra precisa de texto';
 const temTexto = conteudo => conteudo.items.some(x => typeof x.str === 'string' && x.str.trim());
-async function abrirPdf(m, box) {
-  box.innerHTML = `<p class="ajuda">Abrindo o PDF…</p>`;
+async function abrirDocumentoPdf(caminho) {
   await carregarPdfJs();
-  const url = await db.urlArquivo(m.arquivo_path);
+  const url = await db.urlArquivo(caminho);
   window.__pdfOpcoes = { url, ...PDFJS.opcoes };   // o conferir_app.py confere que o eval está desligado
-  const doc = await pdfjsLib.getDocument(window.__pdfOpcoes).promise;
+  return pdfjsLib.getDocument(window.__pdfOpcoes).promise;
+}
+const paginasPdf = n => Array.from({ length: n }, (_, i) => `<div class="pagina"><div class="folha-pdf"><canvas data-pagina="${i + 1}" aria-label="Página ${i + 1}"></canvas></div><small>${i + 1} / ${n}</small></div>`).join('');
+async function desenharPaginaPdf(doc, canvas) {
+  const pag = await doc.getPage(Number(canvas.dataset.pagina));
+  const largura = Math.min(canvas.parentElement.clientWidth || 800, 900);
+  const base = pag.getViewport({ scale: 1 });
+  const escala = (largura / base.width) * (window.devicePixelRatio || 1);
+  const vp = pag.getViewport({ scale: escala });
+  canvas.width = vp.width; canvas.height = vp.height;
+  await pag.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+  return pag;
+}
+// cada página só é desenhada quando chega perto da tela
+function desenharAoChegar(box, desenhar) {
+  const obs = new IntersectionObserver(ent => ent.forEach(e => { if (e.isIntersecting) { obs.unobserve(e.target); desenhar(e.target).catch(err => console.warn(err)); } }), { rootMargin: '600px' });
+  $$('canvas[data-pagina]', box).forEach(c => obs.observe(c));
+}
+async function abrirPdf(m, box) {
+  const lousa = es.lousa = new Lousa({ midia: m.id, dono: al.perfil.id });
+  lousa.carregar();
+  box.innerHTML = `<p class="ajuda">Abrindo o PDF…</p>`;
+  const doc = await abrirDocumentoPdf(m.arquivo_path);
   box.innerHTML = `<div id="pdf-aviso"></div>
     <div class="pron-barra pdf-voz" id="pdf-voz" hidden>${barraVoz()}<span class="ajuda">“Ouvir” e “Ler em voz alta” ficam embaixo de cada página.</span></div>
+    <div class="lousa-lugar lousa-lugar-pdf" id="lousa-lugar"></div>
     <div class="estudo estudo-pdf" id="estudo-pdf">
-      <div class="leitor-pdf">${Array.from({ length: doc.numPages }, (_, i) => `<div class="pagina"><div class="folha-pdf"><canvas data-pagina="${i + 1}" aria-label="Página ${i + 1}"></canvas></div><small>${i + 1} / ${doc.numPages}</small></div>`).join('')}</div>
+      <div class="leitor-pdf">${paginasPdf(doc.numPages)}</div>
       <aside class="estudo-lado" id="pdf-lado">${CAIXA_DIC}</aside>
     </div>`;
+  lousa.barra($('#lousa-lugar', box), { comLousa: true });
+  lousa.folha($('#lousa-lugar', box), $('#pdf-lado', box));
   const dic = $('#dic', box);
   const textos = new Map();
   const redim = new ResizeObserver(ent => ent.forEach(e => ajustarEscala(e.target.parentElement)));
   Object.assign(es, { midia: m.id, textos, redim });
   desenharDic(); carregarVocab(); carregarTentativas(m.id);
-  // cada página só é desenhada quando chega perto da tela
   const desenhar = async canvas => {
     if (canvas.dataset.feita) return; canvas.dataset.feita = '1';
-    const pag = await doc.getPage(Number(canvas.dataset.pagina));
-    const largura = Math.min(canvas.parentElement.clientWidth || 800, 900);
-    const base = pag.getViewport({ scale: 1 });
-    const escala = (largura / base.width) * (window.devicePixelRatio || 1);
-    const vp = pag.getViewport({ scale: escala });
-    canvas.width = vp.width; canvas.height = vp.height;
-    await pag.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+    const pag = await desenharPaginaPdf(doc, canvas);
+    lousa.pagina(canvas.parentElement, canvas.dataset.pagina);
     const conteudo = await pag.getTextContent();
     if (!temTexto(conteudo)) return;
     dic.hidden = false;
@@ -2184,8 +2611,7 @@ async function abrirPdf(m, box) {
     if (es.textos === textos) desenharParagrafos(Number(canvas.dataset.pagina), conteudo.items, canvas.closest('.pagina'));
     redim.observe(canvas);
   };
-  const obs = new IntersectionObserver(ent => ent.forEach(e => { if (e.isIntersecting) { obs.unobserve(e.target); desenhar(e.target).catch(err => console.warn(err)); } }), { rootMargin: '600px' });
-  $$('canvas[data-pagina]', box).forEach(c => obs.observe(c));
+  desenharAoChegar(box, desenhar);
   avisarSeForImagem(doc, dic, $('#pdf-aviso', box)).catch(err => console.warn(err));
 }
 async function avisarSeForImagem(doc, dic, lugar) {
@@ -2320,7 +2746,7 @@ function tocarPalavraPdf(el) {
 }
 
 /* vídeo do YouTube: player no fluxo da página; legenda e transcrição abaixo dele */
-const es = { player: null, linhas: [], atual: -1, timer: null, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null };
+const es = { player: null, linhas: [], atual: -1, timer: null, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null };
 const fRelogio = s => { const t = Math.floor(s), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h ? `${h}:${d2(m)}:${d2(t % 60)}` : `${m}:${d2(t % 60)}`; };
 const linhaNoTempo = t => es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s);
 
@@ -2332,7 +2758,8 @@ function fecharEstudo() {
   if (es.player) es.player.destruir();
   if (es.som) es.som.pause();
   if (es.redim) es.redim.disconnect();
-  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null });
+  if (es.lousa) es.lousa.fechar();
+  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null });
 }
 function desenharLegenda() {
   const en = $('#legenda-texto'), pt = $('#legenda-traducao'); if (!en) return;
@@ -2366,11 +2793,16 @@ async function abrirVideo(m, yt, box) {
       </div>
       <div class="estudo-legenda" id="estudo-legenda"><p class="ajuda">Carregando a legenda…</p></div>
       <aside class="estudo-lado">
+        <div class="lousa-lugar" id="lousa-lugar"></div>
         ${CAIXA_DIC}
         <article class="painel" id="vocab"></article>
       </aside>
       <div class="estudo-transc" id="estudo-transc"></div>
     </div>`;
+  const lousa = es.lousa = new Lousa({ midia: m.id, dono: al.perfil.id });
+  lousa.barra($('#lousa-lugar', box));
+  lousa.folha($('#lousa-lugar', box));
+  lousa.carregar();
   const player = playerYoutube($('#estudo-player'), yt, {
     aoErro: (_, msg) => avisoVideo(msg),
     aoEstado: e => { if (es.player === player) estadoDoVideo(e); },
@@ -2751,7 +3183,7 @@ $('#tela-aluno').addEventListener('submit', ev => {
 <script>
 /* painel da equipe (admin e professor) com dado real */
 const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], mes: null, filtroLicao: 'entregue' };
-const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'legenda'];
+const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'legenda', 'estudo'];
 const ehAdmin = () => eq.perfil?.papel === 'admin';
 const alunos = () => eq.pessoas.filter(p => p.papel === 'aluno');
 const alunosAtivos = () => alunos().filter(p => p.ativo);
@@ -2783,7 +3215,7 @@ function renderEquipe() {
   $('#equipe-avatar').textContent = iniciais(eq.perfil.nome);
   renderHoje(); renderAlunos(); renderAgendaEquipe(); renderLicoesEquipe(); renderBibliotecaEquipe();
 }
-const vistaEquipe = v => { if (v !== 'legenda') fecharLegenda(); mostrarVista('e', 'data-vista-equipe', v, VISTAS_EQUIPE); };
+const vistaEquipe = v => { if (v !== 'legenda') fecharLegenda(); if (v !== 'estudo') fecharEstudoEquipe(); mostrarVista('e', 'data-vista-equipe', v, VISTAS_EQUIPE); };
 
 /* ---------- hoje ---------- */
 function renderHoje() {
@@ -2806,7 +3238,7 @@ function renderAlunos() {
       <span class="avatar${p.papel === 'aluno' ? '' : ' p'}" aria-hidden="true">${esc(iniciais(p.nome))}</span>
       <span class="quem"><b>${esc(p.nome)}</b><small>${esc(p.email)} · ${p.papel === 'aluno' ? (p.nivel ? `nível ${esc(p.nivel)}` : 'sem nível') : esc(p.papel)}${p.menor ? ` · <span class="menor-tag">menor</span>${p.responsavel_nome ? ` · responsável: ${esc(p.responsavel_nome)}` : ''}` : ''}${p.ativo ? '' : ' · desativado'}</small></span>
       <span class="acoes-linha">
-        ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button><button class="btn btn-linha" data-pron-pessoa="${p.id}">Pronúncia</button><button class="btn btn-linha" data-dit-pessoa="${p.id}">Ditado</button>` : ''}
+        ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button><button class="btn btn-linha" data-pron-pessoa="${p.id}">Pronúncia</button><button class="btn btn-linha" data-dit-pessoa="${p.id}">Ditado</button><button class="btn btn-linha" data-anot-pessoa="${p.id}">Lousa</button>` : ''}
         <button class="btn btn-linha" data-editar-pessoa="${p.id}">Editar</button>
         <button class="btn btn-linha" data-senha-pessoa="${p.id}">Nova senha</button>
         <button class="btn btn-linha" data-ativo-pessoa="${p.id}">${p.ativo ? 'Desativar' : 'Reativar'}</button>
@@ -2964,6 +3396,58 @@ async function verDitado(id) {
     : `<div class="caixa-aviso">${esc(primeiroNome(p.nome))} ainda não fez nenhum ditado.</div>`,
   [`<button class="btn btn-primario" data-fechar>Fechar</button>`]);
 }
+const anot = { aluno: null, linhas: [], lousa: null };
+const nomePagina = p => (p === 'folha' ? 'Folha' : `Página ${p}`);
+const tituloAnot = a => a.midias?.titulo || 'Material fora da sua biblioteca';
+function fecharLousaGaveta() { if (anot.lousa) anot.lousa.fechar(); anot.lousa = null; }
+async function verLousa(id) {
+  const p = pessoa(id); if (!p) return;
+  const linhas = await tentar(() => db.anotacoesDoAluno(id));
+  if (!linhas) return;
+  fecharLousaGaveta();
+  Object.assign(anot, { aluno: p, linhas });
+  gavetaForm(p.nome, 'Lousa', '<div class="anot-vista" id="anot-vista"></div>', [`<button class="btn btn-primario" data-fechar>Fechar</button>`]);
+  listarAnotacoes();
+}
+function listarAnotacoes(foco) {
+  const box = $('#anot-vista'); if (!box) return;
+  const { aluno: p, linhas } = anot;
+  box.innerHTML = linhas.length
+    ? `<p class="ajuda">${linhas.length} ${linhas.length === 1 ? 'página anotada' : 'páginas anotadas'}</p>
+      <ul class="lista anot-equipe">${linhas.map((a, i) => `<li><span class="quem"><b>${esc(tituloAnot(a))}</b><small>${esc(nomePagina(a.pagina))} · ${dataSP(a.atualizado_em)}</small></span><button class="btn btn-linha" data-anot-ver="${i}" aria-label="Ver ${esc(nomePagina(a.pagina))} de ${esc(tituloAnot(a))}">Ver</button></li>`).join('')}</ul>`
+    : `<div class="caixa-aviso">${esc(primeiroNome(p.nome))} ainda não anotou nada na lousa.</div>`;
+  if (foco !== undefined) $(`[data-anot-ver="${foco}"]`, box)?.focus();
+}
+async function verAnotacao(i) {
+  const a = anot.linhas[i], p = anot.aluno, box = $('#anot-vista');
+  if (!a || !p || !box) return;
+  fecharLousaGaveta();
+  const lousa = anot.lousa = new Lousa({ midia: a.midia_id, dono: p.id, soLeitura: true });
+  box.innerHTML = `<button class="btn-texto anot-voltar" data-anot-lista="${i}">${ico('caret-left')}Todas as anotações</button>
+    <p class="anot-titulo"><b>${esc(tituloAnot(a))}</b><small>${esc(nomePagina(a.pagina))} · ${dataSP(a.atualizado_em)} · só para ver</small></p>
+    <div class="anot-pagina" id="anot-pagina"><p class="ajuda" role="status">Abrindo a página…</p></div>`;
+  $('[data-anot-lista]', box).focus();
+  const lugar = $('#anot-pagina', box), folha = a.pagina === 'folha';
+  try {
+    if (!folha && !a.midias?.arquivo_path) throw new Error('O PDF deste material não está na sua biblioteca.');
+    const [linhas, doc] = await Promise.all([db.anotacao(p.id, a.midia_id, a.pagina), folha ? null : abrirDocumentoPdf(a.midias.arquivo_path)]);
+    if (anot.lousa !== lousa) return;
+    if (folha) { lugar.replaceChildren(); lousa.folha(lugar); }
+    else {
+      if (Number(a.pagina) > doc.numPages) throw new Error('O PDF não tem mais esta página.');
+      lugar.innerHTML = `<div class="leitor-pdf"><div class="pagina"><div class="folha-pdf"><canvas data-pagina="${Number(a.pagina)}" aria-label="${esc(nomePagina(a.pagina))}"></canvas></div></div></div>`;
+      const canvas = $('canvas', lugar);
+      await desenharPaginaPdf(doc, canvas);
+      if (anot.lousa !== lousa) return;
+      lousa.pagina(canvas.parentElement, a.pagina);
+    }
+    lousa.usar(linhas);
+  } catch (e) {
+    console.warn(e);
+    if (anot.lousa === lousa) lugar.innerHTML = `<div class="caixa-aviso erro">${esc(e.message || 'Não deu para abrir esta página.')}</div>`;
+  }
+}
+function voltarAnotacoes(i) { fecharLousaGaveta(); listarAnotacoes(i); }
 async function excluirPessoa(id) {
   const p = pessoa(id); if (!p) return;
   if (!confirm(`Excluir ${p.nome} de vez? Aulas, lições e o acesso dela são apagados. Não dá para desfazer.`)) return;
@@ -3223,8 +3707,63 @@ function formMaterial(id) {
 }
 async function verMaterial(id) {
   const m = eq.midias.find(x => x.id === id); if (!m) return;
+  const yt = m.tipo === 'youtube' && idYoutube(m.url);
+  if (yt || (m.tipo === 'pdf' && m.arquivo_path)) return estudarMaterial(m, yt);
   const url = m.arquivo_path ? await tentar(() => db.urlArquivo(m.arquivo_path)) : m.url;
   if (url) window.open(url, '_blank', 'noopener');
+}
+/* ---------- estudo da equipe: o material com a lousa de quem abriu ---------- */
+const ee = { lousa: null, player: null, pedido: 0 };
+function fecharEstudoEquipe() {
+  if (ee.player) ee.player.destruir();
+  if (ee.lousa) ee.lousa.fechar();
+  Object.assign(ee, { lousa: null, player: null, pedido: ee.pedido + 1 });
+}
+function avisoEstudoEquipe(msg) {
+  const a = $('#eq-estudo-aviso');
+  if (a) a.innerHTML = `<div class="caixa-aviso erro" role="alert">${esc(msg)}</div>`;
+}
+async function estudarMaterial(m, yt) {
+  fecharEstudoEquipe();
+  vistaEquipe('estudo');
+  const pedido = ee.pedido;
+  $('#e-estudo').innerHTML = `
+    <div class="estudo-topo">
+      <button class="btn-texto" data-vista-equipe="biblioteca">${ico('caret-left')}Biblioteca</button>
+      <h2>${esc(m.titulo)}</h2>
+      <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
+    </div>
+    <div id="eq-estudo"></div>`;
+  const box = $('#eq-estudo');
+  const lousa = ee.lousa = new Lousa({ midia: m.id, dono: eq.perfil.id });
+  lousa.carregar();
+  if (yt) {
+    box.innerHTML = `<div class="estudo estudo-yt">
+        <div class="estudo-video"><div class="video-yt" id="eq-estudo-player"></div><div id="eq-estudo-aviso"></div></div>
+        <aside class="estudo-lado"><div class="lousa-lugar" id="eq-lousa-lugar"></div></aside>
+      </div>`;
+    lousa.barra($('#eq-lousa-lugar', box));
+    lousa.folha($('#eq-lousa-lugar', box));
+    ee.player = playerYoutube($('#eq-estudo-player', box), yt, { aoErro: (_, msg) => avisoEstudoEquipe(msg) });
+    ee.player.carregado.catch(e => avisoEstudoEquipe(e.message));
+    return;
+  }
+  box.innerHTML = '<p class="ajuda">Abrindo o PDF…</p>';
+  let doc;
+  try { doc = await abrirDocumentoPdf(m.arquivo_path); } catch (e) {
+    console.warn(e);
+    if (pedido === ee.pedido) box.innerHTML = `<div class="caixa-aviso erro">${esc(e.message || 'Não deu para abrir o PDF.')}</div>`;
+    return;
+  }
+  if (pedido !== ee.pedido) return;
+  box.innerHTML = `<div class="lousa-lugar lousa-lugar-pdf" id="eq-lousa-lugar"></div>
+    <div class="estudo estudo-pdf">
+      <div class="leitor-pdf">${paginasPdf(doc.numPages)}</div>
+      <aside class="estudo-lado" id="eq-pdf-lado"></aside>
+    </div>`;
+  lousa.barra($('#eq-lousa-lugar', box), { comLousa: true });
+  lousa.folha($('#eq-lousa-lugar', box), $('#eq-pdf-lado', box));
+  desenharAoChegar(box, async canvas => { await desenharPaginaPdf(doc, canvas); lousa.pagina(canvas.parentElement, canvas.dataset.pagina); });
 }
 async function excluirMaterial(id) {
   const m = eq.midias.find(x => x.id === id); if (!m) return;
@@ -3412,6 +3951,9 @@ document.addEventListener('click', ev => {
   if (ds.vocabPessoa) return verVocabulario(ds.vocabPessoa);
   if (ds.pronPessoa) return verPronuncia(ds.pronPessoa);
   if (ds.ditPessoa) return verDitado(ds.ditPessoa);
+  if (ds.anotPessoa) return verLousa(ds.anotPessoa);
+  if (ds.anotVer !== undefined) return verAnotacao(Number(ds.anotVer));
+  if (ds.anotLista !== undefined) return voltarAnotacoes(Number(ds.anotLista));
   if (ds.editarPessoa) return formEditarPessoa(ds.editarPessoa);
   if (ds.senhaPessoa) return novaSenha(ds.senhaPessoa);
   if (ds.ativoPessoa) return alternarAtivo(ds.ativoPessoa);
@@ -3552,7 +4094,7 @@ $('#form-entrar').addEventListener('submit', async ev => {
 // sair recarrega a página: nada do usuário anterior fica na memória
 let saindo = false;
 $('#sair').addEventListener('click', async () => {
-  saindo = true; await db.sair();
+  saindo = true; await fecharLousas(); await db.sair();
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   location.reload();
 });

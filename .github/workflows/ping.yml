@@ -13,7 +13,6 @@ jobs:
       - name: chama a função ping
         run: |
           curl -fsS -X POST "https://xxlxuxilbgkwaaawnpov.supabase.co/rest/v1/rpc/ping" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "apikey: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{}'

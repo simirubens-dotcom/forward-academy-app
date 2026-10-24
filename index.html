@@ -1089,6 +1089,32 @@ button.aviso:focus-visible{outline-offset:-3px}
 .pop-vazio{margin:0;padding:8px 20px 20px;font-size:14px;color:var(--fg-2)}
 .dia.dia-aviso{box-shadow:inset 0 0 0 2px var(--fg)}
 
+/* cursos da equipe */
+.secao-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.curso-linha .quem b{overflow-wrap:anywhere}
+.curso-linha .estado{margin-top:6px}
+.curso-topo{display:grid;justify-items:start;gap:8px;margin-bottom:16px}
+.curso-topo h2{margin:0;font-family:var(--serif);font-weight:400;font-size:28px;overflow-wrap:anywhere;max-width:100%}
+.curso-painel{display:grid;gap:14px;padding:18px 20px}
+.curso-painel p{margin:0}
+.curso-desc{white-space:pre-line;overflow-wrap:anywhere}
+.lista li.am-linha{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:start;gap:10px 14px}
+.am-num{padding-top:1px;font-size:14px;font-variant-numeric:tabular-nums;color:var(--fg-2)}
+.am-linha .quem b,.am-linha .quem small{white-space:normal;overflow-wrap:anywhere}
+.am-linha .acoes-linha .btn{padding:9px 12px;font-size:12px}
+@media (max-width:720px){.lista li.am-linha{grid-template-columns:28px minmax(0,1fr)}.am-linha .acoes-linha{grid-column:2;justify-content:flex-start}}
+.am-licao{display:grid;gap:14px;min-width:0;margin:0;padding:14px 16px 16px;border:1px solid var(--line);border-radius:14px}
+.am-licao legend{padding:0 6px;font-size:13px;font-weight:600}
+.dias-curso .dia-chip[aria-pressed="true"]::before{content:"\2713";margin-right:3px}
+.previa-lista li span{min-width:0;overflow-wrap:anywhere}
+.previa-lista small{display:block;margin-top:2px;font-size:12.5px;font-weight:400;color:var(--fg-2)}
+@media (max-width:520px){.previa-lista li{grid-template-columns:28px minmax(0,1fr)}.previa-lista li span:nth-child(3){grid-column:2}}
+
+/* curso do aluno: painel na Agenda e informação na Biblioteca */
+.curso-aluno{display:grid;gap:4px}
+.curso-aluno b{overflow-wrap:anywhere}
+.curso-aluno+.curso-aluno{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)}
+
 </style>
 
 <div class="barra">
@@ -1131,7 +1157,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1199,6 +1225,7 @@ button.aviso:focus-visible{outline-offset:-3px}
         </div>
         <div class="lado">
           <article class="painel prox" id="prox"></article>
+          <article class="painel progresso-curso" id="curso-aluno" aria-label="Seu curso" hidden></article>
           <article class="painel">
             <div class="painel-topo" style="padding-bottom:4px"><h2>Lições para fazer</h2></div>
             <ul class="lista" id="lado-licoes"></ul>
@@ -1249,6 +1276,7 @@ button.aviso:focus-visible{outline-offset:-3px}
     <button class="trilho-btn" data-vista-equipe="agenda"><span data-icone="calendar-blank"></span>Agenda</button>
     <button class="trilho-btn" data-vista-equipe="licoes"><span data-icone="notebook"></span>Lições</button>
     <button class="trilho-btn" data-vista-equipe="biblioteca"><span data-icone="books"></span>Biblioteca</button>
+    <button class="trilho-btn" data-vista-equipe="cursos"><span data-icone="graduation-cap"></span>Cursos</button>
   </aside>
   <div class="app-corpo">
     <header class="app-topo">
@@ -1304,6 +1332,18 @@ button.aviso:focus-visible{outline-offset:-3px}
       <div class="secao-topo"><h2>Biblioteca</h2><button class="btn btn-primario" data-novo="material"><span data-icone="plus"></span>Novo material</button></div>
       <div id="lista-materiais"></div>
     </section>
+
+    <section class="vista" id="e-cursos" aria-label="Cursos" hidden>
+      <div class="secao-topo"><h2>Cursos</h2>
+        <div class="secao-acoes">
+          <button class="btn btn-linha" id="cursos-aplicar" data-aplicar-curso>Aplicar curso</button>
+          <button class="btn btn-primario" data-novo="curso"><span data-icone="plus"></span>Novo curso</button>
+        </div>
+      </div>
+      <article class="painel"><ul class="lista" id="lista-cursos"></ul></article>
+    </section>
+    <section class="vista" id="e-curso" aria-label="Curso" hidden></section>
+    <section class="vista" id="e-aplicar" aria-label="Aplicar curso" hidden></section>
 
     <section class="vista" id="e-legenda" aria-label="Legenda do vídeo" hidden></section>
     <section class="vista" id="e-estudo" aria-label="Estudo" hidden></section>
@@ -1654,6 +1694,38 @@ function erroLink(e) {
   if (e?.code === '42501') return 'Sem permissão para guardar este link.';
   return traduzirErro(e);
 }
+// recusa de curso e de aula-modelo: o banco diz no texto qual regra falhou
+function erroCurso(e) {
+  const m = String(e?.message || '');
+  if (e?.code === '23503' && /matriculas/.test(m)) return 'Este curso tem alunos matriculados; despublique em vez de apagar.';
+  if (e?.code === '23514') {
+    if (/tarefa_titulo_check/.test(m)) return 'O título da lição precisa ter de 1 a 160 caracteres.';
+    if (/tarefa_instrucoes_check/.test(m)) return 'As instruções da lição têm no máximo 5.000 caracteres.';
+    if (/tarefa_prazo_dias_check/.test(m)) return 'O prazo da lição não pode ser negativo.';
+    if (/curso_aulas_check/.test(m)) return 'Instruções de lição precisam de um título de lição.';
+    if (/titulo_check/.test(m)) return 'O título precisa ter de 1 a 160 caracteres.';
+    if (/descricao_check|resumo_check/.test(m)) return 'O texto tem no máximo 2.000 caracteres.';
+    if (/nivel_check/.test(m)) return 'Escolha um nível de A1 a C2.';
+    return 'O banco recusou estes dados. Confira os campos.';
+  }
+  if (e?.code === '42501') return 'Sem permissão: só quem criou o curso ou o admin pode mudar o curso e as aulas-modelo dele.';
+  return traduzirErro(e);
+}
+// recusa da aplicar_curso: as mensagens da função já vêm em português
+function erroAplicar(e) {
+  const m = String(e?.message || '');
+  if (e?.code === '22023' && m) return m;
+  if (e?.code === '42501') {
+    if (/permission denied for function/i.test(m)) return 'Sua sessão expirou. Entre de novo.';
+    if (/row-level security|permission denied/i.test(m)) return 'Sem permissão para aplicar este curso a este aluno.';
+    return m || 'Sem permissão para aplicar este curso a este aluno.';
+  }
+  if (/Failed to fetch|NetworkError|network/i.test(m)) return traduzirErro(e);
+  return 'Não foi possível aplicar o curso. Nada foi criado; tente de novo.';
+}
+const CURSO_SEM_EFEITO = 'Nada mudou: o curso não existe mais ou só quem o criou e o admin podem mudá-lo.';
+// aula sem lição grava título e instruções da lição nulos e prazo 0
+const linhaAulaModelo = c => ('tarefa_titulo' in c && !c.tarefa_titulo ? { ...c, tarefa_titulo: null, tarefa_instrucoes: null, tarefa_prazo_dias: 0 } : c);
 
 const db = {
   /* ---------- sessão ---------- */
@@ -1777,6 +1849,64 @@ const db = {
     this._urls.set(caminho, { url: signedUrl, expira: Date.now() + 3600 * 1000 });
     return signedUrl;
   },
+
+  /* ---------- cursos: a equipe lê todos; muda e apaga quem criou o curso ou o admin ---------- */
+  async cursos() { return ok(await sb.from('cursos').select('id, titulo, descricao, nivel, publicado, criado_por, criado_em, curso_aulas(count)').order('titulo')); },
+  async criarCurso(linha) {
+    const { data, error } = await sb.from('cursos').insert(linha).select().single();
+    if (error) throw new Error(erroCurso(error));
+    return data;
+  },
+  // sem permissão a API responde 200 com a lista vazia
+  async editarCurso(id, campos) {
+    const { data, error } = await sb.from('cursos').update(campos).eq('id', id).select('id');
+    if (error) throw new Error(erroCurso(error));
+    if (!data.length) throw new Error(CURSO_SEM_EFEITO);
+  },
+  async apagarCurso(id) {
+    const { data, error } = await sb.from('cursos').delete().eq('id', id).select('id');
+    if (error) throw new Error(erroCurso(error));
+    if (!data.length) throw new Error(CURSO_SEM_EFEITO);
+  },
+  async aulasModelo(curso) {
+    return ok(await sb.from('curso_aulas').select('id, ordem, titulo, resumo, tarefa_titulo, tarefa_instrucoes, tarefa_prazo_dias').eq('curso_id', curso).order('ordem').order('id'));
+  },
+  async criarAulaModelo(linha) {
+    const { data, error } = await sb.from('curso_aulas').insert(linhaAulaModelo(linha)).select().single();
+    if (error) throw new Error(erroCurso(error));
+    return data;
+  },
+  async editarAulaModelo(id, campos) {
+    const { data, error } = await sb.from('curso_aulas').update(linhaAulaModelo(campos)).eq('id', id).select('id');
+    if (error) throw new Error(erroCurso(error));
+    if (!data.length) throw new Error(CURSO_SEM_EFEITO);
+  },
+  async apagarAulaModelo(id) {
+    const { data, error } = await sb.from('curso_aulas').delete().eq('id', id).select('id');
+    if (error) throw new Error(erroCurso(error));
+    if (!data.length) throw new Error(CURSO_SEM_EFEITO);
+  },
+  // a ordem da lista vira 1..M; só a linha fora do lugar é regravada
+  async reordenarAulasModelo(aulas) {
+    for (const [i, a] of aulas.entries()) if (a.ordem !== i + 1) await this.editarAulaModelo(a.id, { ordem: i + 1 });
+  },
+  // uma transação no servidor: matrícula, aulas da série e lições; devolve o id da matrícula
+  async aplicarCurso(campos) {
+    const { data, error } = await sb.rpc('aplicar_curso', campos);
+    if (error) throw new Error(erroAplicar(error));
+    return data;
+  },
+  // curso da aula gerada e a posição dela entre as aulas não canceladas da matrícula
+  async cursoDaAula(id) {
+    const a = ok(await sb.from('aulas').select('id, inicio, fim, status, titulo, serie_id, matricula_id, matriculas(id, cursos(titulo, nivel))').eq('id', id).maybeSingle());
+    if (!a?.matriculas) return null;
+    const lista = a.status === 'cancelada' ? []
+      : ok(await sb.from('aulas').select('id, inicio, status, titulo').eq('matricula_id', a.matricula_id).neq('status', 'cancelada').order('inicio').order('id'));
+    return { curso: a.matriculas.cursos, n: lista.findIndex(x => x.id === id) + 1, m: lista.length };
+  },
+  async matriculas() { return ok(await sb.from('matriculas').select('id, inicio, dias_semana, hora, duracao_min, criado_em, cursos(id, titulo, nivel)').order('criado_em')); },
+  // o aluno também lê o curso despublicado da própria matrícula: o filtro é obrigatório
+  async cursosPublicados() { return ok(await sb.from('cursos').select('id, titulo, descricao, nivel, curso_aulas(count)').eq('publicado', true).order('titulo')); },
 
   /* ---------- biblioteca pessoal: o aluno guarda, muda e apaga os seus links; a equipe dele lê e apaga ---------- */
   async guardarLink(linha) {
@@ -2848,16 +2978,16 @@ async function abrirAnexo(c) {
 </script>
 <script>
 /* área do aluno com dado real: agenda, lições, biblioteca e estudo */
-const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], meus: new Set(), vistos: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
+const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
 const VISTAS_ALUNO = ['agenda', 'biblioteca', 'licoes', 'estudo'];
 
 async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [aulas, tarefas, fileiras, midias, meus, professor, vistos] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id),
+  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos] = await Promise.all([
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(),
   ]);
-  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])) });
+  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])) });
   renderAluno();
   iniciarSino($('#tela-aluno .app-acoes'), levarAlunoAoAviso);
 }
@@ -2920,6 +3050,40 @@ function renderLadoAluno() {
   $('#lado-licoes').innerHTML = fazer.length
     ? fazer.map(t => { const e = estadoTarefa(t); return `<li><span class="quem"><b>${esc(t.titulo)}</b><small>Prazo ${fData(new Date(t.prazo))} às ${fHora(new Date(t.prazo))}</small></span><button class="btn btn-linha" data-tarefa="${t.id}">${e === 'atrasada' ? 'Atrasada' : 'Fazer'}</button></li>`; }).join('')
     : `<li><span class="quem vazio-linha">Nenhuma lição em aberto.</span></li>`;
+  renderCursoAluno();
+}
+
+/* curso: aulas não canceladas da matrícula por início; a da vez é a primeira de hoje em diante (dia de Brasília) */
+const fmtDiaSP = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
+const diaSP = d => fmtDiaSP.format(d);
+const porInicio = (a, b) => new Date(a.inicio) - new Date(b.inicio) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+function andamentoDoCurso(m) {
+  const aulas = al.aulas.filter(a => a.matricula_id === m.id && aulaVisivel(a)).sort(porInicio);
+  const hoje = diaSP(new Date());
+  const i = aulas.findIndex(a => diaSP(new Date(a.inicio)) >= hoje);
+  return { m: aulas.length, n: i + 1, proxima: aulas[i] || null };
+}
+function renderCursoAluno() {
+  const blocos = al.matriculas.map(mat => {
+    const c = andamentoDoCurso(mat);
+    if (!c.m || !mat.cursos) return '';
+    const feitas = c.proxima ? c.n - 1 : c.m;
+    let txt = `Curso concluído: ${c.m} de ${c.m} aulas.`;
+    if (c.proxima) {
+      const ini = new Date(c.proxima.inicio);
+      const quando = diaSP(ini) === diaSP(new Date()) ? `Hoje: ${esc(c.proxima.titulo)}, às ${fHora(ini)}` : `Próxima: ${esc(c.proxima.titulo)}, ${fData(ini)} às ${fHora(ini)}`;
+      txt = `Você está na aula ${c.n} de ${c.m}. ${quando}.`;
+    }
+    return `<div class="curso-aluno">
+        <span class="prox-quando">Seu curso</span>
+        <b>${esc(mat.cursos.titulo)}</b>
+        <span class="ajuda">${txt}</span>
+        <div class="trilho-prog" role="img" aria-label="${feitas} de ${c.m} aulas feitas"><i style="transform:scaleX(${feitas / c.m})"></i></div>
+      </div>`;
+  }).join('');
+  const box = $('#curso-aluno');
+  box.innerHTML = blocos;
+  box.hidden = !blocos;
 }
 function abrirAulaAluno(id) {
   const a = al.aulas.find(x => x.id === id); if (!a) return;
@@ -2930,7 +3094,7 @@ function abrirAulaAluno(id) {
   $('#gaveta').innerHTML = `
     <button class="gaveta-fechar" data-fechar aria-label="Fechar" style="background:var(--surface-2);color:var(--fg)">${ico('x')}</button>
     <div class="gaveta-rolo"><div class="gaveta-corpo" style="padding-top:28px">
-      <div><p class="sobre">Aula</p><h2 id="gaveta-titulo">${esc(a.titulo)}</h2></div>
+      <div><p class="sobre"${a.matricula_id ? ` id="aula-curso" data-aula="${a.id}"` : ''}>Aula</p><h2 id="gaveta-titulo">${esc(a.titulo)}</h2></div>
       <dl class="fatos">
         <dt>Quando</dt><dd>${fLonga(ini)}, ${fHora(ini)} às ${fHora(fim)}</dd>
         <dt>Professor</dt><dd>${esc(al.professor?.nome || 'Forward')}</dd>
@@ -2942,6 +3106,14 @@ function abrirAulaAluno(id) {
     </div></div>
     ${passou ? '' : `<div class="gaveta-acoes">${botoesAula(a)}</div>`}`;
   abrirCamada($('#gaveta'));
+  if (a.matricula_id) mostrarCursoDaAulaAluno(a.id);
+}
+async function mostrarCursoDaAulaAluno(id) {
+  let r = null;
+  try { r = await db.cursoDaAula(id); } catch (e) { return; }
+  const p = $('#aula-curso');
+  if (!r?.curso || p?.dataset.aula !== id) return;
+  p.textContent = r.n ? `Aula ${r.n} de ${r.m}, ${r.curso.titulo}` : r.curso.titulo;
 }
 async function confirmarAula(id) {
   const feito = await tentar(() => db.confirmarAula(id), 'Presença confirmada. O Pedro já vê no painel dele.');
@@ -3037,6 +3209,10 @@ function trocarItem(lista, item, chave) {
 async function levarAlunoAoAviso(tipo, id) {
   if (tipo === 'aula') {
     const a = await db.aula(id); if (!a) return false;
+    if (a.matricula_id && !al.matriculas.some(m => m.id === a.matricula_id)) {
+      [al.aulas, al.tarefas, al.matriculas] = await Promise.all([db.aulas(), db.tarefas(), db.matriculas()]);
+      renderLicoes();
+    }
     trocarItem(al.aulas, a, 'inicio');
     const ini = new Date(a.inicio);
     al.mes = new Date(ini.getFullYear(), ini.getMonth(), 1);
@@ -3073,6 +3249,39 @@ function fileiraHtml(titulo, itens) {
   if (!itens.length) return '';
   return `<section class="fileira"><div class="fileira-topo"><h3>${esc(titulo)}</h3><span>${contaVistos(itens)}</span></div><div class="trilha">${itens.map(cardMaterial).join('')}</div></section>`;
 }
+/* cursos publicados: só informação, sem estudo e sem visto */
+const aulasDoCurso = c => { const n = c.curso_aulas?.[0]?.count || 0; return `${n} ${n === 1 ? 'aula' : 'aulas'}`; };
+const capaCurso = c => `<div class="capa-tipo marinho"><small>${aulasDoCurso(c)}${c.nivel ? `, nível ${esc(c.nivel)}` : ''}</small><b>${esc(c.titulo)}</b></div>`;
+function cardCurso(c) {
+  return `<button class="card" data-curso-bib="${c.id}">
+    <span class="card-capa">${capaCurso(c)}</span>
+    <span class="card-titulo">${esc(c.titulo)}</span>
+    <span class="card-meta">${ico('graduation-cap')}${c.nivel ? `Nível ${esc(c.nivel)}, ` : ''}${aulasDoCurso(c)}</span>
+  </button>`;
+}
+function fileiraCursos(cursos) {
+  if (!cursos.length) return '';
+  return `<section class="fileira"><div class="fileira-topo"><h3>Cursos da Forward</h3><span>${cursos.length} ${cursos.length === 1 ? 'curso' : 'cursos'}</span></div><div class="trilha">${cursos.map(cardCurso).join('')}</div></section>`;
+}
+async function abrirCursoAluno(id) {
+  const c = al.cursos.find(x => x.id === id); if (!c) return;
+  const meu = al.matriculas.some(m => m.cursos?.id === c.id);
+  $('#modal').innerHTML = `
+    <div class="modal-capa">${capaCurso(c)}<button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button></div>
+    <div class="modal-corpo">
+      <h2 id="modal-titulo">${esc(c.titulo)}</h2>
+      <div class="etiquetas">${c.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(c.nivel)}</span>` : ''}<span class="etq">${ico('calendar-blank')}${aulasDoCurso(c)}</span><span class="etq">Curso da Forward</span></div>
+      ${c.descricao ? `<p class="curso-desc">${esc(c.descricao)}</p>` : ''}
+      <div id="curso-aulas" data-curso="${c.id}"></div>
+      <p class="ajuda">${meu ? 'Este é o seu curso: as aulas estão na sua agenda.' : 'Quando a escola aplicar este curso a você, as aulas entram na sua agenda.'}</p>
+    </div>`;
+  abrirCamada($('#modal'));
+  let aulas;
+  try { aulas = await db.aulasModelo(c.id); } catch (e) { return; }
+  const box = $('#curso-aulas');
+  if (box?.dataset.curso !== id || !aulas.length) return;
+  box.innerHTML = `<ol class="aulas-curso" aria-label="Aulas do curso" tabindex="0">${aulas.map((x, i) => `<li><span>${d2(i + 1)}</span>${esc(x.titulo)}</li>`).join('')}</ol>`;
+}
 function renderBibliotecaAluno() {
   $('#bib-niveis').innerHTML = NIVEIS.map(n => `<button class="nivel-chip" data-nivel="${n}" aria-pressed="${al.nivel === n}">${n}</button>`).join('');
   const escola = al.midias.filter(m => !doAluno(m));
@@ -3081,8 +3290,9 @@ function renderBibliotecaAluno() {
   const lista = escola.filter(passa);
   const paraMim = lista.filter(m => al.meus.has(m.id));
   const blocos = fileiraHtml(`Do ${primeiroNome(al.professor?.nome) || 'professor'} para você`, paraMim)
+    + fileiraCursos(al.cursos.filter(passa))
     + al.fileiras.map(f => fileiraHtml(f.titulo, lista.filter(m => m.fileira_id === f.id && !al.meus.has(m.id)))).join('');
-  $('#bib-conteudo').innerHTML = blocos || (escola.length
+  $('#bib-conteudo').innerHTML = blocos || (escola.length || al.cursos.length
     ? `<div class="vazio">${ico('magnifying-glass')}<b>Nada encontrado</b><span>Tente outro termo ou limpe o filtro de nível.</span></div>`
     : `<div class="vazio">${ico('books')}<b>A biblioteca ainda está vazia</b><span>Os materiais que o Pedro puser aparecem aqui.</span></div>`);
   const links = al.midias.filter(doAluno).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
@@ -3664,6 +3874,7 @@ $('#tela-aluno').addEventListener('click', ev => {
   if (ds.licao) { al.licaoSel = ds.licao; renderLicoes(); if (matchMedia('(max-width:980px)').matches) $('#licao-detalhe').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'start' }); return; }
   if (ds.nivel) { al.nivel = al.nivel === ds.nivel ? null : ds.nivel; return renderBibliotecaAluno(); }
   if (ds.material) return abrirMaterialAluno(ds.material);
+  if (ds.cursoBib) return abrirCursoAluno(ds.cursoBib);
   if (ds.irLinha !== undefined) return irParaLinha(Number(ds.irLinha));
   if (ds.palN !== undefined) return abrirPalavra(Number(ds.palN), Number(ds.palI), b.textContent);
   if (ds.ouvir !== undefined) return ouvirPalavra();
@@ -3831,8 +4042,8 @@ $('#tela-aluno').addEventListener('submit', ev => {
 </script>
 <script>
 /* painel da equipe (admin e professor) com dado real */
-const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], mes: null, filtroLicao: 'entregue' };
-const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'legenda', 'estudo'];
+const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], cursos: [], mes: null, filtroLicao: 'entregue' };
+const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'cursos', 'curso', 'aplicar', 'legenda', 'estudo'];
 const ehAdmin = () => eq.perfil?.papel === 'admin';
 const alunos = () => eq.pessoas.filter(p => p.papel === 'aluno');
 const alunosAtivos = () => alunos().filter(p => p.ativo);
@@ -3846,15 +4057,15 @@ const opcoesNivel = sel => `<option value="">Sem nível</option>` + NIVEIS.map(n
 async function carregarEquipe(perfil) {
   eq.perfil = perfil;
   const hoje = new Date(); eq.mes = eq.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [pessoas, aulas, tarefas, fileiras, midias, midiaAlunos] = await Promise.all([
-    db.pessoas(), db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(),
+  const [pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos] = await Promise.all([
+    db.pessoas(), db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.cursos(),
   ]);
-  Object.assign(eq, { pessoas, aulas, tarefas, fileiras, midias, midiaAlunos });
+  Object.assign(eq, { pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos });
   renderEquipe();
   iniciarSino($('#tela-equipe .app-acoes'), levarEquipeAoAviso);
 }
 async function recarregar(...quais) {
-  const fontes = { pessoas: db.pessoas, aulas: db.aulas, tarefas: db.tarefas, midias: db.midias, midiaAlunos: db.midiaAlunos };
+  const fontes = { pessoas: db.pessoas, aulas: db.aulas, tarefas: db.tarefas, midias: db.midias, midiaAlunos: db.midiaAlunos, cursos: db.cursos };
   const dados = await Promise.all(quais.map(q => fontes[q].call(db)));
   quais.forEach((q, i) => { eq[q] = dados[i]; });
   renderEquipe();
@@ -3863,7 +4074,7 @@ function renderEquipe() {
   $('#equipe-data').textContent = maiuscula(fLonga(new Date()));
   $('#equipe-ola').textContent = `${saudacao()}, ${primeiroNome(eq.perfil.nome)}`;
   $('#equipe-avatar').textContent = iniciais(eq.perfil.nome);
-  renderHoje(); renderAlunos(); renderAgendaEquipe(); renderLicoesEquipe(); renderBibliotecaEquipe();
+  renderHoje(); renderAlunos(); renderAgendaEquipe(); renderLicoesEquipe(); renderBibliotecaEquipe(); renderCursos();
 }
 const vistaEquipe = v => { if (v !== 'legenda') fecharLegenda(); if (v !== 'estudo') fecharEstudoEquipe(); mostrarVista('e', 'data-vista-equipe', v, VISTAS_EQUIPE); };
 
@@ -4179,9 +4390,20 @@ function abrirAulaEquipe(id) {
       <dt>Quando</dt><dd>${fLonga(ini)}, ${fHora(ini)} às ${fHora(fim)}</dd>
       <dt>Sala</dt><dd>${sala ? `<a href="${esc(sala)}" target="_blank" rel="noopener noreferrer">${esc(a.sala)}</a>` : esc(a.sala || 'A combinar')}</dd>
       <dt>Situação</dt><dd>${situacao}</dd>
+      ${a.matricula_id ? `<dt>Curso</dt><dd id="au-curso" data-aula="${a.id}">Carregando…</dd>` : ''}
       ${a.serie_id ? `<dt>Série</dt><dd>${daSerie} ${daSerie === 1 ? 'aula' : 'aulas'} a partir desta</dd>` : ''}
     </dl>
     ${a.resumo ? `<div><h3>Nesta aula</h3><p>${esc(a.resumo)}</p></div>` : ''}`, botoes);
+  if (a.matricula_id) mostrarCursoDaAula(a.id);
+}
+async function mostrarCursoDaAula(id) {
+  let txt;
+  try {
+    const r = await db.cursoDaAula(id);
+    txt = !r?.curso ? 'Não foi possível ler o curso desta aula.' : r.n ? `Aula ${r.n} de ${r.m}, ${r.curso.titulo}` : r.curso.titulo;
+  } catch (e) { txt = 'Não foi possível ler o curso desta aula.'; }
+  const dd = $('#au-curso');
+  if (dd?.dataset.aula === id) dd.textContent = txt;
 }
 function formAula(id) {
   const a = id ? eq.aulas.find(x => x.id === id) : null;
@@ -4491,6 +4713,269 @@ async function excluirMaterial(id) {
   if (await tentar(() => db.excluirMaterial(m), 'Material removido.')) recarregar('midias', 'midiaAlunos');
 }
 
+/* ---------- cursos: lista e curso aberto com as aulas-modelo ---------- */
+const cur = { id: null, aulas: [], carregado: false, ocupado: false };
+const podeEditarCurso = c => ehAdmin() || c.criado_por === eq.perfil.id;
+const qtdAulas = c => c.curso_aulas?.[0]?.count ?? 0;
+const nAulas = n => `${n} ${n === 1 ? 'aula' : 'aulas'}`;
+const prazoLicao = n => (n === 0 ? 'até o fim do dia da aula' : `${n} ${n === 1 ? 'dia' : 'dias'} depois da aula`);
+const estadoCurso = c => (c.publicado
+  ? `<span class="estado confirmada">${ico('check-circle')}Publicado</span>`
+  : `<span class="estado entregue">${ico('pencil-simple-line')}Rascunho</span>`);
+function renderCursos() {
+  $('#lista-cursos').innerHTML = eq.cursos.length ? eq.cursos.map(c => `<li class="mat-linha curso-linha">
+      <span class="mat-ico">${ico('graduation-cap')}</span>
+      <span class="quem"><b>${esc(c.titulo)}</b><small>${c.nivel ? `Nível ${esc(c.nivel)} · ` : ''}${nAulas(qtdAulas(c))}</small>${estadoCurso(c)}</span>
+      <span class="acoes-linha"><button class="btn btn-linha" data-abrir-curso="${c.id}" aria-label="Abrir ${esc(c.titulo)}">Abrir</button></span>
+    </li>`).join('')
+    : `<li><span class="quem vazio-linha">Nenhum curso ainda. Use “Novo curso” para montar o primeiro.</span></li>`;
+  if (cur.id && !$('#e-curso').hidden) renderCurso();
+}
+function renderCurso() {
+  const c = eq.cursos.find(x => x.id === cur.id);
+  const voltar = `<button class="btn-texto" data-vista-equipe="cursos">${ico('caret-left')}Cursos</button>`;
+  if (!c) { $('#e-curso').innerHTML = `<div class="estudo-topo curso-topo">${voltar}</div><div class="vazio">${ico('graduation-cap')}<b>Este curso não existe mais</b></div>`; return; }
+  const pode = podeEditarCurso(c), n = cur.aulas.length;
+  const linha = (a, i) => `<li class="am-linha">
+      <span class="am-num" aria-hidden="true">${d2(i + 1)}</span>
+      <span class="quem"><b>${esc(a.titulo)}</b>${a.resumo ? `<small>${esc(a.resumo)}</small>` : ''}<small>${a.tarefa_titulo ? `Lição: ${esc(a.tarefa_titulo)}, prazo ${prazoLicao(a.tarefa_prazo_dias)}` : 'Sem lição'}</small></span>
+      ${pode ? `<span class="acoes-linha">
+        <button class="btn btn-linha" data-subir-am="${a.id}" aria-label="Subir ${esc(a.titulo)}" ${i === 0 ? 'disabled' : ''}>Subir</button>
+        <button class="btn btn-linha" data-descer-am="${a.id}" aria-label="Descer ${esc(a.titulo)}" ${i === n - 1 ? 'disabled' : ''}>Descer</button>
+        <button class="btn btn-linha" data-editar-am="${a.id}" aria-label="Editar ${esc(a.titulo)}">Editar</button>
+        <button class="btn btn-linha" data-apagar-am="${a.id}" aria-label="Apagar ${esc(a.titulo)}">Apagar</button>
+      </span>` : ''}
+    </li>`;
+  $('#e-curso').innerHTML = `
+    <div class="estudo-topo curso-topo">
+      ${voltar}
+      <h2>${esc(c.titulo)}</h2>
+      <div class="etiquetas">${c.nivel ? `<span class="etq">Nível ${esc(c.nivel)}</span>` : ''}${estadoCurso(c)}</div>
+    </div>
+    <article class="painel curso-painel">
+      ${c.descricao ? `<p class="curso-desc">${esc(c.descricao)}</p>` : '<p class="ajuda">Sem descrição.</p>'}
+      ${cur.carregado && !n ? '<p class="ajuda">Sem aula-modelo, o curso não pode ser aplicado a um aluno.</p>' : ''}
+      ${pode ? `<div class="secao-acoes">
+        <button class="btn btn-linha" data-editar-curso="${c.id}">Editar curso</button>
+        <button class="btn btn-linha" data-publicar-curso="${c.id}">${c.publicado ? 'Despublicar' : 'Publicar'}</button>
+        <button class="btn btn-linha" data-apagar-curso="${c.id}">Apagar curso</button>
+      </div>` : '<p class="ajuda">Só quem criou o curso ou o admin pode mudar este curso.</p>'}
+    </article>
+    <article class="painel" style="margin-top:16px">
+      <div class="painel-topo"><h2>Aulas-modelo</h2>${pode ? `<button class="btn btn-primario" data-nova-aula-modelo>${ico('plus')}Nova aula-modelo</button>` : ''}</div>
+      <ol class="lista" id="lista-aulas-modelo">${!cur.carregado ? '<li><span class="quem vazio-linha">Carregando…</span></li>'
+        : n ? cur.aulas.map(linha).join('') : '<li><span class="quem vazio-linha">Nenhuma aula-modelo ainda.</span></li>'}</ol>
+    </article>`;
+}
+async function abrirCurso(id) {
+  Object.assign(cur, { id, aulas: [], carregado: false });
+  vistaEquipe('curso');
+  $('.trilho [data-vista-equipe="cursos"]').setAttribute('aria-current', 'page');
+  renderCurso();
+  await recarregarCurso();
+  $('#e-curso .curso-topo h2')?.setAttribute('tabindex', '-1');
+  $('#e-curso .curso-topo h2')?.focus({ preventScroll: true });
+}
+// relê as aulas-modelo e a lista; depois de criar ou apagar, fecha os buracos da ordem
+async function recarregarCurso(acertar = false) {
+  const id = cur.id;
+  const r = await tentar(async () => {
+    let aulas = await db.aulasModelo(id);
+    if (acertar && aulas.some((a, i) => a.ordem !== i + 1)) { await db.reordenarAulasModelo(aulas); aulas = await db.aulasModelo(id); }
+    return [aulas, await db.cursos()];
+  });
+  if (!r || cur.id !== id) return;
+  [cur.aulas, eq.cursos] = r; cur.carregado = true;
+  renderCursos();
+}
+function formCurso(id) {
+  const c = id ? eq.cursos.find(x => x.id === id) : null;
+  const g = gavetaForm('Cursos', c ? 'Editar curso' : 'Novo curso', `
+    <form class="form-gaveta" novalidate>
+      <div class="campo"><label for="cu-titulo">Título</label><input id="cu-titulo" maxlength="160" value="${esc(c?.titulo || '')}" placeholder="Ex.: A1 Foundations" aria-describedby="cu-titulo-erro" data-foco><span class="erro-msg" id="cu-titulo-erro" role="alert"></span></div>
+      <div class="campo"><label for="cu-nivel">Nível</label><select id="cu-nivel">${opcoesNivel(c?.nivel)}</select></div>
+      <div class="campo"><label for="cu-desc">Descrição (opcional)</label><textarea id="cu-desc" maxlength="2000" style="min-height:100px">${esc(c?.descricao || '')}</textarea></div>
+    </form>`, [`<button class="btn btn-primario btn-g" id="cu-salvar">${c ? 'Salvar' : 'Criar curso'}</button>`]);
+  $('form', g).addEventListener('submit', ev => { ev.preventDefault(); $('#cu-salvar').click(); });
+  $('#cu-salvar', g).addEventListener('click', async () => {
+    const titulo = $('#cu-titulo').value.trim();
+    const erro = titulo ? '' : 'Dê um título para o curso.';
+    $('#cu-titulo-erro').textContent = erro; $('#cu-titulo').setAttribute('aria-invalid', String(!!erro));
+    if (erro) return $('#cu-titulo').focus();
+    const campos = { titulo, nivel: $('#cu-nivel').value || null, descricao: $('#cu-desc').value.trim() || null };
+    $('#cu-salvar').disabled = true;
+    const feito = c ? await tentar(() => db.editarCurso(c.id, campos), 'Curso salvo.')
+      : await tentar(() => db.criarCurso(campos), 'Curso criado. Agora monte as aulas-modelo.');
+    if (!feito) { $('#cu-salvar').disabled = false; return; }
+    fecharCamadas();
+    if (c) { await recarregarCurso(); return $(`[data-editar-curso="${c.id}"]`)?.focus(); }
+    eq.cursos = [...eq.cursos, { ...feito, curso_aulas: [{ count: 0 }] }];
+    abrirCurso(feito.id);
+  });
+}
+function formAulaModelo(id) {
+  const c = eq.cursos.find(x => x.id === cur.id); if (!c) return;
+  const a = id ? cur.aulas.find(x => x.id === id) : null;
+  const g = gavetaForm(c.titulo, a ? 'Editar aula-modelo' : 'Nova aula-modelo', `
+    <form class="form-gaveta" novalidate>
+      <div class="campo"><label for="am-titulo">Título da aula</label><input id="am-titulo" maxlength="160" value="${esc(a?.titulo || '')}" placeholder="Ex.: Daily routines" aria-describedby="am-titulo-erro" data-foco><span class="erro-msg" id="am-titulo-erro" role="alert"></span></div>
+      <div class="campo"><label for="am-resumo">Nesta aula (opcional)</label><textarea id="am-resumo" maxlength="2000" style="min-height:80px">${esc(a?.resumo || '')}</textarea></div>
+      <fieldset class="am-licao"><legend>Lição desta aula (opcional)</legend>
+        <div class="campo"><label for="am-licao">Título da lição</label><input id="am-licao" maxlength="160" value="${esc(a?.tarefa_titulo || '')}" aria-describedby="am-licao-ajuda am-licao-erro"><span class="ajuda" id="am-licao-ajuda">Em branco, a aula fica sem lição.</span><span class="erro-msg" id="am-licao-erro" role="alert"></span></div>
+        <div class="campo"><label for="am-instrucoes">Instruções</label><textarea id="am-instrucoes" maxlength="5000" style="min-height:80px">${esc(a?.tarefa_instrucoes || '')}</textarea></div>
+        <div class="campo"><label for="am-prazo">Prazo, em dias depois da aula</label><input id="am-prazo" type="number" min="0" step="1" inputmode="numeric" value="${a?.tarefa_titulo ? a.tarefa_prazo_dias : ''}" aria-describedby="am-prazo-ajuda am-prazo-erro"><span class="ajuda" id="am-prazo-ajuda">0 = até as 23:59 do dia da aula.</span><span class="erro-msg" id="am-prazo-erro" role="alert"></span></div>
+      </fieldset>
+    </form>`, [`<button class="btn btn-primario btn-g" id="am-salvar">${a ? 'Salvar' : 'Pôr no curso'}</button>`]);
+  $('form', g).addEventListener('submit', ev => { ev.preventDefault(); $('#am-salvar').click(); });
+  $('#am-salvar', g).addEventListener('click', async () => {
+    const titulo = $('#am-titulo').value.trim(), licao = $('#am-licao').value.trim(), instrucoes = $('#am-instrucoes').value.trim();
+    const campoPrazo = $('#am-prazo'), txtPrazo = campoPrazo.value.trim(), prazo = Number(txtPrazo);
+    const erros = {
+      titulo: titulo ? '' : 'Dê um título para a aula.',
+      licao: !licao && instrucoes ? 'Dê um título à lição ou apague as instruções.' : '',
+      prazo: campoPrazo.validity.badInput || (txtPrazo && !(Number.isInteger(prazo) && prazo >= 0)) ? 'O prazo é um número inteiro de dias, 0 ou mais.'
+        : licao && !txtPrazo ? 'Informe o prazo em dias (0 = no dia da aula).' : '',
+    };
+    Object.entries(erros).forEach(([k, msg]) => { $(`#am-${k}-erro`).textContent = msg; $(`#am-${k}`).setAttribute('aria-invalid', String(!!msg)); });
+    const primeiro = Object.keys(erros).find(k => erros[k]);
+    if (primeiro) return $(`#am-${primeiro}`).focus();
+    const linha = { titulo, resumo: $('#am-resumo').value.trim() || null, tarefa_titulo: licao || null, tarefa_instrucoes: licao ? (instrucoes || null) : null, tarefa_prazo_dias: licao ? prazo : 0 };
+    $('#am-salvar').disabled = true;
+    const feito = a ? await tentar(() => db.editarAulaModelo(a.id, linha), 'Aula-modelo salva.')
+      : await tentar(() => db.criarAulaModelo({ ...linha, curso_id: c.id, ordem: Math.max(0, ...cur.aulas.map(x => x.ordem)) + 1 }), 'Aula-modelo no curso.');
+    if (!feito) { $('#am-salvar').disabled = false; return; }
+    fecharCamadas();
+    await recarregarCurso(!a);
+    $(a ? `[data-editar-am="${a.id}"]` : '[data-nova-aula-modelo]')?.focus();
+  });
+}
+async function moverAulaModelo(id, passo) {
+  const i = cur.aulas.findIndex(a => a.id === id), j = i + passo;
+  if (cur.ocupado || i < 0 || j < 0 || j >= cur.aulas.length) return;
+  const nova = cur.aulas.slice(); [nova[i], nova[j]] = [nova[j], nova[i]];
+  cur.ocupado = true;
+  await tentar(() => db.reordenarAulasModelo(nova), `“${cur.aulas[i].titulo}” agora é a aula ${j + 1}.`);
+  await recarregarCurso();
+  cur.ocupado = false;
+  const alvo = [$(`[data-${passo < 0 ? 'subir' : 'descer'}-am="${id}"]`), $(`[data-${passo < 0 ? 'descer' : 'subir'}-am="${id}"]`)].find(b => b && !b.disabled);
+  if (alvo) alvo.focus();
+}
+async function publicarCurso(id) {
+  const c = eq.cursos.find(x => x.id === id); if (!c) return;
+  const publicar = !c.publicado;
+  if (await tentar(() => db.editarCurso(id, { publicado: publicar }), publicar ? 'Curso publicado.' : 'Curso despublicado: voltou a ser rascunho.')) await recarregarCurso();
+  $(`[data-publicar-curso="${id}"]`)?.focus();
+}
+async function apagarCurso(id) {
+  const c = eq.cursos.find(x => x.id === id); if (!c) return;
+  const n = cur.id === id && cur.carregado ? cur.aulas.length : qtdAulas(c);
+  if (!confirm(`Apagar o curso “${c.titulo}”${n === 1 ? ' e a aula-modelo dele' : n ? ` e as ${n} aulas-modelo dele` : ''}? Não dá para desfazer.`)) return;
+  if (!(await tentar(() => db.apagarCurso(id), 'Curso apagado.'))) return;
+  cur.id = null;
+  vistaEquipe('cursos');
+  await recarregar('cursos');
+  $('#e-cursos [data-novo="curso"]').focus();
+}
+async function apagarAulaModelo(id) {
+  const a = cur.aulas.find(x => x.id === id); if (!a) return;
+  if (!confirm(`Apagar a aula-modelo “${a.titulo}”? As aulas já marcadas para alunos não mudam.`)) return;
+  if (await tentar(() => db.apagarAulaModelo(id), 'Aula-modelo apagada.')) await recarregarCurso(true);
+  $('[data-nova-aula-modelo]')?.focus();
+}
+
+/* ---------- aplicar curso: formulário e prévia do que o servidor vai criar ---------- */
+const apl = { modelos: {}, feito: null, ocupado: false };
+const aplicaveis = () => eq.cursos.filter(c => c.publicado && qtdAulas(c) > 0);
+const nLicoes = n => (n === 0 ? 'nenhuma lição' : `${n} ${n === 1 ? 'lição' : 'lições'}`);
+const diasAp = () => $$('[data-dia-ap][aria-pressed="true"]').map(b => Number(b.dataset.diaAp));
+// a data do formulário é contada como data pura, sem fuso, como no servidor
+const fDataPura = d => `${DIAS[d.getUTCDay()]} ${d2(d.getUTCDate())}/${d2(d.getUTCMonth() + 1)}`;
+function datasDoCurso(inicio, dias, n) {
+  const [a, m, d] = inicio.split('-').map(Number); const out = [];
+  for (let i = 0; out.length < n && i < 7 * n; i++) { const x = new Date(Date.UTC(a, m - 1, d + i)); if (dias.includes(x.getUTCDay())) out.push(x); }
+  return out;
+}
+function abrirAplicar() {
+  Object.assign(apl, { modelos: {}, feito: null, ocupado: false });
+  const cursos = aplicaveis(); const ini = new Date(); ini.setDate(ini.getDate() + 1);
+  vistaEquipe('aplicar');
+  $('.trilho [data-vista-equipe="cursos"]').setAttribute('aria-current', 'page');
+  $('#e-aplicar').innerHTML = `
+    <div class="estudo-topo curso-topo"><button class="btn-texto" data-vista-equipe="cursos">${ico('caret-left')}Cursos</button></div>
+    <div class="aplicar">
+      <form class="painel aplicar-form" id="form-aplicar" novalidate>
+        <h2 tabindex="-1">Aplicar curso</h2>
+        <div class="duas">
+          <div class="campo"><label for="ap-aluno">Aluno</label><select id="ap-aluno">${alunosAtivos().length ? opcoesAlunos(null) : '<option value="">Nenhum aluno ativo</option>'}</select></div>
+          <div class="campo"><label for="ap-curso">Curso</label><select id="ap-curso">${cursos.length ? cursos.map(c => `<option value="${c.id}">${esc(c.titulo)}, ${nAulas(qtdAulas(c))}</option>`).join('') : '<option value="">Nenhum curso publicado com aulas</option>'}</select></div>
+        </div>
+        <div class="tres">
+          <div class="campo"><label for="ap-inicio">Começa em</label><input id="ap-inicio" type="date" value="${dataInput(ini)}"></div>
+          <div class="campo"><label for="ap-hora">Horário</label><input id="ap-hora" type="time" step="900" value="19:00"></div>
+          <div class="campo"><label for="ap-dur">Duração</label><select id="ap-dur">${[30, 45, 60, 90, 120].map(n => `<option value="${n}" ${n === 60 ? 'selected' : ''}>${n} min</option>`).join('')}</select></div>
+        </div>
+        <div class="campo"><span class="rotulo" id="ap-rot-dias">Dias da semana</span>
+          <div class="dias dias-curso" role="group" aria-labelledby="ap-rot-dias" aria-describedby="ap-dias-erro">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" class="dia-chip" data-dia-ap="${d}" aria-pressed="${d === ini.getDay()}">${DIAS[d]}</button>`).join('')}</div>
+          <span class="erro-msg" id="ap-dias-erro"></span>
+        </div>
+        <div class="campo"><label for="ap-sala">Sala da aula</label><input id="ap-sala" maxlength="500" placeholder="Link do Google Meet ou endereço" aria-describedby="ap-sala-ajuda"><span class="ajuda" id="ap-sala-ajuda">Link do Google Meet, Zoom ou Teams, ou o endereço da aula presencial.</span></div>
+        <span class="erro-msg" id="ap-erro" role="alert"></span>
+        <button class="btn btn-primario btn-g" type="submit" id="ap-enviar">${ico('check')}Aplicar curso</button>
+      </form>
+      <article class="painel previa" aria-live="polite">
+        <h2>O que vai ser criado</h2>
+        <div class="resumo-previa" id="ap-resumo"></div>
+        <div id="ap-ok"></div>
+        <ol class="previa-lista" id="ap-lista"></ol>
+      </article>
+    </div>`;
+  const f = $('#form-aplicar');
+  const mudou = () => { apl.feito = null; $('#ap-ok').innerHTML = ''; $('#ap-erro').textContent = ''; previaAplicar(); };
+  f.addEventListener('click', ev => { const b = ev.target.closest('[data-dia-ap]'); if (b) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); mudou(); } });
+  f.addEventListener('input', ev => { if (ev.target.id !== 'ap-curso') mudou(); });
+  $('#ap-curso').addEventListener('change', () => { mudou(); carregarModelos(); });
+  f.addEventListener('submit', ev => { ev.preventDefault(); aplicarCurso(); });
+  carregarModelos();
+  $('#e-aplicar h2').focus({ preventScroll: true });
+}
+async function carregarModelos() {
+  const id = $('#ap-curso')?.value;
+  previaAplicar();
+  if (!id || apl.modelos[id]) return;
+  try { apl.modelos[id] = await db.aulasModelo(id); } catch (e) { if ($('#ap-curso')?.value === id) $('#ap-resumo').textContent = e.message; return; }
+  if ($('#ap-curso')?.value === id) previaAplicar();
+}
+function previaAplicar() {
+  const curso = eq.cursos.find(c => c.id === $('#ap-curso').value), aluno = pessoa($('#ap-aluno').value);
+  const inicio = $('#ap-inicio').value, hora = $('#ap-hora').value, dias = diasAp(), modelos = curso && apl.modelos[curso.id];
+  $('#ap-dias-erro').textContent = dias.length ? '' : 'Escolha pelo menos um dia.';
+  const falta = !aluno ? 'Escolha o aluno.' : !curso ? 'Escolha um curso publicado com aulas.' : !inicio || !hora ? 'Informe a data de início e o horário.'
+    : !dias.length ? 'Escolha os dias para ver as datas.' : !modelos ? 'Carregando as aulas do curso…' : !modelos.length ? 'Este curso ainda não tem aulas.' : '';
+  $('#ap-enviar').disabled = !!falta || apl.ocupado || !!apl.feito;
+  if (falta) { $('#ap-resumo').textContent = falta; $('#ap-lista').innerHTML = ''; return; }
+  const datas = datasDoCurso(inicio, dias, modelos.length), k = modelos.filter(m => m.tarefa_titulo).length;
+  $('#ap-resumo').innerHTML = `<b>${nAulas(datas.length)} e ${nLicoes(k)}</b> para ${esc(aluno.nome)}, de ${fDataPura(datas[0])} a ${fDataPura(datas[datas.length - 1])}, às ${esc(hora)} (${Number($('#ap-dur').value)} min). ${esc(primeiroNome(aluno.nome))} recebe um único aviso no app.`;
+  $('#ap-lista').innerHTML = datas.map((d, i) => { const m = modelos[i]; return `<li><span>${d2(i + 1)}</span><span>${fDataPura(d)} ${esc(hora)}</span><span>${esc(m.titulo)}${m.tarefa_titulo ? `<small>Lição até ${fDataPura(new Date(d.getTime() + m.tarefa_prazo_dias * 864e5))}, 23:59</small>` : ''}</span></li>`; }).join('');
+}
+async function aplicarCurso() {
+  const curso = eq.cursos.find(c => c.id === $('#ap-curso').value), aluno = pessoa($('#ap-aluno').value);
+  const modelos = curso && apl.modelos[curso.id];
+  if (apl.ocupado || apl.feito || !aluno || !modelos?.length) return;
+  const inicio = $('#ap-inicio').value, hora = $('#ap-hora').value, dias = diasAp();
+  if (!inicio || !hora || !dias.length) return;
+  apl.ocupado = true; $('#ap-enviar').disabled = true; $('#ap-erro').textContent = '';
+  try {
+    await db.aplicarCurso({ p_aluno: aluno.id, p_curso: curso.id, p_inicio: inicio, p_dias: dias, p_hora: hora, p_duracao_min: Number($('#ap-dur').value), p_sala: $('#ap-sala').value.trim() || null });
+    const datas = datasDoCurso(inicio, dias, modelos.length), k = modelos.filter(m => m.tarefa_titulo).length;
+    apl.feito = aluno.id;
+    $('#ap-ok').innerHTML = `<div class="aplicado"><b>${ico('check-circle')} Curso aplicado.</b><span>${nAulas(datas.length)} e ${nLicoes(k)} entraram na agenda de ${esc(aluno.nome)}. ${esc(primeiroNome(aluno.nome))} recebe o aviso no app.</span><button class="btn btn-linha" type="button" data-vista-equipe="agenda">Ver na agenda</button></div>`;
+    eq.mes = new Date(datas[0].getUTCFullYear(), datas[0].getUTCMonth(), 1);
+    recarregar('aulas', 'tarefas');
+  } catch (e) { $('#ap-erro').textContent = e.message; }
+  apl.ocupado = false;
+  previaAplicar();
+}
+
 /* ---------- legenda do vídeo: player no topo, linhas abaixo ---------- */
 const ed = { m: null, pode: false, linhas: [], player: null };
 const podeEditarMaterial = m => ehAdmin() || m.criado_por === eq.perfil.id;
@@ -4668,6 +5153,17 @@ document.addEventListener('click', ev => {
   if (ds.novo === 'aula') return formAula();
   if (ds.novo === 'licao') return formLicao();
   if (ds.novo === 'material') return formMaterial();
+  if (ds.novo === 'curso') return formCurso();
+  if (ds.aplicarCurso !== undefined) return abrirAplicar();
+  if (ds.abrirCurso) return abrirCurso(ds.abrirCurso);
+  if (ds.editarCurso) return formCurso(ds.editarCurso);
+  if (ds.publicarCurso) return publicarCurso(ds.publicarCurso);
+  if (ds.apagarCurso) return apagarCurso(ds.apagarCurso);
+  if (ds.novaAulaModelo !== undefined) return formAulaModelo();
+  if (ds.editarAm) return formAulaModelo(ds.editarAm);
+  if (ds.apagarAm) return apagarAulaModelo(ds.apagarAm);
+  if (ds.subirAm) return moverAulaModelo(ds.subirAm, -1);
+  if (ds.descerAm) return moverAulaModelo(ds.descerAm, 1);
   if (ds.vocabPessoa) return verVocabulario(ds.vocabPessoa);
   if (ds.pronPessoa) return verPronuncia(ds.pronPessoa);
   if (ds.ditPessoa) return verDitado(ds.ditPessoa);

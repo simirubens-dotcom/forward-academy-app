@@ -1784,9 +1784,11 @@ function distanciaAoSegmento(px, py, ax, ay, bx, by) {
 }
 // a camada é um SVG de 1000 unidades de largura e altura na proporção da página: o navegador escala o traço
 const LOUSA_UNIDADE = 1000;
+// abaixo de 1,5 px na tela o traço se divide em dois pixels claros e perde contraste
+const LOUSA_PISO_PX = 1.5;
 const lousaXY = ([x, y], alto) => `${Math.round(x * LOUSA_UNIDADE * 10) / 10},${Math.round(y * alto * 10) / 10}`;
-function elementoDoTraco(t, alto) {
-  const largura = LOUSA_LARGURA[t.ferramenta][t.espessura] * LOUSA_UNIDADE, um = t.pontos.length === 1;
+function elementoDoTraco(t, alto, piso) {
+  const largura = Math.max(LOUSA_LARGURA[t.ferramenta][t.espessura] * LOUSA_UNIDADE, piso), um = t.pontos.length === 1;
   const el = document.createElementNS('http://www.w3.org/2000/svg', um ? 'circle' : 'polyline');
   if (um) {
     const [cx, cy] = lousaXY(t.pontos[0], alto).split(',');
@@ -1861,26 +1863,27 @@ class Lousa {
     this.ajustar(c);
     return c;
   }
-  // mudou a proporção da caixa: a altura do viewBox acompanha e o traço é refeito a partir dos pontos
+  // mudou a proporção da caixa, ou a largura com o piso valendo: a altura do viewBox acompanha e o traço é refeito a partir dos pontos
   ajustar(c) {
     const r = c.getBoundingClientRect();
     if (!r.width || !r.height) return;
     const alto = Math.round(LOUSA_UNIDADE * r.height / r.width * 10) / 10;
-    if (Number(c.dataset.alto) === alto) return;
-    c.dataset.alto = alto;
+    const piso = Math.max(LOUSA_LARGURA.caneta.fina * LOUSA_UNIDADE, Math.ceil(LOUSA_PISO_PX * LOUSA_UNIDADE / r.width * 10) / 10);
+    if (Number(c.dataset.alto) === alto && Number(c.dataset.piso) === piso) return;
+    c.dataset.alto = alto; c.dataset.piso = piso;
     c.setAttribute('viewBox', `0 0 ${LOUSA_UNIDADE} ${alto}`);
     this.desenhar(c.dataset.lousaPagina);
   }
   desenhar(p) {
     const c = this.camadas.get(p); if (!c || !c.dataset.alto) return;
-    const alto = Number(c.dataset.alto);
-    c.replaceChildren(...(this.dados.get(p) || []).map(t => elementoDoTraco(t, alto)));
+    const alto = Number(c.dataset.alto), piso = Number(c.dataset.piso);
+    c.replaceChildren(...(this.dados.get(p) || []).map(t => elementoDoTraco(t, alto, piso)));
     if (this.risco?.pagina === p && this.risco.traco) { this.risco.el = null; this.desenharRisco(); }
   }
   desenharRisco() {
     const r = this.risco, c = r && this.camadas.get(r.pagina);
     if (!r?.traco || !c?.dataset.alto) return;
-    const novo = elementoDoTraco(r.traco, Number(c.dataset.alto));
+    const novo = elementoDoTraco(r.traco, Number(c.dataset.alto), Number(c.dataset.piso));
     if (r.el?.isConnected) r.el.replaceWith(novo); else c.append(novo);
     r.el = novo;
   }

@@ -847,6 +847,9 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .campo .escolha-alunos input{width:auto;flex:none;padding:0;border:0;box-shadow:none}
 .menor-bloco{display:grid;gap:12px}
 .menor-bloco .check{font-size:14.5px;color:var(--fg)}
+.ia-autoriza{display:grid;gap:2px}
+.ia-autoriza .check{min-height:24px}
+.ia-autoriza .ajuda{padding-left:27px}
 .resp-bloco{display:grid;gap:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r-input)}
 .fatos-resp dd{min-width:0;overflow-wrap:anywhere}
 .caixa-aviso{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--fg-2)}
@@ -908,6 +911,15 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 }
 .dic{scroll-margin:120px 0 96px;min-width:0;overflow-wrap:anywhere}
 .dic .prof-ia{padding-top:0}
+/* professor de IA: pergunta e resposta embaixo do dicionário */
+.dic .dic-ia{padding-top:16px;border-top:1px solid var(--line-2)}
+.ia-form{display:grid;gap:10px}
+.ia-form textarea{min-height:84px}
+.ia-conta{justify-self:end;font-variant-numeric:tabular-nums}
+.ia-res{display:grid;gap:8px;min-width:0}
+.ia-res:empty{display:none}
+.prof-ia h3.ia-rotulo{margin:0;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--fg-2)}
+.ia-texto{white-space:pre-line;overflow-wrap:anywhere;line-height:1.55}
 .dic-aviso::first-letter{text-transform:uppercase}
 .prof-ia h3.dic-palavra{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1;letter-spacing:0;text-transform:none;color:var(--fg);overflow-wrap:anywhere}
 .dic-defs{margin:0;padding-left:20px;display:grid;gap:8px}
@@ -1197,7 +1209,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável e a data em que ele autorizou. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1216,6 +1228,7 @@ button.aviso:focus-visible{outline-offset:-3px}
           <li>Quando você usa “Ler em voz alta”, quem reconhece a sua fala é o navegador, e ele envia o áudio da sua voz para o serviço da empresa dele: o Chrome envia ao Google, e o Edge, à Microsoft. A Forward recebe só o texto reconhecido.</li>
           <li>Com os avisos no celular ligados, cada aviso (o título e o começo do texto) chega ao seu aparelho pelo serviço de push do navegador: o Google no Chrome e no Android, a Apple no iPhone e no iPad, a Mozilla no Firefox e a Microsoft no Edge. Esse serviço recebe o endereço da inscrição e a mensagem cifrada, que só o seu navegador abre.</li>
           <li>Quando o professor liga a conta Google dele ao app, cada aula online marcada sem sala vira um evento na agenda Google do professor, com o título da aula, o primeiro nome do aluno e o horário (sem o e-mail do aluno), e ganha uma sala do Google Meet. Ao entrar nessa sala, o Google recebe os dados da conexão, como o endereço de internet (IP) do seu aparelho.</li>
+          <li>Quando você usa “Pergunte sobre esta palavra”, a sua pergunta, a palavra e a frase do material vão para a Anthropic, a empresa da IA Claude, que escreve a resposta. O app não envia o seu nome nem o seu e-mail. A Anthropic apaga esse texto em até 30 dias e não o usa para treinar a IA. A Forward não guarda a pergunta nem a resposta: guarda só quantas perguntas você fez em cada dia. Para aluno menor de idade, a IA fica desligada até o responsável autorizar.</li>
         </ul>
       </section>
       <section>
@@ -1807,6 +1820,26 @@ function erroPush(e) {
   if (e?.code === '42501') return 'Sem permissão para ligar os avisos. Entre de novo e tente outra vez.';
   return traduzirErro(e);
 }
+// recusa do professor de IA: a mensagem sai pelo código da função, nunca pelo texto que veio do servidor
+const IA_DESLIGADA = 'A pergunta à IA está desligada para você. O seu professor liga quando o seu responsável autorizar.';
+const ERROS_IA = {
+  palavra_invalida: 'Esta palavra não aceita pergunta. Toque numa palavra em inglês.',
+  frase_invalida: 'Não deu para perguntar a partir desta frase. Abra o material de novo e toque na palavra.',
+  material_invalido: 'Este material não aceita pergunta. Pergunte num vídeo com legenda ou num PDF da biblioteca.',
+  pergunta_vazia: 'Escreva a sua pergunta.',
+  pergunta_longa: 'A pergunta pode ter até 300 caracteres.',
+  so_aluno: 'Só o aluno pergunta à IA.',
+  ia_desligada: IA_DESLIGADA,
+  teto_dia: 'Você chegou ao limite de perguntas de hoje. A IA volta à meia-noite, horário de Brasília.',
+  teto_mes: 'A escola chegou ao limite de perguntas deste mês. A IA volta no dia 1º do mês que vem.',
+  ia_indisponivel: 'IA indisponível no momento. Avise a escola.',
+  ia_ocupada: 'A IA está ocupada agora. Tente de novo em instantes.',
+  http_401: 'Sua sessão expirou. Entre de novo.',
+  http_403: 'Sem permissão para perguntar. Entre de novo.',
+  rede: 'Sem conexão com o servidor. Confira a internet e tente de novo.',
+  demorou: 'A IA demorou para responder. Tente de novo.',
+};
+const erroIA = codigo => Object.assign(new Error(Object.hasOwn(ERROS_IA, codigo) ? ERROS_IA[codigo] : 'Não deu para responder agora. Tente de novo.'), { codigo });
 const CAMPOS_CONTATO = 'id, nome, email, telefone, objetivo, formato, nivel_declarado, horario_preferido, como_conheceu, status, observacao, criado_em';
 // aula sem lição grava título e instruções da lição nulos e prazo 0
 const linhaAulaModelo = c => ('tarefa_titulo' in c && !c.tarefa_titulo ? { ...c, tarefa_titulo: null, tarefa_instrucoes: null, tarefa_prazo_dias: 0 } : c);
@@ -2096,6 +2129,22 @@ const db = {
         throw new Error(msg || DICIONARIO_FORA);
       }
       if (!data || typeof data !== 'object') throw new Error(DICIONARIO_FORA);
+      return data;
+    } finally { clearTimeout(timer); }
+  },
+  // professor de IA: a mesma função, com a ação perguntar; o erro leva o código para a caixa decidir o que mostrar
+  async perguntarIA(palavra, frase, midia_id, pergunta) {
+    let timer;
+    const limite = new Promise((_, falha) => { timer = setTimeout(() => falha(erroIA('demorou')), 30000); });
+    try {
+      const { data, error } = await Promise.race([sb.functions.invoke('palavra', { body: { acao: 'perguntar', palavra, frase, midia_id, pergunta } }), limite]);
+      if (error) {
+        if (!(error.context instanceof Response)) throw erroIA('rede');
+        let codigo = '';
+        try { codigo = String((await error.context.json()).codigo || ''); } catch (e) { /* corpo sem JSON */ }
+        throw erroIA(codigo || `http_${error.context.status}`);
+      }
+      if (!data || typeof data.resposta !== 'string' || !data.resposta) throw erroIA('erro_interno');
       return data;
     } finally { clearTimeout(timer); }
   },
@@ -3996,7 +4045,7 @@ function desenharTextosVideo() {
 }
 
 /* caixa do dicionário e "Meu vocabulário" */
-const CAIXA_DIC = '<article class="painel dic" id="dic" aria-labelledby="dic-titulo" hidden><div class="painel-topo"><h2 id="dic-titulo">Dicionário</h2></div><div class="prof-ia" id="dic-corpo" aria-live="polite"></div></article>';
+const CAIXA_DIC = '<article class="painel dic" id="dic" aria-labelledby="dic-titulo" hidden><div class="painel-topo"><h2 id="dic-titulo">Dicionário</h2></div><div class="prof-ia" id="dic-corpo" aria-live="polite"></div><div class="prof-ia dic-ia" id="dic-ia" hidden></div></article>';
 const RE_PALAVRA = /\p{L}+(?:['’]\p{L}+)*/gu;
 function palavrasEmBotao(texto, n) {
   let html = '', resto = 0, i = 0;
@@ -4052,6 +4101,7 @@ async function consultarPalavra(texto, frase, i) {
 }
 function desenharDic() {
   const box = $('#dic-corpo'); if (!box) return;
+  desenharIA();
   const d = es.dic;
   if (!d) { box.innerHTML = `<p class="ajuda">${es.textos ? 'Toque numa palavra do texto: o significado aparece aqui.' : 'Toque numa palavra da legenda ou da transcrição: o vídeo pausa e o significado aparece aqui.'}</p>`; return; }
   const r = d.r || {};
@@ -4339,6 +4389,82 @@ $('#tela-aluno').addEventListener('submit', ev => {
 
 </script>
 <script>
+/* professor de IA: pergunta sobre a palavra tocada, embaixo do dicionário, só na área do aluno.
+   A pergunta e a resposta ficam só na tela; trocar de palavra apaga as duas. */
+const IA_LIMITE = 300;
+const IA_POUCAS = 5;
+const ia = { pedido: -1, enviando: false, desligada: false };
+
+const iaLigada = () => !ia.desligada && !!al.perfil && (!al.perfil.menor || !!al.perfil.ia_autorizada_em);
+// corta no limite sem partir um emoji ao meio
+function cortarPergunta(v) { const s = v.slice(0, IA_LIMITE); return /[\uD800-\uDBFF]$/.test(s) ? s.slice(0, -1) : s; }
+
+// chamada a cada desenho do dicionário; o formulário só é refeito quando a palavra muda
+function desenharIA() {
+  const box = $('#dic-ia'); if (!box || ia.pedido === es.pedido) return;
+  Object.assign(ia, { pedido: es.pedido, enviando: false });
+  box.hidden = !es.dic;
+  if (!es.dic) { box.replaceChildren(); return; }
+  box.innerHTML = iaLigada() ? `
+    <form class="ia-form" id="ia-form" novalidate>
+      <div class="campo">
+        <label for="ia-pergunta">Pergunte sobre esta palavra</label>
+        <textarea id="ia-pergunta" maxlength="${IA_LIMITE}" autocomplete="off" aria-describedby="ia-conta" placeholder="Significado, uso, pronúncia, gramática ou tradução da frase"></textarea>
+        <span class="ajuda ia-conta" id="ia-conta">0 de ${IA_LIMITE}</span>
+      </div>
+      <button class="btn btn-primario" type="submit" id="ia-enviar" disabled>${ico('paper-plane-tilt')}Perguntar</button>
+    </form>
+    <div class="ia-res" id="ia-res" aria-live="polite"></div>`
+    : `<p class="ajuda ia-desligada">${esc(IA_DESLIGADA)}</p>`;
+}
+function resultadoIA(html) { const res = $('#ia-res'); if (res) res.innerHTML = html; }
+function respostaIA(r) {
+  const n = r.restantes_hoje;
+  const restam = Number.isInteger(n) && n <= IA_POUCAS
+    ? `<p class="ajuda ia-restam">${n <= 0 ? 'Esta foi a sua última pergunta de hoje. A IA volta à meia-noite, horário de Brasília.' : n === 1 ? 'Resta 1 pergunta para hoje.' : `Restam ${n} perguntas para hoje.`}</p>`
+    : '';
+  if (r.tipo !== 'resposta') return `<div class="caixa-aviso">${esc(r.resposta)}</div>${restam}`;
+  return `<h3 class="ia-rotulo">Resposta de IA (Claude, da Anthropic)</h3>
+    <p class="ia-texto">${esc(r.resposta)}</p>
+    ${r.cortada === true ? '<p class="ajuda">A resposta ficou longa e foi cortada. Pergunte algo mais específico para ver o resto.</p>' : ''}${restam}`;
+}
+async function perguntarIA() {
+  const d = es.dic, campo = $('#ia-pergunta');
+  const pergunta = campo ? cortarPergunta(campo.value.trim()) : '';
+  if (!d || !pergunta || ia.enviando || !iaLigada()) return;
+  const pedido = es.pedido;
+  ia.enviando = true;
+  $('#ia-enviar').disabled = true;
+  resultadoIA('<p class="ajuda" role="status">Perguntando à IA…</p>');
+  let html;
+  try {
+    html = respostaIA(await db.perguntarIA(d.texto, d.frase, es.midia, pergunta));
+  } catch (e) {
+    if (pedido !== es.pedido) return;
+    if (e.codigo === 'ia_desligada') { ia.desligada = true; ia.pedido = -1; desenharIA(); return; }
+    html = `<div class="caixa-aviso erro" role="alert">${esc(e.message)}</div>`;
+  }
+  if (pedido !== es.pedido) return;
+  ia.enviando = false;
+  resultadoIA(html);
+  $('#ia-enviar').disabled = !$('#ia-pergunta').value.trim();
+}
+
+$('#tela-aluno').addEventListener('input', ev => {
+  if (ev.target.id !== 'ia-pergunta') return;
+  const campo = ev.target;
+  if (campo.value.length > IA_LIMITE) campo.value = cortarPergunta(campo.value);
+  $('#ia-conta').textContent = `${campo.value.length} de ${IA_LIMITE}`;
+  $('#ia-enviar').disabled = ia.enviando || !campo.value.trim();
+});
+$('#tela-aluno').addEventListener('submit', ev => {
+  if (ev.target.id !== 'ia-form') return;
+  ev.preventDefault();
+  perguntarIA();
+});
+
+</script>
+<script>
 /* painel da equipe (admin e professor) com dado real */
 const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], cursos: [], mes: null, filtroLicao: 'entregue', contatos: [], filtroContato: 'todos', pedidoContatos: 0 };
 const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'cursos', 'curso', 'aplicar', 'legenda', 'estudo', 'contatos'];
@@ -4436,6 +4562,11 @@ function formNovaPessoa() {
     const r = await tentar(() => db.pessoa('criar', dados).catch(e => { $('#pe-erro').textContent = e.message; throw e; }));
     $('#pe-salvar').disabled = false;
     if (!r) return;
+    // o cadastro não recebe a autorização da IA: ela vai depois, na pessoa já criada
+    if (dados.menor && $('#pe-ia', g).checked) {
+      try { await db.editarAluno(r.id, { ia_autorizada_em: new Date().toISOString() }); }
+      catch (e) { avisar('Cadastro feito, mas a IA ficou desligada. Ligue em Editar.', true); }
+    }
     await recarregar('pessoas');
     mostrarAcesso(dados.nome, dados.email, dados.senha, 'Cadastro feito');
   });
@@ -4477,6 +4608,9 @@ function formEditarPessoa(id) {
       const erro = faltaResponsavel(r);
       if (erro) { $('#ed-erro').textContent = erro; return; }
       if (renovar) Object.assign(campos, { menor: true, responsavel_nome: r.nome, responsavel_email: r.email, consentimento_responsavel_em: new Date().toISOString() });
+      // a data da IA também só vai quando a caixa muda: outra data regrava a data e quem ligou
+      const iaMarcada = $('#ed-ia', g).checked;
+      if (iaMarcada !== Boolean(p.ia_autorizada_em)) campos.ia_autorizada_em = iaMarcada ? new Date().toISOString() : null;
     } else if (aluno && p.menor) campos.menor = false;
     $('#ed-erro').textContent = '';
     if (await tentar(() => db.editarAluno(id, campos).catch(e => { $('#ed-erro').textContent = e.message; throw e; }), 'Dados salvos.')) { fecharCamadas(); recarregar('pessoas'); }
@@ -4490,18 +4624,22 @@ function blocoMenor(pre, p = {}) {
       <div class="campo"><label for="${pre}-resp-nome">Nome do responsável</label><input id="${pre}-resp-nome" value="${esc(p.responsavel_nome)}" maxlength="120" autocomplete="off"></div>
       <div class="campo"><label for="${pre}-resp-email">E-mail do responsável</label><input id="${pre}-resp-email" type="email" value="${esc(p.responsavel_email)}" maxlength="254" autocomplete="off" inputmode="email"></div>
       <label class="check"><input type="checkbox" id="${pre}-consent" ${p.menor ? 'checked' : ''}>O responsável autorizou o uso dos dados do aluno na plataforma</label>
+      <div class="ia-autoriza">
+        <label class="check"><input type="checkbox" id="${pre}-ia" ${p.ia_autorizada_em ? 'checked' : ''} aria-describedby="${pre}-ia-ajuda">O responsável autorizou a IA</label>
+        <span class="ajuda" id="${pre}-ia-ajuda">Libera “Pergunte sobre esta palavra” no estudo: a pergunta vai para a IA Claude, da Anthropic.</span>
+      </div>
     </div>
   </div>`;
 }
 function ligarMenor(g, pre) {
-  const marca = $(`#${pre}-menor`, g), consent = $(`#${pre}-consent`, g);
+  const marca = $(`#${pre}-menor`, g), consent = $(`#${pre}-consent`, g), autorizaIA = $(`#${pre}-ia`, g);
   const campos = [$(`#${pre}-resp-nome`, g), $(`#${pre}-resp-email`, g)];
   marca.addEventListener('change', () => {
     $(`#${pre}-resp`, g).hidden = !marca.checked;
-    if (!marca.checked) { campos.forEach(c => { c.value = ''; }); consent.checked = false; }
+    if (!marca.checked) { campos.forEach(c => { c.value = ''; }); consent.checked = false; autorizaIA.checked = false; }
   });
   // outro responsável precisa autorizar de novo
-  campos.forEach(c => c.addEventListener('input', () => { consent.checked = false; }));
+  campos.forEach(c => c.addEventListener('input', () => { consent.checked = false; autorizaIA.checked = false; }));
 }
 const lerMenor = (g, pre) => ({ nome: $(`#${pre}-resp-nome`, g).value.trim(), email: $(`#${pre}-resp-email`, g).value.trim().toLowerCase(), autorizou: $(`#${pre}-consent`, g).checked });
 // mesma redação da recusa do servidor

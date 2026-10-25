@@ -1141,6 +1141,20 @@ button.aviso:focus-visible{outline-offset:-3px}
 .curso-aluno b{overflow-wrap:anywhere}
 .curso-aluno+.curso-aluno{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)}
 
+/* Google Agenda e Meet: painel do admin na Agenda e a sala da aula */
+.google-painel{display:grid;justify-items:start;gap:12px;margin-bottom:18px}
+.google-painel[hidden]{display:none}
+.google-painel h2{margin:0;font-size:18px;font-weight:600}
+.google-estado,.google-msg{margin:0;font-size:14.5px;line-height:1.5;overflow-wrap:anywhere}
+.google-estado .ajuda{display:block;margin-top:4px}
+.google-alerta{display:flex;gap:8px;align-items:flex-start}
+.google-alerta .ico,.sala-erro .ico{flex:none;margin-top:2px}
+.google-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.google-msg:empty{display:none}
+.sala-erro{display:flex;gap:6px;align-items:flex-start;margin-top:6px;font-size:14px;line-height:1.45;color:var(--erro);overflow-wrap:anywhere}
+.sala-de-novo{margin-top:10px}
+.sala-aviso{display:block;margin-top:6px}
+
 </style>
 
 <div class="barra">
@@ -1201,6 +1215,7 @@ button.aviso:focus-visible{outline-offset:-3px}
           <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons, que recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>Quando você usa “Ler em voz alta”, quem reconhece a sua fala é o navegador, e ele envia o áudio da sua voz para o serviço da empresa dele: o Chrome envia ao Google, e o Edge, à Microsoft. A Forward recebe só o texto reconhecido.</li>
           <li>Com os avisos no celular ligados, cada aviso (o título e o começo do texto) chega ao seu aparelho pelo serviço de push do navegador: o Google no Chrome e no Android, a Apple no iPhone e no iPad, a Mozilla no Firefox e a Microsoft no Edge. Esse serviço recebe o endereço da inscrição e a mensagem cifrada, que só o seu navegador abre.</li>
+          <li>Quando o professor liga a conta Google dele ao app, cada aula online marcada sem sala vira um evento na agenda Google do professor, com o título da aula, o primeiro nome do aluno e o horário (sem o e-mail do aluno), e ganha uma sala do Google Meet. Ao entrar nessa sala, o Google recebe os dados da conexão, como o endereço de internet (IP) do seu aparelho.</li>
         </ul>
       </section>
       <section>
@@ -1337,6 +1352,7 @@ button.aviso:focus-visible{outline-offset:-3px}
 
     <section class="vista" id="e-agenda" aria-label="Agenda" hidden>
       <div class="secao-topo"><h2>Agenda</h2><button class="btn btn-primario" data-novo="aula"><span data-icone="plus"></span>Nova aula</button></div>
+      <article class="painel google-painel" id="google-painel" aria-labelledby="google-titulo" tabindex="-1" hidden></article>
       <div class="painel">
         <div class="painel-topo">
           <h2 class="mes-titulo" id="mes-titulo-equipe" aria-live="polite"></h2>
@@ -1860,6 +1876,18 @@ const db = {
   },
   async editarAluno(id, campos) { return ok(await sb.from('perfis').update(campos).eq('id', id).select().single()); },
 
+  /* ---------- Google (Edge Function google-oauth): conexão do admin e Meet das aulas ---------- */
+  async google(acao, dados = {}) {
+    const { data, error } = await sb.functions.invoke('google-oauth', { body: { acao, ...dados } });
+    if (error) {
+      if (!(error.context instanceof Response)) throw new Error('Sem conexão com o servidor. Confira a internet e tente de novo.');
+      let msg = '';
+      try { msg = (await error.context.json()).erro || ''; } catch (e) { /* corpo sem JSON */ }
+      throw new Error(msg || 'O servidor não respondeu direito. Tente de novo.');
+    }
+    return data;
+  },
+
   /* ---------- aulas ---------- */
   async criarAulas(linhas) { return ok(await sb.from('aulas').insert(linhas).select()); },
   async editarAula(id, campos) { return ok(await sb.from('aulas').update(campos).eq('id', id).select().single()); },
@@ -2160,8 +2188,9 @@ const ICONE_AVISO = {
   licao_corrigida: () => ico('seal-check'),
   licao_entregue: () => ico('paper-plane-tilt'),
   lead_novo: () => ico('user-plus'),
+  google_reconectar: () => ico('warning-circle'),
 };
-const CLASSE_AVISO = { aula_remarcada: 'alerta', aula_cancelada: 'alerta', licao_corrigida: 'ok' };
+const CLASSE_AVISO = { aula_remarcada: 'alerta', aula_cancelada: 'alerta', licao_corrigida: 'ok', google_reconectar: 'alerta' };
 const AVISO_SUMIU = { aula: 'Esta aula não existe mais.', licao: 'Esta lição não existe mais.', contato: 'Este contato não existe mais.' };
 const sino = { botao: null, num: null, pop: null, levar: null, avisos: [], naoLidas: 0, relogio: null, pedido: 0 };
 
@@ -2238,6 +2267,7 @@ async function tocarAviso(id) {
   levarAoAviso(v.link);
 }
 async function levarAoAviso(link) {
+  if (link === '#google/reconectar') { abrirPainelGoogle(); return; }
   const m = RE_LINK_AVISO.exec(link || ''); if (!m) return;
   let achou;
   try { achou = await sino.levar(m[1], m[2]); } catch (e) { console.warn(e); avisar(e.message || 'Não deu para abrir este aviso. Tente de novo.', true); return; }
@@ -3293,6 +3323,7 @@ function botoesAula(a) {
     : `<button class="btn btn-primario" data-confirmar="${a.id}" ${futura ? '' : 'disabled'}>Confirmar</button>`;
   return `${conf}<button class="btn btn-amarelo" data-entrar="${a.id}" ${podeEntrar(a) ? '' : 'disabled'}>${ico('video-camera')}Entrar</button>`;
 }
+const avisoMeet = a => (/^https:\/\/meet\.google\.com\//i.test(linkSala(a.sala) || '') ? '<span class="ajuda sala-aviso">No Google Meet, toque em “Pedir para participar” e espere o professor aceitar a sua entrada na sala.</span>' : '');
 const botaoDuvida = assunto => `<a class="btn btn-linha" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`Olá, Pedro! Tenho uma dúvida sobre ${assunto}.`)}" target="_blank" rel="noopener noreferrer">${ico('whatsapp-logo')}Mandar dúvida no WhatsApp</a>`;
 function renderLadoAluno() {
   const a = proximaAula();
@@ -3304,6 +3335,7 @@ function renderLadoAluno() {
         <h3>${esc(a.titulo)}</h3>
         <span class="ajuda">${faltaTxt}.</span>
         <div class="prox-acoes">${botoesAula(a)}</div>
+        ${avisoMeet(a)}
         ${podeEntrar(a) ? '' : `<span class="ajuda">O botão Entrar libera 15 minutos antes, às ${fHora(new Date(ini.getTime() - 15 * 60000))}.</span>`}
       </div>`;
   } else {
@@ -3361,7 +3393,7 @@ function abrirAulaAluno(id) {
       <dl class="fatos">
         <dt>Quando</dt><dd>${fLonga(ini)}, ${fHora(ini)} às ${fHora(fim)}</dd>
         <dt>Professor</dt><dd>${esc(al.professor?.nome || 'Forward')}</dd>
-        <dt>Sala</dt><dd>${sala ? `<a href="${esc(sala)}" target="_blank" rel="noopener noreferrer">${esc(a.sala)}</a>` : esc(a.sala || 'A combinar')}</dd>
+        <dt>Sala</dt><dd>${sala ? `<a href="${esc(sala)}" target="_blank" rel="noopener noreferrer">${esc(a.sala)}</a>${avisoMeet(a)}` : esc(a.sala || 'A combinar')}</dd>
         <dt>Situação</dt><dd>${passou ? 'Aula realizada' : a.confirmada_em ? 'Presença confirmada' : 'Aguardando sua confirmação'}</dd>
       </dl>
       ${a.resumo ? `<div><h3>Nesta aula</h3><p>${esc(a.resumo)}</p></div>` : ''}
@@ -4330,6 +4362,7 @@ async function carregarEquipe(perfil) {
   $('#tela-equipe [data-vista-equipe="contatos"]').hidden = !ehAdmin();
   renderEquipe();
   iniciarSino($('#tela-equipe .app-acoes'), levarEquipeAoAviso);
+  iniciarGoogle();
 }
 async function recarregar(...quais) {
   const fontes = { pessoas: db.pessoas, aulas: db.aulas, tarefas: db.tarefas, midias: db.midias, midiaAlunos: db.midiaAlunos, cursos: db.cursos };
@@ -4631,129 +4664,6 @@ async function excluirPessoa(id) {
   if (await tentar(() => db.pessoa('excluir', { id }), 'Excluído.')) recarregar('pessoas', 'aulas', 'tarefas', 'midiaAlunos');
 }
 
-/* ---------- agenda ---------- */
-function chipAulaEquipe(a) {
-  const ini = new Date(a.inicio); const cancelada = a.status === 'cancelada';
-  return `<button class="chip-aula chip-prof${new Date(a.fim) <= new Date() ? ' realizada' : ''}${cancelada ? ' cancelada' : ''}" data-aula-equipe="${a.id}" style="--cor:${corDe(a.aluno_id)}" aria-label="${esc(nomeDe(a.aluno_id))}, ${fData(ini)} às ${fHora(ini)}${cancelada ? ', cancelada' : ''}"><span class="hora">${fHora(ini)}</span><span class="nome">${esc(primeiroNome(nomeDe(a.aluno_id)))}</span></button>`;
-}
-function renderAgendaEquipe() {
-  const ano = eq.mes.getFullYear(), m = eq.mes.getMonth();
-  desenharMes(eq.mes, '#mes-equipe', '#lista-mes-equipe', '#mes-titulo-equipe',
-    d => eq.aulas.filter(a => mesmoDia(new Date(a.inicio), d)).map(chipAulaEquipe).join(''));
-  const doMes = eq.aulas.filter(a => a.status !== 'cancelada' && new Date(a.inicio).getMonth() === m && new Date(a.inicio).getFullYear() === ano);
-  $('#legenda-equipe').innerHTML = alunos().map(al => { const n = doMes.filter(a => a.aluno_id === al.id).length; return n ? `<span style="--cor:${corDe(al.id)}"><i></i>${esc(primeiroNome(al.nome))}, ${n} ${n === 1 ? 'aula' : 'aulas'}</span>` : ''; }).join('');
-}
-function abrirAulaEquipe(id) {
-  const a = eq.aulas.find(x => x.id === id); if (!a) return;
-  const ini = new Date(a.inicio), fim = new Date(a.fim); const sala = linkSala(a.sala);
-  const cancelada = a.status === 'cancelada';
-  const daSerie = a.serie_id ? eq.aulas.filter(x => x.serie_id === a.serie_id && x.status !== 'cancelada' && new Date(x.inicio) >= ini).length : 0;
-  const situacao = cancelada ? 'Cancelada' : fim <= new Date() ? 'Aula realizada' : a.confirmada_em ? 'Aluno confirmou presença' : 'Sem resposta do aluno';
-  const botoes = cancelada
-    ? [`<button class="btn btn-linha" data-excluir-aula="${a.id}">Excluir</button>`, `<button class="btn btn-primario" data-reativar-aula="${a.id}">Reativar</button>`]
-    : [`<button class="btn btn-linha" data-cancelar-aula="${a.id}">Cancelar</button>`, `<button class="btn btn-primario" data-editar-aula="${a.id}">Editar</button>`];
-  gavetaForm(nomeDe(a.aluno_id), a.titulo, `
-    <dl class="fatos">
-      <dt>Quando</dt><dd>${fLonga(ini)}, ${fHora(ini)} às ${fHora(fim)}</dd>
-      <dt>Sala</dt><dd>${sala ? `<a href="${esc(sala)}" target="_blank" rel="noopener noreferrer">${esc(a.sala)}</a>` : esc(a.sala || 'A combinar')}</dd>
-      <dt>Situação</dt><dd>${situacao}</dd>
-      ${a.matricula_id ? `<dt>Curso</dt><dd id="au-curso" data-aula="${a.id}">Carregando…</dd>` : ''}
-      ${a.serie_id ? `<dt>Série</dt><dd>${daSerie} ${daSerie === 1 ? 'aula' : 'aulas'} a partir desta</dd>` : ''}
-    </dl>
-    ${a.resumo ? `<div><h3>Nesta aula</h3><p>${esc(a.resumo)}</p></div>` : ''}`, botoes);
-  if (a.matricula_id) mostrarCursoDaAula(a.id);
-}
-async function mostrarCursoDaAula(id) {
-  let txt;
-  try {
-    const r = await db.cursoDaAula(id);
-    txt = !r?.curso ? 'Não foi possível ler o curso desta aula.' : r.n ? `Aula ${r.n} de ${r.m}, ${r.curso.titulo}` : r.curso.titulo;
-  } catch (e) { txt = 'Não foi possível ler o curso desta aula.'; }
-  const dd = $('#au-curso');
-  if (dd?.dataset.aula === id) dd.textContent = txt;
-}
-function formAula(id) {
-  const a = id ? eq.aulas.find(x => x.id === id) : null;
-  if (!a && !alunosAtivos().length) { avisar('Cadastre um aluno antes de marcar aula.', true); return; }
-  const ini = a ? new Date(a.inicio) : (() => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(19, 0, 0, 0); return d; })();
-  const dur = a ? Math.round((new Date(a.fim) - new Date(a.inicio)) / 60000) : 60;
-  const ate = new Date(ini); ate.setMonth(ate.getMonth() + 1);
-  const g = gavetaForm(a ? nomeDe(a.aluno_id) : 'Agenda', a ? 'Editar aula' : 'Nova aula', `
-    <form class="form-gaveta" novalidate>
-      ${a ? '' : `<div class="campo"><label for="au-aluno">Aluno</label><select id="au-aluno" data-foco>${opcoesAlunos(null)}</select></div>`}
-      <div class="campo"><label for="au-titulo">Título</label><input id="au-titulo" value="${esc(a?.titulo || '')}" placeholder="Ex.: Daily routines" ${a ? 'data-foco' : ''}></div>
-      <div class="campo"><label for="au-resumo">Nesta aula (opcional)</label><textarea id="au-resumo" style="min-height:80px">${esc(a?.resumo || '')}</textarea></div>
-      <div class="tres">
-        <div class="campo"><label for="au-data">${a ? 'Data' : 'Primeira aula'}</label><input id="au-data" type="date" value="${dataInput(ini)}"></div>
-        <div class="campo"><label for="au-hora">Horário</label><input id="au-hora" type="time" step="900" value="${horaInput(ini)}"></div>
-        <div class="campo"><label for="au-dur">Duração</label><select id="au-dur">${[30, 45, 60, 90, 120].map(n => `<option value="${n}" ${n === dur ? 'selected' : ''}>${n} min</option>`).join('')}</select></div>
-      </div>
-      <div class="campo"><label for="au-sala">Sala</label><input id="au-sala" value="${esc(a?.sala || '')}" placeholder="Link do Google Meet ou endereço"></div>
-      ${a ? '' : `
-      <label class="anexar" style="font-size:14.5px"><input type="checkbox" id="au-repete"> Repetir toda semana</label>
-      <div id="au-serie" hidden>
-        <div class="campo"><span class="rotulo" id="rot-dias">Dias da semana</span><div class="dias" role="group" aria-labelledby="rot-dias">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" class="dia-chip" data-dia-serie="${d}" aria-pressed="${d === ini.getDay()}">${DIAS[d]}</button>`).join('')}</div></div>
-        <div class="campo" style="margin-top:12px"><label for="au-ate">Até</label><input id="au-ate" type="date" value="${dataInput(ate)}"></div>
-      </div>
-      <p class="ajuda" id="au-previa"></p>`}
-      <span class="erro-msg" id="au-erro" role="alert"></span>
-    </form>`, [`<button class="btn btn-primario btn-g" id="au-salvar">${a ? 'Salvar' : 'Marcar'}</button>`]);
-  const dias = () => $$('[data-dia-serie][aria-pressed="true"]', g).map(b => Number(b.dataset.diaSerie));
-  const datas = () => {
-    const data = $('#au-data').value, hora = $('#au-hora').value; if (!data || !hora) return [];
-    if (!$('#au-repete')?.checked) return [instante(data, hora)];
-    return datasDaSerie(instante(data, '00:00'), instante($('#au-ate').value || data, '00:00'), dias(), hora);
-  };
-  const previa = () => {
-    if (!$('#au-previa')) return;
-    const ds = datas();
-    $('#au-previa').textContent = ds.length > 1 ? `${ds.length} aulas, de ${fData(ds[0])} a ${fData(ds[ds.length - 1])}, às ${$('#au-hora').value}.` : '';
-  };
-  g.addEventListener('click', ev => { const b = ev.target.closest('[data-dia-serie]'); if (b) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); previa(); } });
-  g.addEventListener('input', previa);
-  $('#au-repete')?.addEventListener('change', ev => { $('#au-serie').hidden = !ev.target.checked; previa(); });
-  $('#au-salvar', g).addEventListener('click', async () => {
-    const titulo = $('#au-titulo').value.trim(); const ds = datas(); const minutos = Number($('#au-dur').value);
-    const erro = !titulo ? 'Dê um título para a aula.' : !ds.length ? ($('#au-repete')?.checked ? 'Escolha os dias e confira a data final.' : 'Preencha data e horário.') : ds.length > 120 ? 'Mais de 120 aulas de uma vez: encurte o período.' : '';
-    $('#au-erro').textContent = erro; if (erro) return;
-    const base = { titulo, resumo: $('#au-resumo').value.trim() || null, sala: $('#au-sala').value.trim() || null };
-    const fimDe = d => new Date(d.getTime() + minutos * 60000).toISOString();
-    $('#au-salvar').disabled = true;
-    let feito;
-    if (a) {
-      feito = await tentar(() => db.editarAula(a.id, { ...base, inicio: ds[0].toISOString(), fim: fimDe(ds[0]) }), 'Aula salva.');
-    } else {
-      const serie = ds.length > 1 ? crypto.randomUUID() : null; const aluno = $('#au-aluno').value;
-      feito = await tentar(() => db.criarAulas(ds.map(d => ({ ...base, aluno_id: aluno, professor_id: eq.perfil.id, serie_id: serie, inicio: d.toISOString(), fim: fimDe(d) }))),
-        ds.length > 1 ? `${ds.length} aulas marcadas para ${primeiroNome(nomeDe(aluno))}.` : `Aula marcada para ${primeiroNome(nomeDe(aluno))}.`);
-    }
-    $('#au-salvar').disabled = false;
-    if (feito) { fecharCamadas(); if (ds[0]) eq.mes = new Date(ds[0].getFullYear(), ds[0].getMonth(), 1); recarregar('aulas'); }
-  });
-  previa();
-}
-function cancelarAula(id) {
-  const a = eq.aulas.find(x => x.id === id); if (!a) return;
-  const ini = new Date(a.inicio);
-  const proximas = a.serie_id ? eq.aulas.filter(x => x.serie_id === a.serie_id && x.status !== 'cancelada' && new Date(x.inicio) >= ini).length : 1;
-  gavetaForm(nomeDe(a.aluno_id), 'Cancelar aula', `
-    <p>Aula de ${fLonga(ini)}, ${fHora(ini)}: ${esc(a.titulo)}.</p>
-    ${proximas > 1 ? `<div class="caixa-aviso">Esta aula faz parte de uma série com mais ${proximas - 1} ${proximas - 1 === 1 ? 'aula' : 'aulas'} depois dela.</div>` : ''}`,
-  proximas > 1
-    ? [`<button class="btn btn-linha" data-cancelar-confirma="${a.id}" data-serie="0">Só esta</button>`, `<button class="btn btn-primario" data-cancelar-confirma="${a.id}" data-serie="1">Esta e as próximas</button>`]
-    : [`<button class="btn btn-primario" data-cancelar-confirma="${a.id}" data-serie="0">Cancelar a aula</button>`]);
-}
-async function confirmarCancelamento(id, serie) {
-  const a = eq.aulas.find(x => x.id === id); if (!a) return;
-  const r = await tentar(() => db.cancelarAulas(a, serie));
-  if (r) { avisar(`${r.length} ${r.length === 1 ? 'aula cancelada' : 'aulas canceladas'}.`); fecharCamadas(); recarregar('aulas'); }
-}
-async function reativarAula(id) { if (await tentar(() => db.editarAula(id, { status: 'agendada' }), 'Aula reativada.')) { fecharCamadas(); recarregar('aulas'); } }
-async function excluirAula(id) {
-  if (!confirm('Excluir esta aula de vez? Não dá para desfazer.')) return;
-  if (await tentar(() => db.excluirAula(id), 'Aula excluída.')) { fecharCamadas(); recarregar('aulas', 'tarefas'); }
-}
-
 /* ---------- lições ---------- */
 function renderLicoesEquipe() {
   $$('[data-filtro-licao]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filtroLicao === eq.filtroLicao)));
@@ -4990,6 +4900,221 @@ async function excluirMaterial(id) {
   if (await tentar(() => db.excluirMaterial(m), 'Material removido.')) recarregar('midias', 'midiaAlunos');
 }
 
+/* ---------- eventos do painel ---------- */
+document.addEventListener('click', ev => {
+  if (!eq.perfil) return;
+  const b = ev.target.closest('button'); if (!b) return;
+  const ds = b.dataset;
+  if (ds.vistaEquipe === 'contatos') return abrirContatos();
+  if (ds.vistaEquipe) return vistaEquipe(ds.vistaEquipe);
+  if (ds.filtroContato) { eq.filtroContato = ds.filtroContato; return listarContatos(); }
+  if (ds.abrirContato) return abrirContato(ds.abrirContato);
+  if (ds.apagarContato) return apagarContato(ds.apagarContato);
+  if (ds.mes !== undefined && ds.alvo === 'equipe') {
+    const n = Number(ds.mes); const hoje = new Date();
+    eq.mes = n === 0 ? new Date(hoje.getFullYear(), hoje.getMonth(), 1) : new Date(eq.mes.getFullYear(), eq.mes.getMonth() + n, 1);
+    return renderAgendaEquipe();
+  }
+  if (ds.novo === 'aluno') return formNovaPessoa();
+  if (ds.novo === 'aula') return formAula();
+  if (ds.novo === 'licao') return formLicao();
+  if (ds.novo === 'material') return formMaterial();
+  if (ds.novo === 'curso') return formCurso();
+  if (ds.aplicarCurso !== undefined) return abrirAplicar();
+  if (ds.abrirCurso) return abrirCurso(ds.abrirCurso);
+  if (ds.editarCurso) return formCurso(ds.editarCurso);
+  if (ds.publicarCurso) return publicarCurso(ds.publicarCurso);
+  if (ds.apagarCurso) return apagarCurso(ds.apagarCurso);
+  if (ds.novaAulaModelo !== undefined) return formAulaModelo();
+  if (ds.editarAm) return formAulaModelo(ds.editarAm);
+  if (ds.apagarAm) return apagarAulaModelo(ds.apagarAm);
+  if (ds.subirAm) return moverAulaModelo(ds.subirAm, -1);
+  if (ds.descerAm) return moverAulaModelo(ds.descerAm, 1);
+  if (ds.vocabPessoa) return verVocabulario(ds.vocabPessoa);
+  if (ds.pronPessoa) return verPronuncia(ds.pronPessoa);
+  if (ds.ditPessoa) return verDitado(ds.ditPessoa);
+  if (ds.anotPessoa) return verLousa(ds.anotPessoa);
+  if (ds.anotVer !== undefined) return verAnotacao(Number(ds.anotVer));
+  if (ds.anotLista !== undefined) return voltarAnotacoes(Number(ds.anotLista));
+  if (ds.bibPessoa) return verBibliotecaAluno(ds.bibPessoa);
+  if (ds.progPessoa) return verProgressoAluno(ds.progPessoa);
+  if (ds.verLink) return verLinkAluno(ds.verLink);
+  if (ds.tirarLink) return tirarLinkAluno(ds.tirarLink);
+  if (ds.editarPessoa) return formEditarPessoa(ds.editarPessoa);
+  if (ds.senhaPessoa) return novaSenha(ds.senhaPessoa);
+  if (ds.ativoPessoa) return alternarAtivo(ds.ativoPessoa);
+  if (ds.excluirPessoa) return excluirPessoa(ds.excluirPessoa);
+  if (ds.aulaEquipe) return abrirAulaEquipe(ds.aulaEquipe);
+  if (ds.editarAula) return formAula(ds.editarAula);
+  if (ds.cancelarAula) return cancelarAula(ds.cancelarAula);
+  if (ds.cancelarConfirma) return confirmarCancelamento(ds.cancelarConfirma, ds.serie === '1');
+  if (ds.reativarAula) return reativarAula(ds.reativarAula);
+  if (ds.excluirAula) return excluirAula(ds.excluirAula);
+  if (ds.meetDeNovo) return tentarMeetDeNovo(ds.meetDeNovo);
+  if (ds.google) return acaoGoogle(ds.google);
+  if (ds.filtroLicao) { eq.filtroLicao = ds.filtroLicao; return renderLicoesEquipe(); }
+  if (ds.corrigir) return abrirCorrecao(ds.corrigir);
+  if (ds.verLicao) return abrirCorrecao(ds.verLicao, true);
+  if (ds.editarLicao) return formLicao(ds.editarLicao);
+  if (ds.excluirLicao) return excluirLicao(ds.excluirLicao);
+  if (ds.baixarAnexo) return baixarAnexo(ds.baixarAnexo);
+  if (ds.abrirAnexo) return abrirAnexo(ds.abrirAnexo);
+  if (ds.legendaMaterial) return abrirLegenda(ds.legendaMaterial);
+  if (ds.verMaterial) return verMaterial(ds.verMaterial);
+  if (ds.editarMaterial) return formMaterial(ds.editarMaterial);
+  if (ds.excluirMaterial) return excluirMaterial(ds.excluirMaterial);
+});
+
+</script>
+<script>
+/* ---------- agenda ---------- */
+function chipAulaEquipe(a) {
+  const ini = new Date(a.inicio); const cancelada = a.status === 'cancelada';
+  return `<button class="chip-aula chip-prof${new Date(a.fim) <= new Date() ? ' realizada' : ''}${cancelada ? ' cancelada' : ''}" data-aula-equipe="${a.id}" style="--cor:${corDe(a.aluno_id)}" aria-label="${esc(nomeDe(a.aluno_id))}, ${fData(ini)} às ${fHora(ini)}${cancelada ? ', cancelada' : ''}"><span class="hora">${fHora(ini)}</span><span class="nome">${esc(primeiroNome(nomeDe(a.aluno_id)))}</span></button>`;
+}
+function renderAgendaEquipe() {
+  const ano = eq.mes.getFullYear(), m = eq.mes.getMonth();
+  desenharMes(eq.mes, '#mes-equipe', '#lista-mes-equipe', '#mes-titulo-equipe',
+    d => eq.aulas.filter(a => mesmoDia(new Date(a.inicio), d)).map(chipAulaEquipe).join(''));
+  const doMes = eq.aulas.filter(a => a.status !== 'cancelada' && new Date(a.inicio).getMonth() === m && new Date(a.inicio).getFullYear() === ano);
+  $('#legenda-equipe').innerHTML = alunos().map(al => { const n = doMes.filter(a => a.aluno_id === al.id).length; return n ? `<span style="--cor:${corDe(al.id)}"><i></i>${esc(primeiroNome(al.nome))}, ${n} ${n === 1 ? 'aula' : 'aulas'}</span>` : ''; }).join('');
+}
+// sala da aula; sem sala porque o Google falhou, o motivo e o "Tentar de novo"
+function salaEquipe(a) {
+  const sala = linkSala(a.sala);
+  if (sala) return `<a href="${esc(sala)}" target="_blank" rel="noopener noreferrer">${esc(a.sala)}</a>`;
+  if (a.sala || a.google_estado !== 'erro') return esc(a.sala || 'A combinar');
+  const pode = a.status === 'agendada' && new Date(a.fim) > new Date() && (ehAdmin() || a.professor_id === eq.perfil.id);
+  return `A combinar<span class="sala-erro">${ico('warning-circle')}<span>${esc(a.google_erro || 'O Google não criou o Meet desta aula.')}</span></span>${pode ? `<button class="btn btn-linha sala-de-novo" data-meet-de-novo="${a.id}">Tentar de novo</button>` : ''}`;
+}
+async function tentarMeetDeNovo(id) {
+  const b = $(`[data-meet-de-novo="${id}"]`); if (b) b.disabled = true;
+  const r = await tentar(() => db.google('tentar_de_novo', { aula_id: id }));
+  const a = eq.aulas.find(x => x.id === id);
+  if (r && a) {
+    Object.assign(a, { sala: r.sala, google_estado: r.google_estado, google_erro: r.google_erro });
+    avisar(r.google_estado === 'ok' ? 'Link do Meet criado.' : 'O Google não criou o Meet: veja o motivo na aula.', r.google_estado !== 'ok');
+    renderAgendaEquipe(); renderHoje();
+  }
+  const dd = $('#au-sala-dd');
+  if (a && dd?.dataset.aula === id) { dd.innerHTML = salaEquipe(a); $('[data-meet-de-novo]', dd)?.focus(); }
+}
+function abrirAulaEquipe(id) {
+  const a = eq.aulas.find(x => x.id === id); if (!a) return;
+  const ini = new Date(a.inicio), fim = new Date(a.fim);
+  const cancelada = a.status === 'cancelada';
+  const daSerie = a.serie_id ? eq.aulas.filter(x => x.serie_id === a.serie_id && x.status !== 'cancelada' && new Date(x.inicio) >= ini).length : 0;
+  const situacao = cancelada ? 'Cancelada' : fim <= new Date() ? 'Aula realizada' : a.confirmada_em ? 'Aluno confirmou presença' : 'Sem resposta do aluno';
+  const botoes = cancelada
+    ? [`<button class="btn btn-linha" data-excluir-aula="${a.id}">Excluir</button>`, `<button class="btn btn-primario" data-reativar-aula="${a.id}">Reativar</button>`]
+    : [`<button class="btn btn-linha" data-cancelar-aula="${a.id}">Cancelar</button>`, `<button class="btn btn-primario" data-editar-aula="${a.id}">Editar</button>`];
+  gavetaForm(nomeDe(a.aluno_id), a.titulo, `
+    <dl class="fatos">
+      <dt>Quando</dt><dd>${fLonga(ini)}, ${fHora(ini)} às ${fHora(fim)}</dd>
+      <dt>Sala</dt><dd id="au-sala-dd" data-aula="${a.id}">${salaEquipe(a)}</dd>
+      <dt>Situação</dt><dd>${situacao}</dd>
+      ${a.matricula_id ? `<dt>Curso</dt><dd id="au-curso" data-aula="${a.id}">Carregando…</dd>` : ''}
+      ${a.serie_id ? `<dt>Série</dt><dd>${daSerie} ${daSerie === 1 ? 'aula' : 'aulas'} a partir desta</dd>` : ''}
+    </dl>
+    ${a.resumo ? `<div><h3>Nesta aula</h3><p>${esc(a.resumo)}</p></div>` : ''}`, botoes);
+  if (a.matricula_id) mostrarCursoDaAula(a.id);
+}
+async function mostrarCursoDaAula(id) {
+  let txt;
+  try {
+    const r = await db.cursoDaAula(id);
+    txt = !r?.curso ? 'Não foi possível ler o curso desta aula.' : r.n ? `Aula ${r.n} de ${r.m}, ${r.curso.titulo}` : r.curso.titulo;
+  } catch (e) { txt = 'Não foi possível ler o curso desta aula.'; }
+  const dd = $('#au-curso');
+  if (dd?.dataset.aula === id) dd.textContent = txt;
+}
+function formAula(id) {
+  const a = id ? eq.aulas.find(x => x.id === id) : null;
+  if (!a && !alunosAtivos().length) { avisar('Cadastre um aluno antes de marcar aula.', true); return; }
+  const ini = a ? new Date(a.inicio) : (() => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(19, 0, 0, 0); return d; })();
+  const dur = a ? Math.round((new Date(a.fim) - new Date(a.inicio)) / 60000) : 60;
+  const ate = new Date(ini); ate.setMonth(ate.getMonth() + 1);
+  const salaAntes = a?.sala || '';
+  const g = gavetaForm(a ? nomeDe(a.aluno_id) : 'Agenda', a ? 'Editar aula' : 'Nova aula', `
+    <form class="form-gaveta" novalidate>
+      ${a ? '' : `<div class="campo"><label for="au-aluno">Aluno</label><select id="au-aluno" data-foco>${opcoesAlunos(null)}</select></div>`}
+      <div class="campo"><label for="au-titulo">Título</label><input id="au-titulo" value="${esc(a?.titulo || '')}" placeholder="Ex.: Daily routines" ${a ? 'data-foco' : ''}></div>
+      <div class="campo"><label for="au-resumo">Nesta aula (opcional)</label><textarea id="au-resumo" style="min-height:80px">${esc(a?.resumo || '')}</textarea></div>
+      <div class="tres">
+        <div class="campo"><label for="au-data">${a ? 'Data' : 'Primeira aula'}</label><input id="au-data" type="date" value="${dataInput(ini)}"></div>
+        <div class="campo"><label for="au-hora">Horário</label><input id="au-hora" type="time" step="900" value="${horaInput(ini)}"></div>
+        <div class="campo"><label for="au-dur">Duração</label><select id="au-dur">${[30, 45, 60, 90, 120].map(n => `<option value="${n}" ${n === dur ? 'selected' : ''}>${n} min</option>`).join('')}</select></div>
+      </div>
+      <div class="campo"><label for="au-sala">Sala</label><input id="au-sala" value="${esc(salaAntes)}" placeholder="Link do Google Meet ou endereço"${ehAdmin() ? ' aria-describedby="au-sala-ajuda"' : ''}>${ehAdmin() ? '<span class="ajuda" id="au-sala-ajuda">Vazia, o link do Google Meet é criado sozinho ao marcar a aula, quando o Google está conectado no painel da Agenda. Aula em outra sala: cole o link ou escreva o endereço.</span>' : ''}</div>
+      ${a ? '' : `
+      <label class="anexar" style="font-size:14.5px"><input type="checkbox" id="au-repete"> Repetir toda semana</label>
+      <div id="au-serie" hidden>
+        <div class="campo"><span class="rotulo" id="rot-dias">Dias da semana</span><div class="dias" role="group" aria-labelledby="rot-dias">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" class="dia-chip" data-dia-serie="${d}" aria-pressed="${d === ini.getDay()}">${DIAS[d]}</button>`).join('')}</div></div>
+        <div class="campo" style="margin-top:12px"><label for="au-ate">Até</label><input id="au-ate" type="date" value="${dataInput(ate)}"></div>
+      </div>
+      <p class="ajuda" id="au-previa"></p>`}
+      <span class="erro-msg" id="au-erro" role="alert"></span>
+    </form>`, [`<button class="btn btn-primario btn-g" id="au-salvar">${a ? 'Salvar' : 'Marcar'}</button>`]);
+  const dias = () => $$('[data-dia-serie][aria-pressed="true"]', g).map(b => Number(b.dataset.diaSerie));
+  const datas = () => {
+    const data = $('#au-data').value, hora = $('#au-hora').value; if (!data || !hora) return [];
+    if (!$('#au-repete')?.checked) return [instante(data, hora)];
+    return datasDaSerie(instante(data, '00:00'), instante($('#au-ate').value || data, '00:00'), dias(), hora);
+  };
+  const previa = () => {
+    if (!$('#au-previa')) return;
+    const ds = datas();
+    $('#au-previa').textContent = ds.length > 1 ? `${ds.length} aulas, de ${fData(ds[0])} a ${fData(ds[ds.length - 1])}, às ${$('#au-hora').value}.` : '';
+  };
+  g.addEventListener('click', ev => { const b = ev.target.closest('[data-dia-serie]'); if (b) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); previa(); } });
+  g.addEventListener('input', previa);
+  $('#au-repete')?.addEventListener('change', ev => { $('#au-serie').hidden = !ev.target.checked; previa(); });
+  $('#au-salvar', g).addEventListener('click', async () => {
+    const titulo = $('#au-titulo').value.trim(); const ds = datas(); const minutos = Number($('#au-dur').value);
+    const erro = !titulo ? 'Dê um título para a aula.' : !ds.length ? ($('#au-repete')?.checked ? 'Escolha os dias e confira a data final.' : 'Preencha data e horário.') : ds.length > 120 ? 'Mais de 120 aulas de uma vez: encurte o período.' : '';
+    $('#au-erro').textContent = erro; if (erro) return;
+    const sala = $('#au-sala').value.trim();
+    // a sala só vai quando mudou: a que está na tela pode ser anterior ao Meet gravado pelo servidor
+    const base = { titulo, resumo: $('#au-resumo').value.trim() || null, ...(!a || sala !== salaAntes.trim() ? { sala: sala || null } : {}) };
+    const fimDe = d => new Date(d.getTime() + minutos * 60000).toISOString();
+    $('#au-salvar').disabled = true;
+    let feito;
+    if (a) {
+      feito = await tentar(() => db.editarAula(a.id, { ...base, inicio: ds[0].toISOString(), fim: fimDe(ds[0]) }), 'Aula salva.');
+    } else {
+      const serie = ds.length > 1 ? crypto.randomUUID() : null; const aluno = $('#au-aluno').value;
+      feito = await tentar(() => db.criarAulas(ds.map(d => ({ ...base, aluno_id: aluno, professor_id: eq.perfil.id, serie_id: serie, inicio: d.toISOString(), fim: fimDe(d) }))),
+        ds.length > 1 ? `${ds.length} aulas marcadas para ${primeiroNome(nomeDe(aluno))}.` : `Aula marcada para ${primeiroNome(nomeDe(aluno))}.`);
+    }
+    $('#au-salvar').disabled = false;
+    if (feito) { fecharCamadas(); if (ds[0]) eq.mes = new Date(ds[0].getFullYear(), ds[0].getMonth(), 1); recarregar('aulas'); }
+  });
+  previa();
+}
+function cancelarAula(id) {
+  const a = eq.aulas.find(x => x.id === id); if (!a) return;
+  const ini = new Date(a.inicio);
+  const proximas = a.serie_id ? eq.aulas.filter(x => x.serie_id === a.serie_id && x.status !== 'cancelada' && new Date(x.inicio) >= ini).length : 1;
+  gavetaForm(nomeDe(a.aluno_id), 'Cancelar aula', `
+    <p>Aula de ${fLonga(ini)}, ${fHora(ini)}: ${esc(a.titulo)}.</p>
+    ${proximas > 1 ? `<div class="caixa-aviso">Esta aula faz parte de uma série com mais ${proximas - 1} ${proximas - 1 === 1 ? 'aula' : 'aulas'} depois dela.</div>` : ''}`,
+  proximas > 1
+    ? [`<button class="btn btn-linha" data-cancelar-confirma="${a.id}" data-serie="0">Só esta</button>`, `<button class="btn btn-primario" data-cancelar-confirma="${a.id}" data-serie="1">Esta e as próximas</button>`]
+    : [`<button class="btn btn-primario" data-cancelar-confirma="${a.id}" data-serie="0">Cancelar a aula</button>`]);
+}
+async function confirmarCancelamento(id, serie) {
+  const a = eq.aulas.find(x => x.id === id); if (!a) return;
+  const r = await tentar(() => db.cancelarAulas(a, serie));
+  if (r) { avisar(`${r.length} ${r.length === 1 ? 'aula cancelada' : 'aulas canceladas'}.`); fecharCamadas(); recarregar('aulas'); }
+}
+async function reativarAula(id) { if (await tentar(() => db.editarAula(id, { status: 'agendada' }), 'Aula reativada.')) { fecharCamadas(); recarregar('aulas'); } }
+async function excluirAula(id) {
+  if (!confirm('Excluir esta aula de vez? Não dá para desfazer.')) return;
+  if (await tentar(() => db.excluirAula(id), 'Aula excluída.')) { fecharCamadas(); recarregar('aulas', 'tarefas'); }
+}
+
+</script>
+<script>
 /* ---------- cursos: lista e curso aberto com as aulas-modelo ---------- */
 const cur = { id: null, aulas: [], carregado: false, ocupado: false };
 const podeEditarCurso = c => ehAdmin() || c.criado_por === eq.perfil.id;
@@ -5253,6 +5378,8 @@ async function aplicarCurso() {
   previaAplicar();
 }
 
+</script>
+<script>
 /* ---------- legenda do vídeo: player no topo, linhas abaixo ---------- */
 const ed = { m: null, pode: false, linhas: [], player: null };
 const podeEditarMaterial = m => ehAdmin() || m.criado_por === eq.perfil.id;
@@ -5415,6 +5542,8 @@ $('#e-legenda').addEventListener('click', ev => {
   if (b.id === 'leg-salvar') return salvarLegenda();
 });
 
+</script>
+<script>
 /* ---------- contatos do site (só o admin): lista, status, observação e exclusão ---------- */
 const STATUS_CONTATO = { novo: 'Novo', contatado: 'Contatado', aula_experimental: 'Aula experimental', matriculado: 'Matriculado', descartado: 'Descartado' };
 const CLASSE_CONTATO = { novo: 'novo', contatado: 'aguardando', aula_experimental: 'confirmada', matriculado: 'corrigida', descartado: 'entregue' };
@@ -5513,67 +5642,121 @@ async function apagarContato(id) {
   ($('#lista-contatos [data-abrir-contato]') || $('#filtro-contatos [aria-pressed="true"]'))?.focus({ preventScroll: true });
 }
 
-/* ---------- eventos do painel ---------- */
-document.addEventListener('click', ev => {
-  if (!eq.perfil) return;
-  const b = ev.target.closest('button'); if (!b) return;
-  const ds = b.dataset;
-  if (ds.vistaEquipe === 'contatos') return abrirContatos();
-  if (ds.vistaEquipe) return vistaEquipe(ds.vistaEquipe);
-  if (ds.filtroContato) { eq.filtroContato = ds.filtroContato; return listarContatos(); }
-  if (ds.abrirContato) return abrirContato(ds.abrirContato);
-  if (ds.apagarContato) return apagarContato(ds.apagarContato);
-  if (ds.mes !== undefined && ds.alvo === 'equipe') {
-    const n = Number(ds.mes); const hoje = new Date();
-    eq.mes = n === 0 ? new Date(hoje.getFullYear(), hoje.getMonth(), 1) : new Date(eq.mes.getFullYear(), eq.mes.getMonth() + n, 1);
-    return renderAgendaEquipe();
+</script>
+<script>
+/* conexão do admin com o Google (Meet automático nas aulas): o painel da Agenda e a volta da tela de autorização,
+   que chega pelo endereço #google/conectado ou #google/erro/<motivo>; o aviso do sino leva a #google/reconectar. */
+const RE_ROTA_GOOGLE = /^#google\/(conectado|reconectar|erro\/[a-z-]+)$/;
+const GOOGLE_ERRO = {
+  state: 'A volta do Google não foi reconhecida: o pedido venceu ou já tinha sido usado. Toque em “Conectar ao Google” de novo.',
+  recusado: 'A conexão foi cancelada na tela do Google. Para o Meet sair sozinho nas aulas, toque em “Conectar ao Google” e permita o acesso.',
+  escopo: 'A permissão da agenda ficou desmarcada na tela do Google. Toque em “Conectar ao Google” de novo e deixe marcada a caixa da agenda.',
+  'sem-refresh': 'O Google não mandou a permissão de uso contínuo. Tire o acesso da Forward Academy em myaccount.google.com/connections e toque em “Conectar ao Google” de novo.',
+  troca: 'O Google não confirmou a conexão. Espere alguns minutos e toque em “Conectar ao Google” de novo.',
+};
+const GOOGLE_ERRO_OUTRO = 'Não deu para conectar o Google. Toque em “Conectar ao Google” de novo.';
+const gg = { estado: null, lendo: false, ocupado: false, msg: '', erro: false, volta: null, pedido: 0 };
+
+// a volta fica guardada até a área da equipe abrir; o endereço volta a ser o do app
+function lerRotaGoogle() {
+  const m = RE_ROTA_GOOGLE.exec(location.hash); if (!m) return false;
+  gg.volta = m[1];
+  history.replaceState(null, '', location.pathname + location.search);
+  return true;
+}
+lerRotaGoogle();
+window.addEventListener('hashchange', () => { if (lerRotaGoogle() && eq.perfil) seguirVoltaGoogle(); });
+
+function iniciarGoogle() {
+  Object.assign(gg, { estado: null, msg: '', erro: false });
+  desenharGoogle();
+  if (ehAdmin()) lerGoogle();
+}
+async function lerGoogle() {
+  const pedido = ++gg.pedido;
+  gg.lendo = true; desenharGoogle();
+  let estado = null;
+  try { estado = await db.google('estado'); } catch (e) { console.warn(e); }
+  if (pedido !== gg.pedido) return;
+  gg.estado = estado; gg.lendo = false; desenharGoogle();
+}
+async function seguirVoltaGoogle() {
+  const volta = gg.volta; gg.volta = null;
+  if (!volta || !ehAdmin()) return;
+  vistaEquipe('agenda');
+  Object.assign(gg, { msg: '', erro: false });
+  await lerGoogle();
+  if (volta === 'conectado') {
+    if (gg.estado?.conectado) avisar(`Google conectado com ${gg.estado.email}.`);
+    else Object.assign(gg, { msg: 'O Google voltou para o app, mas a conexão não apareceu. Toque em “Conectar ao Google” de novo.', erro: true });
+  } else if (volta !== 'reconectar') {
+    Object.assign(gg, { msg: GOOGLE_ERRO[volta.slice('erro/'.length)] || GOOGLE_ERRO_OUTRO, erro: true });
   }
-  if (ds.novo === 'aluno') return formNovaPessoa();
-  if (ds.novo === 'aula') return formAula();
-  if (ds.novo === 'licao') return formLicao();
-  if (ds.novo === 'material') return formMaterial();
-  if (ds.novo === 'curso') return formCurso();
-  if (ds.aplicarCurso !== undefined) return abrirAplicar();
-  if (ds.abrirCurso) return abrirCurso(ds.abrirCurso);
-  if (ds.editarCurso) return formCurso(ds.editarCurso);
-  if (ds.publicarCurso) return publicarCurso(ds.publicarCurso);
-  if (ds.apagarCurso) return apagarCurso(ds.apagarCurso);
-  if (ds.novaAulaModelo !== undefined) return formAulaModelo();
-  if (ds.editarAm) return formAulaModelo(ds.editarAm);
-  if (ds.apagarAm) return apagarAulaModelo(ds.apagarAm);
-  if (ds.subirAm) return moverAulaModelo(ds.subirAm, -1);
-  if (ds.descerAm) return moverAulaModelo(ds.descerAm, 1);
-  if (ds.vocabPessoa) return verVocabulario(ds.vocabPessoa);
-  if (ds.pronPessoa) return verPronuncia(ds.pronPessoa);
-  if (ds.ditPessoa) return verDitado(ds.ditPessoa);
-  if (ds.anotPessoa) return verLousa(ds.anotPessoa);
-  if (ds.anotVer !== undefined) return verAnotacao(Number(ds.anotVer));
-  if (ds.anotLista !== undefined) return voltarAnotacoes(Number(ds.anotLista));
-  if (ds.bibPessoa) return verBibliotecaAluno(ds.bibPessoa);
-  if (ds.progPessoa) return verProgressoAluno(ds.progPessoa);
-  if (ds.verLink) return verLinkAluno(ds.verLink);
-  if (ds.tirarLink) return tirarLinkAluno(ds.tirarLink);
-  if (ds.editarPessoa) return formEditarPessoa(ds.editarPessoa);
-  if (ds.senhaPessoa) return novaSenha(ds.senhaPessoa);
-  if (ds.ativoPessoa) return alternarAtivo(ds.ativoPessoa);
-  if (ds.excluirPessoa) return excluirPessoa(ds.excluirPessoa);
-  if (ds.aulaEquipe) return abrirAulaEquipe(ds.aulaEquipe);
-  if (ds.editarAula) return formAula(ds.editarAula);
-  if (ds.cancelarAula) return cancelarAula(ds.cancelarAula);
-  if (ds.cancelarConfirma) return confirmarCancelamento(ds.cancelarConfirma, ds.serie === '1');
-  if (ds.reativarAula) return reativarAula(ds.reativarAula);
-  if (ds.excluirAula) return excluirAula(ds.excluirAula);
-  if (ds.filtroLicao) { eq.filtroLicao = ds.filtroLicao; return renderLicoesEquipe(); }
-  if (ds.corrigir) return abrirCorrecao(ds.corrigir);
-  if (ds.verLicao) return abrirCorrecao(ds.verLicao, true);
-  if (ds.editarLicao) return formLicao(ds.editarLicao);
-  if (ds.excluirLicao) return excluirLicao(ds.excluirLicao);
-  if (ds.baixarAnexo) return baixarAnexo(ds.baixarAnexo);
-  if (ds.abrirAnexo) return abrirAnexo(ds.abrirAnexo);
-  if (ds.legendaMaterial) return abrirLegenda(ds.legendaMaterial);
-  if (ds.verMaterial) return verMaterial(ds.verMaterial);
-  if (ds.editarMaterial) return formMaterial(ds.editarMaterial);
-  if (ds.excluirMaterial) return excluirMaterial(ds.excluirMaterial);
+  desenharGoogle();
+  $('#google-painel').focus();
+}
+function abrirPainelGoogle() { gg.volta = 'reconectar'; seguirVoltaGoogle(); }
+
+function desenharGoogle() {
+  const box = $('#google-painel');
+  box.hidden = !ehAdmin(); if (box.hidden) return;
+  const foco = box.contains(document.activeElement) ? document.activeElement.dataset.google : null;
+  const e = gg.estado, trava = gg.ocupado || gg.lendo ? ' disabled' : '';
+  let corpo, botoes = '';
+  if (!e) {
+    corpo = gg.lendo ? 'Conferindo a conexão com o Google…' : 'Não deu para ler a conexão com o Google agora.';
+    if (!gg.lendo) botoes = '<button class="btn btn-linha" data-google="ler">Conferir de novo</button>';
+  } else if (!e.conectado) {
+    corpo = 'Conecte a sua conta Google para cada aula online marcada sem sala ganhar um evento na sua agenda Google com o link do Google Meet.';
+    botoes = `<button class="btn btn-primario" data-google="conectar"${trava}>Conectar ao Google</button>`;
+  } else if (e.situacao === 'reconectar') {
+    corpo = `<span class="caixa-aviso erro google-alerta">${ico('warning-circle')}<span>O Google parou de aceitar a conexão com <b>${esc(e.email)}</b>. Conecte o Google de novo: até lá, as aulas marcadas sem sala ficam sem o Meet.</span></span>`;
+    botoes = `<button class="btn btn-primario" data-google="conectar"${trava}>Conectar de novo</button><button class="btn btn-linha" data-google="desconectar"${trava}>Desconectar</button>`;
+  } else {
+    corpo = `Google conectado com <b>${esc(e.email)}</b>. As aulas marcadas sem sala ganham o link do Meet sozinhas.<span class="ajuda">“Tentar de novo em todas” cria o Meet das suas próximas aulas que estão sem sala.</span>`;
+    botoes = `<button class="btn btn-linha" data-google="todas"${trava}>Tentar de novo em todas</button><button class="btn btn-linha" data-google="desconectar"${trava}>Desconectar</button>`;
+  }
+  box.innerHTML = `<h2 id="google-titulo">Google Agenda e Meet</h2>
+    <p class="google-estado">${corpo}</p>
+    ${botoes ? `<div class="google-acoes">${botoes}</div>` : ''}
+    <p class="google-msg${gg.erro ? ' caixa-aviso erro' : ''}" role="status">${esc(gg.msg)}</p>`;
+  if (!foco) return;
+  const alvo = $(`[data-google="${foco}"]`, box);
+  (alvo && !alvo.disabled ? alvo : box).focus({ preventScroll: true });
+}
+
+function acaoGoogle(acao) {
+  if (gg.ocupado || !ehAdmin()) return;
+  if (acao === 'ler') lerGoogle();
+  else if (acao === 'conectar') conectarGoogle();
+  else if (acao === 'desconectar') desconectarGoogle();
+  else if (acao === 'todas') tentarTodasGoogle();
+}
+async function fazerGoogle(msg, acao) {
+  Object.assign(gg, { ocupado: true, msg, erro: false }); desenharGoogle();
+  try { await acao(); } catch (e) { console.warn(e); Object.assign(gg, { msg: e.message || 'Algo deu errado. Tente de novo.', erro: true }); }
+  finally { gg.ocupado = false; desenharGoogle(); }
+}
+const conectarGoogle = () => fazerGoogle('', async () => {
+  const url = (await db.google('iniciar'))?.url;
+  if (!/^https:\/\//.test(url || '')) throw new Error('O servidor não devolveu o endereço do Google. Tente de novo.');
+  location.assign(url);
+});
+function desconectarGoogle() {
+  if (!confirm('Desconectar o Google? As próximas aulas marcadas sem sala deixam de ganhar o Meet sozinhas. Os links que já estão nas aulas continuam valendo.')) return;
+  fazerGoogle('', async () => {
+    const r = await db.google('desconectar');
+    gg.estado = { conectado: false };
+    gg.msg = r?.revogado === false ? 'Google desconectado do app. O Google não confirmou a retirada do acesso: confira em myaccount.google.com/connections.' : 'Google desconectado.';
+  });
+}
+const tentarTodasGoogle = () => fazerGoogle('Criando o Meet das próximas aulas sem sala…', async () => {
+  const r = await db.google('tentar_de_novo', { todas: true });
+  const n = r?.processadas || 0;
+  gg.msg = !n ? 'Nenhuma aula futura sem sala.'
+    : `${n} ${n === 1 ? 'aula' : 'aulas'}: ${r.ok} com Meet, ${r.erro} com erro${r.pendentes ? `, ${r.pendentes} ainda em andamento (a Agenda atualiza sozinha)` : ''}.`;
+  await recarregar('aulas');
+  if (r?.pendentes) setTimeout(() => recarregar('aulas').catch(e => console.warn(e)), 20000);
 });
 
 </script>
@@ -5678,6 +5861,7 @@ async function abrirSessao() {
     else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('hoje'); }
     hidratar();
     iniciarPush(perfil);
+    seguirVoltaGoogle();
   } catch (e) {
     console.warn(e);
     telaEntrar(e.message || 'Não deu para abrir a sua área. Tente de novo.');

@@ -858,13 +858,14 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 
 /* capa de material sem foto: cor pelo tipo */
 .capa-tipo.pdf{background:var(--bege);color:#1A2142}
-.capa-tipo.youtube{background:var(--marinho);color:#F0EDE4}
+.capa-tipo.youtube,.capa-tipo.video{background:var(--marinho);color:#F0EDE4}
 .capa-tipo.link,.capa-tipo.audio{background:#252526;color:#F0EDE4}
 .card-capa>img.yt{object-fit:cover}
 
 /* estudo: vídeo do YouTube e PDF dentro da Forward */
 .video-yt{position:relative;aspect-ratio:16/9;border-radius:var(--r-card);overflow:hidden;background:#0B1026}
 .video-yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-yt video{position:absolute;inset:0;width:100%;height:100%;background:#000}
 .leitor-pdf{display:grid;gap:14px;justify-items:center}
 .leitor-pdf canvas{width:100%;height:auto;max-width:900px;border-radius:8px;background:#fff;box-shadow:var(--sombra)}
 .leitor-pdf .pagina{width:100%;max-width:900px;display:grid;gap:6px}
@@ -993,6 +994,10 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .mat-linha{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center}
 .mat-linha .mat-ico{width:44px;height:44px;border-radius:12px;background:var(--surface-2)}
 .para-quem{font-size:12.5px;color:var(--fg-2)}
+.mat-linha .video-estado{display:flex;width:fit-content;margin-top:6px}
+.video-motivo{display:block;margin-top:4px;font-size:12.5px;color:var(--erro)}
+.video-envio{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+.video-envio progress{flex:1;height:10px;accent-color:var(--fg)}
 .bib-equipe .quem b,.bib-equipe .quem small,.prog-equipe .quem b,.prog-equipe .quem small{white-space:normal;overflow-wrap:anywhere}
 @media (max-width:520px){.bib-equipe .acoes-linha{grid-column:1/-1}}
 @media (max-width:720px){#lista-alunos li{flex-wrap:wrap}#lista-alunos .acoes-linha{flex-basis:100%}}
@@ -1007,6 +1012,8 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .minha-vazia{margin:0}
 .selo-visto{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);font-size:12.5px;font-weight:600}
 .selo-visto .ico{width:14px;height:14px}
+.card-continuar{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--fg);font-size:12.5px;font-weight:600}
+.card-continuar .ico{width:14px;height:14px}
 .btn-visto[aria-pressed="true"]{color:var(--ok);box-shadow:inset 0 0 0 1px currentColor}
 
 /* editor de legenda: o player fica no fluxo, nada por cima dele */
@@ -1166,6 +1173,34 @@ button.aviso:focus-visible{outline-offset:-3px}
 .sala-erro{display:flex;gap:6px;align-items:flex-start;margin-top:6px;font-size:14px;line-height:1.45;color:var(--erro);overflow-wrap:anywhere}
 .sala-de-novo{margin-top:10px}
 .sala-aviso{display:block;margin-top:6px}
+/* recursos do player: barra de controles, modos da legenda, caixa da palavra minimizada e tela cheia com a legenda por cima */
+.player-barra{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0}
+.pl-ap{min-width:48px;font-weight:700;letter-spacing:.04em;border-color:var(--campo-borda);color:var(--fg)}
+.pl-campo{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%;font-size:13.5px;font-weight:600;color:var(--fg)}
+.pl-campo select{flex:1 1 auto;min-width:0;max-width:100%;height:40px;padding:0 10px;border-radius:11px;border:1px solid var(--campo-borda);background:var(--bg);color:var(--fg);font:inherit;font-size:14px;font-weight:400}
+.pl-tela{border-color:var(--campo-borda);color:var(--fg)}
+.pl-atalhos{flex-basis:100%;margin:0;font-size:12.5px}
+@media (hover:none){.pl-atalhos{display:none}}
+.legenda-atual .legenda-texto,.legenda-atual .legenda-traducao{transition:filter .2s}
+.estudo-yt[data-legenda="borrado"] .legenda-atual:not(.revelada) :is(.legenda-texto,.legenda-traducao),
+.estudo-yt[data-legenda="en"] .legenda-atual:not(.revelada) .legenda-traducao{filter:blur(6px)}
+.dic-botoes{display:flex;gap:6px;margin-left:auto}
+.dic.minimizada>.prof-ia{display:none}
+.estudo-video:fullscreen{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:12px 16px 72px;max-width:none;background:#000}
+.estudo-video:fullscreen .video-yt{position:absolute;inset:0;max-width:none;aspect-ratio:auto;border-radius:0}
+.estudo-video:fullscreen .player-barra{position:relative;z-index:3;grid-area:1/1;justify-self:start;padding:8px 10px;border-radius:12px;background:rgba(11,16,38,.9)}
+.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-campo,.pl-tela){color:#F0EDE4}
+.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-tela,select){border-color:rgba(240,237,228,.6)}
+.estudo-video:fullscreen .player-barra select{background:#0B1026;color:#F0EDE4}
+.estudo-video:fullscreen .player-barra .pl-ap[aria-pressed="true"]{background:#F0EDE4;color:#1A2142}
+.estudo-video:fullscreen .pl-atalhos{display:none}
+.estudo-video:fullscreen>.estudo-legenda{position:relative;z-index:2;grid-area:3/1;justify-self:center;width:min(100%,1100px)}
+.estudo-video:fullscreen>.estudo-legenda>:not(.legenda-atual){display:none}
+.estudo-video:fullscreen .legenda-atual{min-height:0;background:rgba(11,16,38,.85);box-shadow:none}
+.estudo-video:fullscreen .legenda-texto{font-size:clamp(1.3rem,2.6vw,2.2rem);color:#F0EDE4}
+.estudo-video:fullscreen .legenda-traducao{font-size:clamp(1rem,1.6vw,1.3rem);color:#D9D5CA}
+.estudo-video:fullscreen>.dic{position:relative;z-index:3;grid-area:2/1;justify-self:end;align-self:start;width:min(380px,100%);max-height:100%;overflow-y:auto}
+.estudo-video:fullscreen>#estudo-aviso{position:relative;z-index:3;grid-area:2/1;align-self:start}
 
 </style>
 
@@ -1209,7 +1244,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou), o ponto em que você parou em cada vídeo (para continuar dali) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1222,7 +1257,8 @@ button.aviso:focus-visible{outline-offset:-3px}
       <section>
         <h2>Quem mais recebe alguma coisa</h2>
         <ul>
-          <li>O YouTube recebe o endereço de internet (IP) do seu aparelho quando a Biblioteca mostra a capa de um vídeo e quando você toca um vídeo.</li>
+          <li>O YouTube recebe o endereço de internet (IP) do seu aparelho quando a Biblioteca mostra a capa de um vídeo e quando você toca um vídeo. O vídeo abre pelo youtube.com: se você entrou na sua conta Google neste navegador, o YouTube sabe que é você e usa os cookies dele, como no próprio site do YouTube.</li>
+          <li>Os vídeos enviados pela escola ficam no Internet Archive (archive.org). Quando você toca um desses vídeos, o Internet Archive recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>O Google, que fornece as fontes das letras das páginas: ao abrir o app, ele recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>O dicionário (Wiktionary, consultado pela Kaikki.org) e o tradutor (MyMemory) recebem só a palavra e a frase que você consulta, sem o seu nome e sem o seu e-mail. Quando você toca a pronúncia, o áudio vem do Wikimedia Commons, que recebe o endereço de internet (IP) do seu aparelho.</li>
           <li>Quando você usa “Ler em voz alta”, quem reconhece a sua fala é o navegador, e ele envia o áudio da sua voz para o serviço da empresa dele: o Chrome envia ao Google, e o Edge, à Microsoft. A Forward recebe só o texto reconhecido.</li>
@@ -1438,7 +1474,7 @@ button.aviso:focus-visible{outline-offset:-3px}
 <script src="supabase-2.49.4.js"></script>
 <script>
 const CONFIG = {"url": "https://xxlxuxilbgkwaaawnpov.supabase.co", "publicavel": "sb_publishable_Wo5DJaddMFwTZkU5KB9RVw_KbdSkJTT", "vapid": "BGVGyg6QUeiS1eHVJnR-uDMO3if01LOc4ZHMxZER1VjY2EZHAlbW3Ly9KaOdBmioXbc7IHtDOr4FHUyEktQRLUQ", "whatsapp": "5511932332456"};
-const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
+const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "caret-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M212.24,164.24a6,6,0,0,1-8.48,0L128,88.49,52.24,164.24a6,6,0,0,1-8.48-8.48l80-80a6,6,0,0,1,8.48,0l80,80A6,6,0,0,1,212.24,164.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "corners-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154,96V48a6,6,0,0,1,12,0V90h42a6,6,0,0,1,0,12H160A6,6,0,0,1,154,96ZM96,154H48a6,6,0,0,0,0,12H90v42a6,6,0,0,0,12,0V160A6,6,0,0,0,96,154Zm112,0H160a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V166h42a6,6,0,0,0,0-12ZM96,42a6,6,0,0,0-6,6V90H48a6,6,0,0,0,0,12H96a6,6,0,0,0,6-6V48A6,6,0,0,0,96,42Z\"/></svg>", "corners-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M214,48V88a6,6,0,0,1-12,0V54H168a6,6,0,0,1,0-12h40A6,6,0,0,1,214,48ZM88,202H54V168a6,6,0,0,0-12,0v40a6,6,0,0,0,6,6H88a6,6,0,0,0,0-12Zm120-40a6,6,0,0,0-6,6v34H168a6,6,0,0,0,0,12h40a6,6,0,0,0,6-6V168A6,6,0,0,0,208,162ZM88,42H48a6,6,0,0,0-6,6V88a6,6,0,0,0,12,0V54H88a6,6,0,0,0,0-12Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "film-strip": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM38,86h84v84H38Zm96-12V54h36V74Zm-12,0H86V54h36Zm0,108v20H86V182Zm12,0h36v20H134Zm0-12V86h84v84ZM218,56V74H182V54h34A2,2,0,0,1,218,56ZM40,54H74V74H38V56A2,2,0,0,1,40,54ZM38,200V182H74v20H40A2,2,0,0,1,38,200Zm178,2H182V182h36v18A2,2,0,0,1,216,202Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "minus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "speaker-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66ZM206,128a37.94,37.94,0,0,1-9.5,25.14,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93A38,38,0,0,1,206,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
 </script>
 <script>
 /* base: utilidades de tela, sem banco. Mesmas funções do protótipo, sem o relógio fixo da demonstração. */
@@ -1578,8 +1614,8 @@ const NOME_ESTADO = { pendente: 'Para fazer', atrasada: 'Atrasada', entregue: 'A
 const ICONE_ESTADO = { pendente: 'clock', atrasada: 'warning-circle', entregue: 'paper-plane-tilt', corrigida: 'seal-check' };
 const NOME_AVAL = { mandou_bem: 'Mandou bem', vamos_ajustar: 'Vamos ajustar' };
 const estadoTarefa = t => (t.status === 'pendente' && new Date(t.prazo) < new Date()) ? 'atrasada' : t.status;
-const ICONE_TIPO = { youtube: 'youtube-logo', pdf: 'file-pdf', audio: 'headphones', link: 'arrow-square-out' };
-const NOME_TIPO = { youtube: 'Vídeo do YouTube', pdf: 'PDF', audio: 'Áudio', link: 'Link' };
+const ICONE_TIPO = { youtube: 'youtube-logo', pdf: 'file-pdf', audio: 'headphones', link: 'arrow-square-out', video: 'film-strip' };
+const NOME_TIPO = { youtube: 'Vídeo do YouTube', pdf: 'PDF', audio: 'Áudio', link: 'Link', video: 'Vídeo enviado' };
 const NIVEIS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const CORES_ALUNO = ['#5B7FD1', '#3E9A72', '#D4A94F', '#C9705A', '#9B7BC7', '#4FA3B8', '#B86B9B', '#7C9A3E'];
 
@@ -1602,7 +1638,7 @@ document.addEventListener('click', ev => { const b = ev.target.closest('[data-fe
 
 </script>
 <script>
-/* legenda: player do YouTube (IFrame API) e leitura de legenda colada. Sem banco; serve ao editor da equipe e ao estudo do aluno. */
+/* legenda: tempo e leitura de legenda colada (transcrição do YouTube, SRT e WebVTT). Sem banco; serve ao editor da equipe e ao estudo do aluno. */
 
 /* ---------- tempo ---------- */
 // "1:02:03", "0:05", "00:00:05,000", "12,5" ou "7" viram segundos com centésimos; o que não é tempo vira null
@@ -1650,7 +1686,10 @@ function lerLegenda(colado) {
   return saida;
 }
 
-/* ---------- player ---------- */
+</script>
+<script>
+/* player: a mesma interface para o vídeo do YouTube (IFrame API, pelo youtube.com) e para o vídeo enviado (MP4 do Internet Archive).
+   Eventos por ao(nome, fn): 'estado' ('parado', 'carregando', 'tocando', 'pausado' ou 'fim'), 'tempo' (segundos), 'velocidade' (de 0,5 a 2) e 'erro' (mensagem). */
 const SEM_INCORPORAR = 'Este vídeo não abre aqui: o dono deste vídeo não permite que ele toque fora do YouTube.';
 const ERRO_PLAYER = {
   2: 'O link deste vídeo está com problema.',
@@ -1660,6 +1699,10 @@ const ERRO_PLAYER = {
   150: SEM_INCORPORAR,
 };
 const mensagemDoPlayer = codigo => ERRO_PLAYER[codigo] || 'O player do YouTube deu erro. Tente de novo.';
+const ERRO_ARQUIVO = 'O navegador não conseguiu tocar este vídeo. Tente de novo mais tarde.';
+const ESTADO_YT = { [-1]: 'parado', 0: 'fim', 1: 'tocando', 2: 'pausado', 3: 'carregando', 5: 'parado' };
+const VELOCIDADE_MIN = 0.5, VELOCIDADE_MAX = 2;
+const limitarVelocidade = r => Math.min(VELOCIDADE_MAX, Math.max(VELOCIDADE_MIN, Number(r) || 1));
 
 let apiYoutube = null;
 function apiDoYoutube() {
@@ -1674,59 +1717,158 @@ function apiDoYoutube() {
   return apiYoutube;
 }
 
-// player oficial dentro de `caixa`; aoErro(codigo, mensagem) e aoEstado(YT.PlayerState) são opcionais
-function playerYoutube(caixa, idVideo, { aoErro, aoEstado } = {}) {
-  const alvo = document.createElement('div');
-  caixa.replaceChildren(alvo);
-  let yt = null, pronto = false, trecho = null;
-  const pararTrecho = () => { if (trecho) { clearInterval(trecho.timer); trecho = null; } };
+// parte comum aos dois players; o motor traz o acesso ao player de verdade
+function montarPlayer(caixa, motor) {
+  const ouvintes = { estado: new Set(), tempo: new Set(), velocidade: new Set(), erro: new Set() };
+  const emitir = (nome, valor) => ouvintes[nome].forEach(fn => fn(valor));
+  let relogio = null, trecho = null;
+  const pararTrecho = () => {
+    if (!trecho) return;
+    clearInterval(trecho.timer);
+    if (trecho.voltar) motor.mudarTaxa(trecho.voltar);
+    trecho = null;
+  };
   const ctl = {
-    get pronto() { return pronto; },
-    tempo: () => (pronto ? centesimos(yt.getCurrentTime() || 0) : 0),
-    estado: () => (pronto ? yt.getPlayerState() : -1),
-    tocar() { if (pronto) yt.playVideo(); },
-    pausar() { pararTrecho(); if (pronto) yt.pauseVideo(); },
-    ir(s) { if (pronto) yt.seekTo(s, true); },
-    // toca de `ini` a `fim` e pausa; o tempo só vale depois que o salto para `ini` aparece na leitura
-    trecho(ini, fim) {
-      if (!pronto) return false;
+    tipo: motor.tipo,
+    caixa,
+    get pronto() { return motor.pronto(); },
+    tempo: () => (motor.pronto() ? centesimos(motor.tempo() || 0) : 0),
+    duracao: () => (motor.pronto() ? motor.duracao() || 0 : 0),
+    estado: () => (motor.pronto() ? motor.estado() : 'parado'),
+    tocar() { if (motor.pronto()) motor.tocar(); },
+    pausar() { pararTrecho(); if (motor.pronto()) motor.pausar(); },
+    ir(s) {
+      if (!motor.pronto()) return;
+      motor.ir(Math.max(0, s));
+      emitir('tempo', centesimos(Math.max(0, s)));
+    },
+    velocidade: () => (trecho?.voltar || (motor.pronto() ? motor.taxa() : 1)),
+    mudarVelocidade(r) {
+      const v = limitarVelocidade(r);
+      if (trecho?.voltar) trecho.voltar = v;
+      else if (motor.pronto()) motor.mudarTaxa(v);
+      return v;
+    },
+    // toca de `ini` a `fim` e pausa; com `velocidade`, o trecho toca nela e a velocidade de antes volta no fim
+    trecho(ini, fim, { velocidade } = {}) {
+      if (!motor.pronto()) return false;
       pararTrecho();
-      const t = { visto: false };
+      const t = { visto: false, voltar: null };
+      if (velocidade) { t.voltar = motor.taxa(); motor.mudarTaxa(velocidade); }
+      // o tempo só vale depois que o salto para `ini` aparece na leitura
       t.timer = setInterval(() => {
-        const agora = yt.getCurrentTime() || 0;
+        const agora = motor.tempo() || 0;
         if (!t.visto) { t.visto = agora >= ini - 0.3 && agora < fim; return; }
-        if (agora >= fim) { yt.pauseVideo(); pararTrecho(); }
+        if (agora >= fim) { motor.pausar(); pararTrecho(); }
       }, 40);
       trecho = t;
-      yt.seekTo(ini, true);
-      yt.playVideo();
+      motor.ir(ini);
+      motor.tocar();
       return true;
     },
+    ao(nome, fn) { ouvintes[nome].add(fn); return () => ouvintes[nome].delete(fn); },
     destruir() {
-      pararTrecho(); pronto = false;
-      try { yt?.destroy(); } catch (e) { /* player ainda não montado */ }
+      pararTrecho(); clearInterval(relogio);
+      Object.values(ouvintes).forEach(s => s.clear());
+      motor.destruir();
       caixa.replaceChildren();
     },
   };
+  const mudouEstado = e => {
+    if (trecho?.visto && (e === 'pausado' || e === 'fim')) pararTrecho();
+    clearInterval(relogio); relogio = null;
+    if (e === 'tocando') relogio = setInterval(() => emitir('tempo', ctl.tempo()), 100);
+    emitir('estado', e);
+    emitir('tempo', ctl.tempo());
+  };
+  const deuErro = msg => { pararTrecho(); emitir('erro', msg); };
+  // a velocidade mudada pelo menu do próprio player também fica entre 0,5 e 2
+  const mudouTaxa = r => { const v = limitarVelocidade(r); if (v !== r) motor.mudarTaxa(v); else emitir('velocidade', ctl.velocidade()); };
+  return { ctl, mudouEstado, mudouTempo: () => emitir('tempo', ctl.tempo()), deuErro, mudouTaxa };
+}
+
+// player oficial do YouTube dentro de `caixa`; aoErro(codigo, mensagem) é opcional; `inicio` em segundos; `semTelaCheia` tira o botão de tela cheia do player
+function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = false } = {}) {
+  const alvo = document.createElement('div');
+  caixa.replaceChildren(alvo);
+  let yt = null, pronto = false;
+  const motor = {
+    tipo: 'youtube',
+    pronto: () => pronto,
+    tempo: () => yt.getCurrentTime(),
+    duracao: () => yt.getDuration(),
+    estado: () => ESTADO_YT[yt.getPlayerState()] || 'parado',
+    tocar: () => yt.playVideo(),
+    pausar: () => yt.pauseVideo(),
+    ir: s => yt.seekTo(s, true),
+    taxa: () => yt.getPlaybackRate(),
+    mudarTaxa: r => yt.setPlaybackRate(r),
+    destruir() { pronto = false; try { yt?.destroy(); } catch (e) { /* player ainda não montado */ } },
+  };
+  const { ctl, mudouEstado, deuErro, mudouTaxa } = montarPlayer(caixa, motor);
   ctl.carregado = apiDoYoutube().then(YT => new Promise(resolve => {
     if (!alvo.isConnected) return;
     yt = new YT.Player(alvo, {
-      host: 'https://www.youtube-nocookie.com',
+      host: 'https://www.youtube.com',
       videoId: idVideo,
       width: '100%', height: '100%',
-      playerVars: { rel: 0, playsinline: 1, origin: location.origin },
+      playerVars: { rel: 0, playsinline: 1, origin: location.origin, ...(inicio >= 1 ? { start: Math.floor(inicio) } : {}), ...(semTelaCheia ? { fs: 0 } : {}) },
       events: {
         onReady: () => { pronto = true; resolve(ctl); },
-        onError: ev => { pararTrecho(); if (aoErro) aoErro(ev.data, mensagemDoPlayer(ev.data)); },
-        onStateChange: ev => {
-          if (trecho?.visto && (ev.data === 2 || ev.data === 0)) pararTrecho();
-          if (aoEstado) aoEstado(ev.data);
-        },
+        onError: ev => { const msg = mensagemDoPlayer(ev.data); deuErro(msg); if (aoErro) aoErro(ev.data, msg); },
+        onStateChange: ev => mudouEstado(ESTADO_YT[ev.data] || 'parado'),
+        onPlaybackRateChange: ev => mudouTaxa(ev.data),
       },
     });
   }));
   return ctl;
 }
+
+// vídeo enviado: o MP4 do Internet Archive num <video> com os controles do navegador
+function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false } = {}) {
+  const v = document.createElement('video');
+  Object.assign(v, { controls: true, playsInline: true, preload: 'metadata' });
+  v.setAttribute('controlslist', semTelaCheia ? 'noplaybackrate nofullscreen' : 'noplaybackrate');
+  let pronto = false;
+  const motor = {
+    tipo: 'video',
+    pronto: () => pronto,
+    tempo: () => v.currentTime,
+    duracao: () => (Number.isFinite(v.duration) ? v.duration : 0),
+    estado: () => (v.ended ? 'fim' : !v.paused ? 'tocando' : v.played.length ? 'pausado' : 'parado'),
+    tocar: () => { v.play().catch(() => {}); },
+    pausar: () => v.pause(),
+    ir: s => { v.currentTime = s; },
+    taxa: () => v.playbackRate,
+    mudarTaxa: r => { v.playbackRate = r; },
+    destruir() { pronto = false; v.pause(); v.removeAttribute('src'); v.load(); },
+  };
+  const { ctl, mudouEstado, mudouTempo, deuErro, mudouTaxa } = montarPlayer(caixa, motor);
+  v.addEventListener('playing', () => mudouEstado('tocando'));
+  v.addEventListener('pause', () => { if (!v.ended) mudouEstado('pausado'); });
+  v.addEventListener('ended', () => mudouEstado('fim'));
+  v.addEventListener('waiting', () => { if (!v.paused) mudouEstado('carregando'); });
+  v.addEventListener('seeked', mudouTempo);
+  v.addEventListener('ratechange', () => mudouTaxa(v.playbackRate));
+  v.addEventListener('error', () => {
+    if (!v.getAttribute('src')) return;
+    deuErro(ERRO_ARQUIVO);
+    if (aoErro) aoErro(v.error?.code || 0, ERRO_ARQUIVO);
+  });
+  caixa.replaceChildren(v);
+  ctl.carregado = new Promise(resolve => {
+    v.addEventListener('loadedmetadata', () => {
+      if (inicio > 0 && inicio < v.duration) v.currentTime = inicio;
+      pronto = true;
+      resolve(ctl);
+    }, { once: true });
+    v.src = url;
+  });
+  return ctl;
+}
+
+// fonte: { youtube: '<id do vídeo>' } ou { url: '<MP4 do Archive>' }
+const abrirPlayer = (caixa, fonte, opcoes) => (fonte.youtube ? playerYoutube(caixa, fonte.youtube, opcoes) : playerArquivo(caixa, fonte.url, opcoes));
 
 </script>
 <script>
@@ -1910,8 +2052,12 @@ const db = {
   async editarAluno(id, campos) { return ok(await sb.from('perfis').update(campos).eq('id', id).select().single()); },
 
   /* ---------- Google (Edge Function google-oauth): conexão do admin e Meet das aulas ---------- */
-  async google(acao, dados = {}) {
-    const { data, error } = await sb.functions.invoke('google-oauth', { body: { acao, ...dados } });
+  async google(acao, dados = {}) { return this.funcao('google-oauth', acao, dados); },
+  /* ---------- vídeo enviado (Edge Function archive): chaves do envio, conferência e exclusão ---------- */
+  async archive(acao, dados = {}) { return this.funcao('archive', acao, dados); },
+  // a recusa da função chega com a mensagem que ela mandou no corpo
+  async funcao(nome, acao, dados) {
+    const { data, error } = await sb.functions.invoke(nome, { body: { acao, ...dados } });
     if (error) {
       if (!(error.context instanceof Response)) throw new Error('Sem conexão com o servidor. Confira a internet e tente de novo.');
       let msg = '';
@@ -1920,6 +2066,10 @@ const db = {
     }
     return data;
   },
+
+  // o vídeo já está no Archive: a linha fica mesmo se a escolha dos alunos falhar, e o envio continua dela
+  async criarVideo(linha) { return ok(await sb.from('midias').insert(linha).select().single()); },
+  async ligarAlunos(id, alunos) { ok(await sb.from('midia_alunos').insert(alunos.map(a => ({ midia_id: id, aluno_id: a })))); },
 
   /* ---------- aulas ---------- */
   async criarAulas(linhas) { return ok(await sb.from('aulas').insert(linhas).select()); },
@@ -2102,6 +2252,17 @@ const db = {
   async desmarcarVisto(midia, aluno) { ok(await sb.from('progresso').delete().eq('midia_id', midia).eq('aluno_id', aluno).select('midia_id')); },
   async progressoDoAluno(aluno) {
     return ok(await sb.from('progresso').select('midia_id,visto_em,midias(titulo,tipo,pessoal_de)').eq('aluno_id', aluno).order('visto_em', { ascending: false }));
+  },
+
+  /* ---------- ponto em que o aluno parou no vídeo: só o dele ---------- */
+  async posicoes() { return ok(await sb.from('video_posicoes').select('midia_id,posicao_s,duracao_s')); },
+  async gravarPosicao(linha) { ok(await sb.from('video_posicoes').upsert(linha, { onConflict: 'aluno_id,midia_id' })); },
+  gravarPosicaoNaSaida(linha) {
+    if (!tokenAtual) return null;
+    return fetch(`${CONFIG.url}/rest/v1/video_posicoes?on_conflict=aluno_id,midia_id`, {
+      method: 'POST', keepalive: true, body: JSON.stringify(linha),
+      headers: { apikey: CONFIG.publicavel, Authorization: `Bearer ${tokenAtual}`, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
+    });
   },
 
   /* ---------- legenda: grava só pela função salvar_legendas ---------- */
@@ -2855,7 +3016,7 @@ const fecharLousas = () => Promise.all([...lousasAbertas].map(l => l.fechar()));
 
 </script>
 <script>
-/* pronúncia: ouvir a frase na voz do navegador, ler em voz alta e comparar palavra a palavra.
+/* pronúncia: ouvir a frase (no vídeo, o trecho do próprio vídeo; no PDF, a voz do navegador), ler em voz alta e comparar palavra a palavra.
    O áudio fica no navegador: para o banco vão só a frase, o texto reconhecido e a nota. */
 const PRON_LIMITE = 2000;
 const VELOCIDADES = { normal: 1, devagar: 0.7 };
@@ -2919,9 +3080,10 @@ function palavraNoIndice(texto, c) {
   for (const m of texto.matchAll(RE_PALAVRA)) { if (m.index > c) break; achada = { i, ini: m.index }; i++; }
   return achada;
 }
-const acoesPron = chave => `<div class="pron" data-pron="${chave}">
+const acoesPron = (chave, devagar = false) => `<div class="pron" data-pron="${chave}">
     <div class="pron-acoes">
       <button class="pilula pron-btn" data-pron-ouvir="${chave}">${ico('speaker-high')}<span class="pron-rot">Ouvir</span></button>
+      ${devagar ? `<button class="pilula pron-btn" data-ouvir-devagar="${chave}">${ico('speaker-low')}<span class="pron-rot">Ouvir devagar</span></button>` : ''}
       <button class="pilula pron-btn" data-pron-ler="${chave}">${ico('microphone')}<span class="pron-rot">Ler em voz alta</span></button>
       <button class="btn-texto pron-hist" data-pron-hist="${chave}" aria-expanded="false" hidden></button>
     </div>
@@ -2961,6 +3123,7 @@ function pararFala() {
 }
 function ouvirFrase(chave) {
   const f = pron.frases.get(chave); if (!f) return;
+  if (es.player && chave.startsWith('v')) return ouvirTrecho(chave);
   if (pron.falaChave === chave) { pararFala(); return; }
   if (!('speechSynthesis' in window)) { avisar('Este navegador não tem voz para ler o texto.', true); return; }
   if (es.player) es.player.pausar();
@@ -3319,16 +3482,16 @@ async function abrirAnexo(c) {
 </script>
 <script>
 /* área do aluno com dado real: agenda, lições, biblioteca e estudo */
-const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
+const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), posicoes: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
 const VISTAS_ALUNO = ['agenda', 'biblioteca', 'licoes', 'estudo'];
 
 async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(),
+  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes] = await Promise.all([
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(),
   ]);
-  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])) });
+  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
   renderAluno();
   iniciarSino($('#tela-aluno .app-acoes'), levarAlunoAoAviso);
 }
@@ -3344,6 +3507,135 @@ function vistaAluno(v) {
   if (v === 'estudo') { VISTAS_ALUNO.forEach(x => { $(`#v-${x}`).hidden = x !== 'estudo'; }); }
 }
 
+/* ---------- aviso do sino: abre a aula ou a lição, lida de novo do banco ---------- */
+function trocarItem(lista, item, chave) {
+  const i = lista.findIndex(x => x.id === item.id);
+  if (i < 0) lista.push(item); else lista[i] = item;
+  lista.sort((a, b) => new Date(a[chave]) - new Date(b[chave]));
+}
+async function levarAlunoAoAviso(tipo, id) {
+  if (tipo === 'aula') {
+    const a = await db.aula(id); if (!a) return false;
+    if (a.matricula_id && !al.matriculas.some(m => m.id === a.matricula_id)) {
+      [al.aulas, al.tarefas, al.matriculas] = await Promise.all([db.aulas(), db.tarefas(), db.matriculas()]);
+      renderLicoes();
+    }
+    trocarItem(al.aulas, a, 'inicio');
+    const ini = new Date(a.inicio);
+    al.mes = new Date(ini.getFullYear(), ini.getMonth(), 1);
+    vistaAluno('agenda'); renderMesAluno(); renderLadoAluno();
+    if (aulaVisivel(a)) { abrirAulaAluno(a.id); return true; }
+    const dia = $$('#mes .dia:not(.fora)')[ini.getDate() - 1];
+    if (dia) { dia.classList.add('dia-aviso'); dia.scrollIntoView({ block: 'center', behavior: semMovimento.matches ? 'auto' : 'smooth' }); }
+    avisar(`Esta aula foi cancelada: ${fLonga(ini)}, ${fHora(ini)}.`);
+    return true;
+  }
+  const t = await db.tarefa(id); if (!t) return false;
+  trocarItem(al.tarefas, t, 'prazo');
+  al.licaoSel = t.id;
+  vistaAluno('licoes'); renderLicoes(); renderMesAluno(); renderLadoAluno();
+  if (matchMedia('(max-width:980px)').matches) $('#licao-detalhe').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'start' });
+  return true;
+}
+
+/* ---------- estudo: abre o material ---------- */
+async function abrirEstudo(id) {
+  const m = al.midias.find(x => x.id === id); if (!m) return;
+  fecharEstudo();
+  fecharCamadas();
+  vistaAluno('estudo');
+  const v = $('#v-estudo');
+  v.innerHTML = `
+    <div class="estudo-topo">
+      <button class="btn-texto" data-vista-aluno="biblioteca">${ico('caret-left')}Biblioteca</button>
+      <h2>${esc(m.titulo)}</h2>
+      <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
+      ${botaoVisto(m.id)}
+      ${botaoDuvida(`o material "${m.titulo}"`)}
+    </div>
+    <div id="estudo-conteudo"></div>
+    ${m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
+  const box = $('#estudo-conteudo');
+  if (m.tipo === 'youtube' || m.tipo === 'video') {
+    const fonte = m.tipo === 'video' ? m.url && { url: m.url } : idYoutube(m.url) && { youtube: idYoutube(m.url) };
+    if (fonte) abrirVideo(m, fonte, box);
+    else box.innerHTML = `<div class="caixa-aviso erro">${m.tipo === 'video' ? 'Este vídeo ainda não está pronto. Volte daqui a pouco.' : 'O link deste vídeo não é do YouTube. Avise o Pedro.'}</div>`;
+  } else if (m.tipo === 'audio') {
+    const url = await tentar(() => db.urlArquivo(m.arquivo_path));
+    box.innerHTML = url ? `<audio controls preload="metadata" src="${esc(url)}" style="width:100%"></audio>` : '';
+  } else if (m.tipo === 'pdf') {
+    try { await abrirPdf(m, box); } catch (e) { console.warn(e); box.innerHTML = `<div class="caixa-aviso erro">${esc(e.message || 'Não deu para abrir o PDF.')}</div>`; }
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ---------- eventos da área do aluno ---------- */
+$('#tela-aluno').addEventListener('click', ev => {
+  const pp = ev.target.closest('.pdf-pal');
+  // arrastar para selecionar texto não abre a caixa
+  if (pp) { if (!String(getSelection()).trim()) tocarPalavraPdf(pp); return; }
+  const b = ev.target.closest('button, a'); if (!b) return;
+  const ds = b.dataset;
+  if (ds.vistaAluno) return vistaAluno(ds.vistaAluno);
+  if (ds.mes !== undefined && ds.alvo === 'aluno') {
+    const n = Number(ds.mes); const hoje = new Date();
+    al.mes = n === 0 ? new Date(hoje.getFullYear(), hoje.getMonth(), 1) : new Date(al.mes.getFullYear(), al.mes.getMonth() + n, 1);
+    return renderMesAluno();
+  }
+  if (ds.aula) return abrirAulaAluno(ds.aula);
+  if (ds.tarefa) { fecharCamadas(); al.licaoSel = ds.tarefa; vistaAluno('licoes'); return renderLicoes(); }
+  if (ds.licao) { al.licaoSel = ds.licao; renderLicoes(); if (matchMedia('(max-width:980px)').matches) $('#licao-detalhe').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'start' }); return; }
+  if (ds.nivel) { al.nivel = al.nivel === ds.nivel ? null : ds.nivel; return renderBibliotecaAluno(); }
+  if (ds.material) return abrirMaterialAluno(ds.material);
+  if (ds.cursoBib) return abrirCursoAluno(ds.cursoBib);
+  if (ds.irLinha !== undefined) return irParaLinha(Number(ds.irLinha));
+  if (ds.palN !== undefined) return abrirPalavra(Number(ds.palN), Number(ds.palI), b.textContent);
+  if (ds.ouvir !== undefined) return ouvirPalavra();
+  if (ds.pronOuvir) return ouvirFrase(ds.pronOuvir);
+  if (ds.pronLer) return lerEmVozAlta(ds.pronLer);
+  if (ds.pronHist) return alternarHistorico(ds.pronHist);
+  if (ds.veloc) return escolherVelocidade(ds.veloc);
+  if (ds.tirarPal) return tirarPalavra(ds.tirarPal);
+  if (b.id === 'dic-salvar') return salvarPalavra();
+  if (b.id === 'legenda-traduzir') { es.traducao = !es.traducao; b.setAttribute('aria-pressed', String(es.traducao)); return desenharLegenda(); }
+  if (b.id === 'ditado-alternar') return alternarDitado();
+  if (ds.ditLinha !== undefined) return escolherLinhaDitado(Number(ds.ditLinha));
+  if (ds.ditRepetir !== undefined) return tocarTrechoDitado();
+  if (ds.ditProxima !== undefined) return escolherLinhaDitado(dit.linha + 1);
+  if (ds.ditHist !== undefined) return alternarHistoricoDitado();
+  if (b.id === 'gravar-audio') return alternarGravacao();
+  if (b.id === 'escolher-anexo') return $('#arquivo-licao').click();
+  if (ds.tirarAnexo) return tirarAnexo(ds.tirarAnexo);
+  if (b.id === 'alternar-licoes') { al.listaLicoes = !al.listaLicoes; return renderLicoes(); }
+  if (b.id === 'voltar-lista') { al.listaLicoes = true; renderLicoes(); $('#licoes-lista').scrollIntoView({ block: 'start' }); }
+});
+// o Chromium não começa a seleção arrastando a partir de elemento com tabindex: ele sai no toque e volta em seguida
+$('#tela-aluno').addEventListener('pointerdown', ev => {
+  const pp = ev.target.closest?.('.pdf-pal'); if (!pp) return;
+  pp.removeAttribute('tabindex');
+  const volta = () => { removeEventListener('pointerup', volta); removeEventListener('pointercancel', volta); setTimeout(() => { pp.tabIndex = 0; }); };
+  addEventListener('pointerup', volta); addEventListener('pointercancel', volta);
+});
+$('#tela-aluno').addEventListener('keydown', ev => {
+  const pp = ev.target.closest?.('.pdf-pal');
+  if (pp && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); tocarPalavraPdf(pp); }
+});
+// botões que aparecem na gaveta e no modal (fora da tela do aluno)
+document.addEventListener('click', ev => {
+  if (!al.perfil) return;
+  const b = ev.target.closest('button'); if (!b) return;
+  if (b.dataset.confirmar) return confirmarAula(b.dataset.confirmar);
+  if (b.dataset.entrar) return entrarNaAula(b.dataset.entrar);
+  if (b.dataset.estudar) return abrirEstudo(b.dataset.estudar);
+  if (b.dataset.visto) return alternarVisto(b);
+  if (b.dataset.apagarLink) return apagarLink(b.dataset.apagarLink);
+  if (b.dataset.tarefa && b.closest('#gaveta')) { fecharCamadas(); al.licaoSel = b.dataset.tarefa; vistaAluno('licoes'); renderLicoes(); }
+});
+$('#bib-busca').addEventListener('input', ev => { al.busca = ev.target.value; renderBibliotecaAluno(); });
+$('#form-link').addEventListener('submit', ev => { ev.preventDefault(); guardarLink(); });
+
+</script>
+<script>
 /* ---------- agenda ---------- */
 const aulaVisivel = a => a.status !== 'cancelada';
 function chipAulaAluno(a) {
@@ -3474,6 +3766,8 @@ function entrarNaAula(id) {
   else avisar(a.sala ? `A aula é presencial: ${a.sala}` : 'O Pedro ainda não pôs o link da sala.');
 }
 
+</script>
+<script>
 /* ---------- lições ---------- */
 function renderLicoes() {
   const grupos = [
@@ -3546,37 +3840,8 @@ function renderDetalheLicao() {
   });
 }
 
-/* ---------- aviso do sino: abre a aula ou a lição, lida de novo do banco ---------- */
-function trocarItem(lista, item, chave) {
-  const i = lista.findIndex(x => x.id === item.id);
-  if (i < 0) lista.push(item); else lista[i] = item;
-  lista.sort((a, b) => new Date(a[chave]) - new Date(b[chave]));
-}
-async function levarAlunoAoAviso(tipo, id) {
-  if (tipo === 'aula') {
-    const a = await db.aula(id); if (!a) return false;
-    if (a.matricula_id && !al.matriculas.some(m => m.id === a.matricula_id)) {
-      [al.aulas, al.tarefas, al.matriculas] = await Promise.all([db.aulas(), db.tarefas(), db.matriculas()]);
-      renderLicoes();
-    }
-    trocarItem(al.aulas, a, 'inicio');
-    const ini = new Date(a.inicio);
-    al.mes = new Date(ini.getFullYear(), ini.getMonth(), 1);
-    vistaAluno('agenda'); renderMesAluno(); renderLadoAluno();
-    if (aulaVisivel(a)) { abrirAulaAluno(a.id); return true; }
-    const dia = $$('#mes .dia:not(.fora)')[ini.getDate() - 1];
-    if (dia) { dia.classList.add('dia-aviso'); dia.scrollIntoView({ block: 'center', behavior: semMovimento.matches ? 'auto' : 'smooth' }); }
-    avisar(`Esta aula foi cancelada: ${fLonga(ini)}, ${fHora(ini)}.`);
-    return true;
-  }
-  const t = await db.tarefa(id); if (!t) return false;
-  trocarItem(al.tarefas, t, 'prazo');
-  al.licaoSel = t.id;
-  vistaAluno('licoes'); renderLicoes(); renderMesAluno(); renderLadoAluno();
-  if (matchMedia('(max-width:980px)').matches) $('#licao-detalhe').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'start' });
-  return true;
-}
-
+</script>
+<script>
 /* ---------- biblioteca ---------- */
 const doAluno = m => !!m.pessoal_de;
 const contaVistos = itens => `${itens.filter(m => al.vistos.has(m.id)).length} de ${itens.length} vistos`;
@@ -3589,7 +3854,15 @@ function cardMaterial(m) {
     <span class="card-titulo">${esc(m.titulo)}</span>
     <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(doAluno(m) ? dominio(m.url) : m.fonte || 'Forward')}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
     ${al.vistos.has(m.id) ? `<span class="selo-visto">${ico('check')}Visto</span>` : ''}
+    ${progressoVideo(m.id)}
   </button>`;
+}
+// barra e etiqueta do ponto em que o aluno parou no vídeo
+function progressoVideo(id) {
+  const p = al.posicoes.get(id); if (!p || p.posicao_s < 1) return '';
+  const ponto = pontoGuardado(id);
+  const barra = p.duracao_s ? `<span class="trilho-prog" aria-hidden="true"><i style="transform:scaleX(${Math.min(1, p.posicao_s / p.duracao_s)})"></i></span>` : '';
+  return `${barra}<span class="card-continuar">${ponto ? `${ico('play')}Continuar de ${fRelogio(ponto)}` : `${ico('check')}Assistido até o fim`}</span>`;
 }
 function fileiraHtml(titulo, itens) {
   if (!itens.length) return '';
@@ -3714,10 +3987,10 @@ async function alternarVisto(b) {
 }
 function abrirMaterialAluno(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
-  const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null;
+  const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null, ponto = pontoGuardado(m.id);
   const principal = m.tipo === 'link'
     ? (url ? `<a class="btn btn-primario" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${ico('arrow-square-out')}Abrir o link</a>` : '')
-    : `<button class="btn btn-primario" data-estudar="${m.id}">${ico(m.tipo === 'pdf' ? 'books' : 'play')}Estudar aqui</button>`;
+    : `<button class="btn btn-primario" data-estudar="${m.id}">${ico(m.tipo === 'pdf' ? 'books' : 'play')}${ponto ? `Continuar de ${fRelogio(ponto)}` : 'Estudar aqui'}</button>`;
   $('#modal').innerHTML = `
     <div class="modal-capa">${capaMaterial(m)}<button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button></div>
     <div class="modal-corpo">
@@ -3729,7 +4002,9 @@ function abrirMaterialAluno(id) {
   abrirCamada($('#modal'));
 }
 
-/* ---------- estudo ---------- */
+</script>
+<script>
+/* ---------- estudo do PDF: leitor, camada de texto e frase da palavra ---------- */
 const PDFJS = {
   url: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
   sri: 'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e',
@@ -3943,21 +4218,25 @@ function tocarPalavraPdf(el) {
   consultarPalavra(achada.palavra, achada.frase, achada.i);
 }
 
-/* vídeo do YouTube: player no fluxo da página; legenda e transcrição abaixo dele */
-const es = { player: null, linhas: [], atual: -1, timer: null, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null };
+</script>
+<script>
+/* vídeo do estudo (YouTube ou enviado pela escola): player no fluxo da página, legenda e transcrição abaixo dele e o ponto em que o aluno parou */
+const es = { player: null, linhas: [], atual: -1, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null, posicao: null };
 const fRelogio = s => { const t = Math.floor(s), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h ? `${h}:${d2(m)}:${d2(t % 60)}` : `${m}:${d2(t % 60)}`; };
 const linhaNoTempo = t => es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s);
 
-function pararRelogio() { clearInterval(es.timer); es.timer = null; }
 function fecharEstudo() {
-  pararRelogio();
+  const tinha = !!es.posicao;
+  guardarPosicao();
   fecharPronuncia();
   fecharDitado();
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   if (es.player) es.player.destruir();
   if (es.som) es.som.pause();
   if (es.redim) es.redim.disconnect();
   if (es.lousa) es.lousa.fechar();
-  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null });
+  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null, posicao: null });
+  if (tinha) renderBibliotecaAluno();
 }
 function desenharLegenda() {
   const en = $('#legenda-texto'), pt = $('#legenda-traducao'); if (!en) return;
@@ -3968,25 +4247,39 @@ function desenharLegenda() {
   $$('#transcricao .linha').forEach((el, i) => el.setAttribute('aria-current', String(i === es.atual)));
 }
 function marcarLinha(n) { if (n !== es.atual) { es.atual = n; desenharLegenda(); } }
-const acompanhar = () => marcarLinha(linhaNoTempo(es.player.tempo()));
-function estadoDoVideo(estado) {
-  pararRelogio();
-  acompanhar();
-  if (estado === 1) es.timer = setInterval(acompanhar, 200);
-}
 function irParaLinha(n) {
   const l = es.linhas[n]; if (!l || !es.player?.pronto) return;
   es.player.ir(l.inicio_s);
+  es.posicao.mexeu = true;
   marcarLinha(n);
 }
 function avisoVideo(msg) {
   const a = $('#estudo-aviso');
   if (a) a.innerHTML = `<div class="caixa-aviso erro" role="alert">${esc(msg)}</div>`;
 }
-async function abrirVideo(m, yt, box) {
+// perto do começo ou já no fim, o vídeo abre do começo
+function pontoGuardado(id) {
+  const p = al.posicoes.get(id);
+  return !p || p.posicao_s < 1 || (p.duracao_s && p.posicao_s >= p.duracao_s - 1) ? 0 : p.posicao_s;
+}
+// grava só depois que o aluno tocou o vídeo ou pulou para uma frase
+function guardarPosicao({ saida = false } = {}) {
+  const p = es.posicao, pl = es.player;
+  if (!p?.mexeu || !pl?.pronto) return Promise.resolve();
+  p.ultima = Date.now();
+  const d = pl.duracao(), linha = { midia_id: p.midia, posicao_s: Math.min(pl.tempo(), 999999), duracao_s: d > 0 ? centesimos(Math.min(d, 999999)) : null };
+  if (Math.abs(linha.posicao_s - p.gravada) < 0.5) return Promise.resolve();
+  p.gravada = linha.posicao_s;
+  al.posicoes.set(p.midia, { posicao_s: linha.posicao_s, duracao_s: linha.duracao_s });
+  return Promise.resolve(saida ? db.gravarPosicaoNaSaida(linha) : db.gravarPosicao(linha)).catch(e => console.warn('ponto do vídeo', e));
+}
+addEventListener('pagehide', () => guardarPosicao({ saida: true }));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guardarPosicao({ saida: true }); });
+async function abrirVideo(m, fonte, box) {
   box.innerHTML = `<div class="estudo estudo-yt">
       <div class="estudo-video">
         <div class="video-yt" id="estudo-player"></div>
+        ${barraPlayer()}
         <div id="estudo-aviso"></div>
       </div>
       <div class="estudo-legenda" id="estudo-legenda"><p class="ajuda">Carregando a legenda…</p></div>
@@ -4001,11 +4294,14 @@ async function abrirVideo(m, yt, box) {
   lousa.barra($('#lousa-lugar', box));
   lousa.folha($('#lousa-lugar', box));
   lousa.carregar();
-  const player = playerYoutube($('#estudo-player'), yt, {
-    aoErro: (_, msg) => avisoVideo(msg),
-    aoEstado: e => { if (es.player === player) estadoDoVideo(e); },
-  });
+  const inicio = pontoGuardado(m.id);
+  const player = abrirPlayer($('#estudo-player'), fonte, { inicio, semTelaCheia: true });
+  es.posicao = { midia: m.id, gravada: inicio, ultima: Date.now(), mexeu: false };
+  player.ao('erro', avisoVideo);
+  player.ao('tempo', t => { marcarLinha(linhaNoTempo(t)); if (Date.now() - es.posicao.ultima >= 10000) guardarPosicao(); });
+  player.ao('estado', e => { if (e === 'tocando') es.posicao.mexeu = true; else if (e === 'pausado' || e === 'fim') guardarPosicao(); });
   es.player = player;
+  ligarRecursos(player);
   es.midia = m.id;
   carregarVocab();
   player.carregado.catch(e => avisoVideo(e.message));
@@ -4034,8 +4330,7 @@ function desenharTextosVideo() {
   $('#estudo-transc').innerHTML = tem && !ditado ? `
       <article class="painel transcricao">
         <div class="painel-topo"><h2>Transcrição</h2><span class="ajuda">Toque no tempo para ir até a frase e na palavra para ver o significado</span></div>
-        <div class="pron-barra">${barraVoz()}</div>
-        <div id="transcricao">${es.linhas.map((l, i) => `<div class="linha"><button class="linha-t" data-ir-linha="${i}" aria-label="Ir para ${fRelogio(l.inicio_s)}">${fRelogio(l.inicio_s)}</button><div class="linha-corpo"><p>${palavrasEmBotao(l.texto, i)}</p>${acoesPron(`v${i}`)}</div></div>`).join('')}</div>
+        <div id="transcricao">${es.linhas.map((l, i) => `<div class="linha"><button class="linha-t" data-ir-linha="${i}" aria-label="Ir para ${fRelogio(l.inicio_s)}">${fRelogio(l.inicio_s)}</button><div class="linha-corpo"><p>${palavrasEmBotao(l.texto, i)}</p>${acoesPron(`v${i}`, true)}</div></div>`).join('')}</div>
       </article>` : '';
   $('#dic').hidden = !tem || ditado;
   pron.frases.forEach((_, chave) => desenharHistorico(chave));
@@ -4044,6 +4339,8 @@ function desenharTextosVideo() {
   desenharDic();
 }
 
+</script>
+<script>
 /* caixa do dicionário e "Meu vocabulário" */
 const CAIXA_DIC = '<article class="painel dic" id="dic" aria-labelledby="dic-titulo" hidden><div class="painel-topo"><h2 id="dic-titulo">Dicionário</h2></div><div class="prof-ia" id="dic-corpo" aria-live="polite"></div><div class="prof-ia dic-ia" id="dic-ia" hidden></div></article>';
 const RE_PALAVRA = /\p{L}+(?:['’]\p{L}+)*/gu;
@@ -4081,7 +4378,9 @@ function tituloDic(d) {
 }
 async function abrirPalavra(n, i, texto) {
   const linha = es.linhas[n]; if (!linha) return;
+  if (es.sel?.n === n && es.sel?.i === i) return $('#dic').classList.contains('minimizada') ? abrirCaixaDic() : fecharPalavra();
   if (es.player) es.player.pausar();
+  abrirCaixaDic();
   es.sel = { n, i };
   $$('#v-estudo .pal[aria-pressed="true"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
   $$(`#v-estudo .pal[data-pal-n="${n}"][data-pal-i="${i}"]`).forEach(b => b.setAttribute('aria-pressed', 'true'));
@@ -4174,100 +4473,218 @@ async function tirarPalavra(id) {
   desenharVocab(); desenharDic();
 }
 
-async function abrirEstudo(id) {
-  const m = al.midias.find(x => x.id === id); if (!m) return;
-  fecharEstudo();
-  fecharCamadas();
-  vistaAluno('estudo');
-  const v = $('#v-estudo');
-  v.innerHTML = `
-    <div class="estudo-topo">
-      <button class="btn-texto" data-vista-aluno="biblioteca">${ico('caret-left')}Biblioteca</button>
-      <h2>${esc(m.titulo)}</h2>
-      <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
-      ${botaoVisto(m.id)}
-      ${botaoDuvida(`o material "${m.titulo}"`)}
-    </div>
-    <div id="estudo-conteudo"></div>
-    ${m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
-  const box = $('#estudo-conteudo');
-  if (m.tipo === 'youtube') {
-    const yt = idYoutube(m.url);
-    if (yt) abrirVideo(m, yt, box);
-    else box.innerHTML = `<div class="caixa-aviso erro">O link deste vídeo não é do YouTube. Avise o Pedro.</div>`;
-  } else if (m.tipo === 'audio') {
-    const url = await tentar(() => db.urlArquivo(m.arquivo_path));
-    box.innerHTML = url ? `<audio controls preload="metadata" src="${esc(url)}" style="width:100%"></audio>` : '';
-  } else if (m.tipo === 'pdf') {
-    try { await abrirPdf(m, box); } catch (e) { console.warn(e); box.innerHTML = `<div class="caixa-aviso erro">${esc(e.message || 'Não deu para abrir o PDF.')}</div>`; }
-  }
-  window.scrollTo(0, 0);
+</script>
+<script>
+/* recursos do player no estudo do vídeo (YouTube e enviado): atalhos, pausa automática, mouse na legenda, tradução da palavra
+   no mouse, modos da legenda, velocidade, "Ouvir" com o trecho do próprio vídeo e tela cheia com a legenda por cima */
+const MODOS_LEGENDA = { visivel: 'Tudo visível', borrado: 'Tudo borrado', en: 'Inglês visível, português borrado' };
+const VELOCIDADES_VIDEO = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+const OUVIR_DEVAGAR = 0.75;
+// a pausa automática dispara um pouco antes do fim da linha: o player leva um instante para parar
+const AP_ANTES = 0.12;
+const CAMPO_TEXTO = 'input, textarea, [contenteditable=""], [contenteditable="true"]';
+const rp = { ap: false, modo: 'visivel', veloc: 1, mousePausou: false, ouvindo: null, apLinha: -1, apT: 0, linhaVista: -1, dicas: new Map(), dicaTimer: null, movidos: [] };
+
+const fVelocidade = v => `${String(v).replace('.', ',')}x`;
+const barraPlayer = () => `<div class="player-barra" id="player-barra" role="group" aria-label="Controles do vídeo">
+    <button class="pilula pl-ap" id="pl-ap" aria-pressed="${rp.ap}" aria-label="AP, pausa automática no fim de cada legenda" title="Pausa automática no fim de cada legenda (tecla Q)">AP</button>
+    <label class="pl-campo"><span>Legenda</span><select id="pl-modo">${Object.entries(MODOS_LEGENDA).map(([k, t]) => `<option value="${k}"${k === rp.modo ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <label class="pl-campo"><span>Velocidade</span><select id="pl-veloc">${VELOCIDADES_VIDEO.map(v => `<option value="${v}"${v === rp.veloc ? ' selected' : ''}>${fVelocidade(v)}</option>`).join('')}</select></label>
+    ${document.fullscreenEnabled ? `<button class="icone-btn pl-tela" id="pl-tela" aria-label="Tela cheia" title="Tela cheia">${ico('corners-out')}</button>` : ''}
+    <p class="ajuda pl-atalhos">Teclas: A ou ← volta uma legenda, S repete, D ou → avança, espaço toca e pausa, Q liga a pausa automática.</p>
+  </div>`;
+
+function ligarRecursos(player) {
+  Object.assign(rp, { mousePausou: false, ouvindo: null, apLinha: -1, apT: 0, linhaVista: -1 });
+  player.caixa.closest('.estudo-yt').dataset.legenda = rp.modo;
+  player.ao('tempo', vigiarTempo);
+  player.ao('estado', vigiarEstado);
+  player.ao('velocidade', v => { rp.veloc = v; const s = $('#pl-veloc'); if (s) s.value = String(v); });
+  player.carregado.then(() => { if (es.player === player && rp.veloc !== 1) player.mudarVelocidade(rp.veloc); }, () => {});
+  $('#dic .painel-topo')?.insertAdjacentHTML('beforeend', `<div class="dic-botoes"><button class="icone-btn" id="dic-minimizar" aria-expanded="true" aria-controls="dic-corpo" aria-label="Minimizar a caixa da palavra">${ico('minus')}</button><button class="icone-btn" id="dic-fechar" aria-label="Fechar a caixa da palavra">${ico('x')}</button></div>`);
 }
 
-/* ---------- eventos da área do aluno ---------- */
-$('#tela-aluno').addEventListener('click', ev => {
-  const pp = ev.target.closest('.pdf-pal');
-  // arrastar para selecionar texto não abre a caixa
-  if (pp) { if (!String(getSelection()).trim()) tocarPalavraPdf(pp); return; }
-  const b = ev.target.closest('button, a'); if (!b) return;
-  const ds = b.dataset;
-  if (ds.vistaAluno) return vistaAluno(ds.vistaAluno);
-  if (ds.mes !== undefined && ds.alvo === 'aluno') {
-    const n = Number(ds.mes); const hoje = new Date();
-    al.mes = n === 0 ? new Date(hoje.getFullYear(), hoje.getMonth(), 1) : new Date(al.mes.getFullYear(), al.mes.getMonth() + n, 1);
-    return renderMesAluno();
+/* ---------- pausa automática e legenda nova ---------- */
+function vigiarTempo(t) {
+  if (es.atual !== rp.linhaVista) { rp.linhaVista = es.atual; $('#v-estudo .legenda-atual')?.classList.remove('revelada'); }
+  const antes = rp.apLinha, salto = Math.abs(t - rp.apT) > 0.75;
+  rp.apT = t;
+  rp.apLinha = es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s - AP_ANTES);
+  if (!rp.ap || salto || antes < 0 || antes === rp.apLinha || rp.ouvindo || es.player?.estado() !== 'tocando') return;
+  if (t >= es.linhas[antes].fim_s - AP_ANTES) es.player.pausar();
+}
+function vigiarEstado(e) {
+  const o = rp.ouvindo; if (!o) return;
+  if (e === 'tocando') o.tocou = true;
+  else if (o.tocou && e !== 'carregando') acabouOuvir();
+}
+function alternarAP() {
+  rp.ap = !rp.ap; rp.apLinha = -1;
+  $('#pl-ap')?.setAttribute('aria-pressed', String(rp.ap));
+}
+function mudarModo(m) {
+  if (!MODOS_LEGENDA[m]) return;
+  rp.modo = m;
+  const estudo = $('#v-estudo .estudo-yt'); if (estudo) estudo.dataset.legenda = m;
+  $('#v-estudo .legenda-atual')?.classList.remove('revelada');
+  if (m !== 'visivel' && !es.traducao) { es.traducao = true; $('#legenda-traduzir')?.setAttribute('aria-pressed', 'true'); desenharLegenda(); }
+}
+
+/* ---------- atalhos ---------- */
+function pularLinha(passo) {
+  const pl = es.player, ls = es.linhas; if (!ls.length) return;
+  const t = pl.tempo(), dentro = linhaNoTempo(t);
+  const ultima = ls.reduce((k, l, i) => (l.inicio_s <= t ? i : k), -1);
+  const n = passo < 0 ? Math.max(0, dentro >= 0 ? dentro - 1 : ultima)
+    : passo > 0 ? (dentro >= 0 ? dentro : ultima) + 1
+      : Math.max(0, dentro >= 0 ? dentro : ultima);
+  if (n >= ls.length) return;
+  const tocar = passo === 0 || pl.estado() === 'tocando';
+  if (rp.ouvindo) { pl.pausar(); acabouOuvir(); }
+  rp.apLinha = -1;
+  irParaLinha(n);
+  if (tocar) pl.tocar();
+}
+function tocarOuPausar() {
+  const pl = es.player;
+  rp.mousePausou = false;
+  if (pl.estado() === 'tocando' || pl.estado() === 'carregando') pl.pausar(); else pl.tocar();
+}
+const ATALHOS = { a: () => pularLinha(-1), ArrowLeft: () => pularLinha(-1), s: () => pularLinha(0), d: () => pularLinha(1), ArrowRight: () => pularLinha(1), ' ': tocarOuPausar, q: alternarAP };
+document.addEventListener('keydown', ev => {
+  const vista = $('#v-estudo');
+  if (!es.player?.pronto || !vista || vista.hidden || ev.defaultPrevented || ev.ctrlKey || ev.metaKey || ev.altKey || ev.isComposing) return;
+  const alvo = ev.target instanceof Element ? ev.target : document.body;
+  if (alvo.closest(CAMPO_TEXTO) || $('#modal.aberto, #gaveta.aberta')) return;
+  if (alvo !== document.body && alvo !== document.documentElement && !vista.contains(alvo)) return;
+  const tecla = ev.key.length === 1 ? ev.key.toLowerCase() : ev.key;
+  // no select as setas e o espaço são dele; no botão escolhido pelo teclado o espaço aperta o botão
+  if (alvo.matches('select') ? ['ArrowLeft', 'ArrowRight', ' '].includes(tecla) : tecla === ' ' && alvo.matches('button:focus-visible, a:focus-visible')) return;
+  if (tecla === 'Escape' && document.fullscreenElement) { document.exitFullscreen().catch(() => {}); return; }
+  if (!ATALHOS[tecla]) return;
+  ev.preventDefault();
+  ATALHOS[tecla]();
+});
+
+/* ---------- mouse na legenda: pausa, clareia o borrado e mostra a tradução da palavra ---------- */
+const naLegenda = ev => { const el = ev.target.closest?.('#v-estudo .legenda-atual'); return el && !el.contains(ev.relatedTarget) ? el : null; };
+function traducaoCurta(chave) {
+  if (!rp.dicas.has(chave)) {
+    rp.dicas.set(chave, db.palavra(chave).then(r => {
+      const pt = typeof r?.traducao === 'string' ? r.traducao : '';
+      if (pt || !r?.aviso) rp.dicas.set(chave, pt); else rp.dicas.delete(chave);
+      return pt;
+    }, () => { rp.dicas.delete(chave); return ''; }));
   }
-  if (ds.aula) return abrirAulaAluno(ds.aula);
-  if (ds.tarefa) { fecharCamadas(); al.licaoSel = ds.tarefa; vistaAluno('licoes'); return renderLicoes(); }
-  if (ds.licao) { al.licaoSel = ds.licao; renderLicoes(); if (matchMedia('(max-width:980px)').matches) $('#licao-detalhe').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'start' }); return; }
-  if (ds.nivel) { al.nivel = al.nivel === ds.nivel ? null : ds.nivel; return renderBibliotecaAluno(); }
-  if (ds.material) return abrirMaterialAluno(ds.material);
-  if (ds.cursoBib) return abrirCursoAluno(ds.cursoBib);
-  if (ds.irLinha !== undefined) return irParaLinha(Number(ds.irLinha));
-  if (ds.palN !== undefined) return abrirPalavra(Number(ds.palN), Number(ds.palI), b.textContent);
-  if (ds.ouvir !== undefined) return ouvirPalavra();
-  if (ds.pronOuvir) return ouvirFrase(ds.pronOuvir);
-  if (ds.pronLer) return lerEmVozAlta(ds.pronLer);
-  if (ds.pronHist) return alternarHistorico(ds.pronHist);
-  if (ds.veloc) return escolherVelocidade(ds.veloc);
-  if (ds.tirarPal) return tirarPalavra(ds.tirarPal);
-  if (b.id === 'dic-salvar') return salvarPalavra();
-  if (b.id === 'legenda-traduzir') { es.traducao = !es.traducao; b.setAttribute('aria-pressed', String(es.traducao)); return desenharLegenda(); }
-  if (b.id === 'ditado-alternar') return alternarDitado();
-  if (ds.ditLinha !== undefined) return escolherLinhaDitado(Number(ds.ditLinha));
-  if (ds.ditRepetir !== undefined) return tocarTrechoDitado();
-  if (ds.ditProxima !== undefined) return escolherLinhaDitado(dit.linha + 1);
-  if (ds.ditHist !== undefined) return alternarHistoricoDitado();
-  if (b.id === 'gravar-audio') return alternarGravacao();
-  if (b.id === 'escolher-anexo') return $('#arquivo-licao').click();
-  if (ds.tirarAnexo) return tirarAnexo(ds.tirarAnexo);
-  if (b.id === 'alternar-licoes') { al.listaLicoes = !al.listaLicoes; return renderLicoes(); }
-  if (b.id === 'voltar-lista') { al.listaLicoes = true; renderLicoes(); $('#licoes-lista').scrollIntoView({ block: 'start' }); }
+  return Promise.resolve(rp.dicas.get(chave));
+}
+function dicaDaPalavra(ev) {
+  const b = ev.target.closest?.('#legenda-texto .pal');
+  if (!b || ev.pointerType !== 'mouse' || b.dataset.pt) return;
+  clearTimeout(rp.dicaTimer);
+  const chave = b.textContent.trim().toLowerCase(), pronta = rp.dicas.get(chave);
+  if (typeof pronta === 'string') { if (pronta) b.dataset.pt = pronta; return; }
+  rp.dicaTimer = setTimeout(() => traducaoCurta(chave).then(pt => { if (pt && b.isConnected) b.dataset.pt = pt; }), 250);
+}
+$('#tela-aluno').addEventListener('pointerover', ev => {
+  dicaDaPalavra(ev);
+  const el = naLegenda(ev); if (!el) return;
+  el.classList.add('revelada');
+  const pl = es.player;
+  if (ev.pointerType === 'mouse' && !rp.ouvindo && pl?.estado() === 'tocando') { pl.pausar(); rp.mousePausou = true; }
 });
-// o Chromium não começa a seleção arrastando a partir de elemento com tabindex: ele sai no toque e volta em seguida
-$('#tela-aluno').addEventListener('pointerdown', ev => {
-  const pp = ev.target.closest?.('.pdf-pal'); if (!pp) return;
-  pp.removeAttribute('tabindex');
-  const volta = () => { removeEventListener('pointerup', volta); removeEventListener('pointercancel', volta); setTimeout(() => { pp.tabIndex = 0; }); };
-  addEventListener('pointerup', volta); addEventListener('pointercancel', volta);
+$('#tela-aluno').addEventListener('pointerout', ev => {
+  if (ev.target.closest?.('#legenda-texto .pal')) clearTimeout(rp.dicaTimer);
+  if (!naLegenda(ev) || !rp.mousePausou) return;
+  rp.mousePausou = false;
+  if (es.player?.estado() === 'pausado') es.player.tocar();
 });
-$('#tela-aluno').addEventListener('keydown', ev => {
-  const pp = ev.target.closest?.('.pdf-pal');
-  if (pp && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); tocarPalavraPdf(pp); }
+$('#tela-aluno').addEventListener('focusin', ev => { ev.target.closest?.('#v-estudo .legenda-atual')?.classList.add('revelada'); });
+
+/* ---------- caixa da palavra: minimizar, fechar e tirar o destaque ---------- */
+function minimizarDic(min) {
+  const d = $('#dic'), b = $('#dic-minimizar'); if (!d || !b) return;
+  d.classList.toggle('minimizada', min);
+  b.setAttribute('aria-expanded', String(!min));
+  b.setAttribute('aria-label', min ? 'Abrir a caixa da palavra' : 'Minimizar a caixa da palavra');
+  b.innerHTML = min ? ico('caret-up') : ico('minus');
+}
+function abrirCaixaDic() {
+  rp.mousePausou = false;
+  const d = $('#dic'); if (d) d.hidden = false;
+  minimizarDic(false);
+}
+function fecharPalavra() {
+  const sel = es.sel, d = $('#dic'), dentro = !!d?.contains(document.activeElement);
+  es.pedido++; es.sel = null; es.dic = null;
+  $$('#v-estudo .pal[aria-pressed="true"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  minimizarDic(false);
+  if (d) d.hidden = true;
+  desenharDic();
+  if (dentro && sel) $(`#v-estudo .pal[data-pal-n="${sel.n}"][data-pal-i="${sel.i}"]`)?.focus({ preventScroll: true });
+}
+
+/* ---------- ouvir a linha com o trecho do vídeo ---------- */
+function marcarOuvir(ativo) {
+  const o = rp.ouvindo; if (!o) return;
+  const b = $(`#v-estudo [data-${o.devagar ? 'ouvir-devagar' : 'pron-ouvir'}="${o.chave}"]`); if (!b) return;
+  b.classList.toggle('ativo', ativo);
+  $('.pron-rot', b).textContent = ativo ? 'Parar' : o.devagar ? 'Ouvir devagar' : 'Ouvir';
+}
+function acabouOuvir() { marcarOuvir(false); rp.ouvindo = null; }
+function ouvirTrecho(chave, devagar = false) {
+  const l = es.linhas[Number(chave.slice(1))], pl = es.player;
+  if (!l || !pl?.pronto) return;
+  const antes = rp.ouvindo;
+  pararReconhecimento(); pararFala();
+  if (antes) { acabouOuvir(); if (antes.chave === chave && antes.devagar === devagar) { pl.pausar(); return; } }
+  rp.ouvindo = { chave, devagar, tocou: false };
+  marcarOuvir(true);
+  rp.apLinha = -1;
+  if (!pl.trecho(l.inicio_s, l.fim_s, devagar ? { velocidade: OUVIR_DEVAGAR } : {})) acabouOuvir();
+}
+
+/* ---------- tela cheia: o vídeo, a legenda e a caixa da palavra vão juntos ---------- */
+function levarParaTela(caixa) {
+  rp.movidos = ['#estudo-legenda', '#dic'].map(s => $(s)).filter(Boolean).map(el => [el, el.parentNode, el.nextSibling, el.hidden]);
+  rp.movidos.forEach(([el]) => caixa.append(el));
+  // na tela cheia a caixa da palavra só aparece com uma palavra escolhida
+  if (!es.sel) $('#dic')?.setAttribute('hidden', '');
+}
+function voltarDaTela() {
+  rp.movidos.forEach(([el, pai, depois, oculto]) => {
+    if (pai.isConnected) pai.insertBefore(el, depois?.parentNode === pai ? depois : null);
+    if (el.id === 'dic' && !es.sel) el.hidden = oculto;
+  });
+  rp.movidos = [];
+}
+function alternarTelaCheia() {
+  if (document.fullscreenElement) { document.exitFullscreen().catch(() => {}); return; }
+  const caixa = $('#v-estudo .estudo-video'); if (!caixa) return;
+  levarParaTela(caixa);
+  caixa.requestFullscreen().catch(() => { voltarDaTela(); avisar('Este navegador não deixou pôr o vídeo em tela cheia.', true); });
+}
+document.addEventListener('fullscreenchange', () => {
+  const cheia = !!document.fullscreenElement;
+  if (!cheia) voltarDaTela();
+  const b = $('#pl-tela'); if (!b) return;
+  b.innerHTML = cheia ? ico('corners-in') : ico('corners-out');
+  b.setAttribute('aria-label', cheia ? 'Sair da tela cheia' : 'Tela cheia');
+  b.title = cheia ? 'Sair da tela cheia (Esc)' : 'Tela cheia';
 });
-// botões que aparecem na gaveta e no modal (fora da tela do aluno)
-document.addEventListener('click', ev => {
-  if (!al.perfil) return;
-  const b = ev.target.closest('button'); if (!b) return;
-  if (b.dataset.confirmar) return confirmarAula(b.dataset.confirmar);
-  if (b.dataset.entrar) return entrarNaAula(b.dataset.entrar);
-  if (b.dataset.estudar) return abrirEstudo(b.dataset.estudar);
-  if (b.dataset.visto) return alternarVisto(b);
-  if (b.dataset.apagarLink) return apagarLink(b.dataset.apagarLink);
-  if (b.dataset.tarefa && b.closest('#gaveta')) { fecharCamadas(); al.licaoSel = b.dataset.tarefa; vistaAluno('licoes'); renderLicoes(); }
+
+$('#tela-aluno').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b || !es.player) return;
+  if (b.id === 'pl-ap') return alternarAP();
+  if (b.id === 'pl-tela') return alternarTelaCheia();
+  if (b.id === 'dic-minimizar') return minimizarDic(b.getAttribute('aria-expanded') === 'true');
+  if (b.id === 'dic-fechar') return fecharPalavra();
+  if (b.dataset.ouvirDevagar) ouvirTrecho(b.dataset.ouvirDevagar, true);
 });
-$('#bib-busca').addEventListener('input', ev => { al.busca = ev.target.value; renderBibliotecaAluno(); });
-$('#form-link').addEventListener('submit', ev => { ev.preventDefault(); guardarLink(); });
+$('#tela-aluno').addEventListener('change', ev => {
+  if (ev.target.id === 'pl-modo') mudarModo(ev.target.value);
+  else if (ev.target.id === 'pl-veloc' && es.player) rp.veloc = es.player.mudarVelocidade(ev.target.value);
+});
 
 </script>
 <script>
@@ -4919,8 +5336,8 @@ function renderBibliotecaEquipe() {
     return `<section class="fileira" style="margin-top:22px"><div class="fileira-topo"><h3>${esc(f.titulo)}</h3><span>${itens.length} ${itens.length === 1 ? 'item' : 'itens'}</span></div>
       <article class="painel"><ul class="lista">${itens.map(m => `<li class="mat-linha">
         <span class="mat-ico">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}</span>
-        <span class="quem"><b>${esc(m.titulo)}</b><small>${esc(NOME_TIPO[m.tipo])}${m.nivel ? ` · ${esc(m.nivel)}` : ''}${m.fonte ? ` · ${esc(m.fonte)}` : ''}</small><span class="para-quem">${esc(paraQuem(m))}</span></span>
-        <span class="acoes-linha">${m.tipo === 'youtube' ? `<button class="btn btn-linha" data-legenda-material="${m.id}">Legenda</button>` : ''}<button class="btn btn-linha" data-ver-material="${m.id}">Ver</button><button class="btn btn-linha" data-editar-material="${m.id}">Editar</button><button class="btn btn-linha" data-excluir-material="${m.id}">Excluir</button></span>
+        <span class="quem"><b>${esc(m.titulo)}</b><small>${esc(NOME_TIPO[m.tipo])}${m.nivel ? ` · ${esc(m.nivel)}` : ''}${m.fonte ? ` · ${esc(m.fonte)}` : ''}</small><span class="para-quem">${esc(paraQuem(m))}</span>${estadoVideo(m)}</span>
+        <span class="acoes-linha">${['youtube', 'video'].includes(m.tipo) ? `<button class="btn btn-linha" data-legenda-material="${m.id}">Legenda</button>` : ''}${m.tipo !== 'video' || m.video_estado === 'pronto' ? `<button class="btn btn-linha" data-ver-material="${m.id}">Ver</button>` : ''}<button class="btn btn-linha" data-editar-material="${m.id}">Editar</button><button class="btn btn-linha" data-excluir-material="${m.id}">Excluir</button></span>
       </li>`).join('')}</ul></article></section>`;
   }).join('');
   $('#lista-materiais').innerHTML = blocos || `<div class="vazio">${ico('books')}<b>A biblioteca está vazia</b><span>Use “Novo material” para pôr um PDF, um vídeo do YouTube ou um link.</span></div>`;
@@ -4932,11 +5349,11 @@ function formMaterial(id) {
   const g = gavetaForm('Biblioteca', m ? 'Editar material' : 'Novo material', `
     <form class="form-gaveta" novalidate>
       <div class="duas">
-        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link'].map(t => `<option value="${t}" ${m?.tipo === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
+        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link', 'video'].filter(t => t !== 'video' || ehAdmin() || m?.tipo === 'video').map(t => `<option value="${t}" ${m?.tipo === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
         <div class="campo"><label for="ma-fileira">Fileira</label><select id="ma-fileira">${eq.fileiras.map(f => `<option value="${f.id}" ${m?.fileira_id === f.id ? 'selected' : ''}>${esc(f.titulo)}</option>`).join('')}</select></div>
       </div>
       <div class="campo"><label for="ma-titulo">Título</label><input id="ma-titulo" value="${esc(m?.titulo || '')}" ${m ? 'data-foco' : ''}></div>
-      <div class="campo" id="ma-campo-arquivo"><label for="ma-arquivo">Arquivo PDF</label><input id="ma-arquivo" type="file" accept="application/pdf"><span class="ajuda">Até 50 MB. Livro escaneado pesado: comprima antes.</span></div>
+      <div class="campo" id="ma-campo-arquivo"><label for="ma-arquivo">Arquivo PDF</label><input id="ma-arquivo" type="file" accept="application/pdf"><span class="ajuda">Até 50 MB. Livro escaneado pesado: comprima antes.</span></div>${camposVideo()}
       <div class="campo" id="ma-campo-url"><label for="ma-url">Link</label><input id="ma-url" type="url" inputmode="url" value="${esc(m?.url || '')}" placeholder="https://"></div>
       <div class="duas">
         <div class="campo"><label for="ma-nivel">Nível</label><select id="ma-nivel">${opcoesNivel(m?.nivel)}</select></div>
@@ -4950,7 +5367,7 @@ function formMaterial(id) {
       <span class="erro-msg" id="ma-erro" role="alert"></span>
     </form>`, [`<button class="btn btn-primario btn-g" id="ma-salvar">${m ? 'Salvar' : 'Pôr na biblioteca'}</button>`]);
   const tipo = () => m ? m.tipo : $('#ma-tipo').value;
-  const ajustar = () => { $('#ma-campo-arquivo').hidden = tipo() !== 'pdf' || !!m; $('#ma-campo-url').hidden = tipo() === 'pdf'; };
+  const ajustar = () => { $('#ma-campo-arquivo').hidden = tipo() !== 'pdf' || !!m; $('#ma-campo-url').hidden = ['pdf', 'video'].includes(tipo()); ajustarVideo(tipo() === 'video' && !m); };
   $('#ma-tipo').addEventListener('change', ajustar); ajustar();
   g.addEventListener('change', ev => { if (ev.target.name === 'ma-para') $('#ma-alunos').hidden = ev.target.value !== 'alguns'; });
   $('#ma-salvar', g).addEventListener('click', async () => {
@@ -4960,12 +5377,12 @@ function formMaterial(id) {
     let erro = !titulo ? 'Dê um título.' : '';
     if (!erro && t === 'pdf' && !m && !arquivo) erro = 'Escolha o arquivo PDF.';
     if (!erro && t === 'pdf' && arquivo && arquivo.size > 50 * 1024 * 1024) erro = 'O PDF passa de 50 MB. Comprima e tente de novo.';
-    if (!erro && t !== 'pdf' && !/^https:\/\//i.test(url)) erro = 'O link precisa começar com https://';
+    if (!erro && !['pdf', 'video'].includes(t) && !/^https:\/\//i.test(url)) erro = 'O link precisa começar com https://';
     if (!erro && t === 'youtube' && !idYoutube(url)) erro = 'Esse link não é de um vídeo do YouTube.';
     if (!erro && alguns && !lista.length) erro = (ehAdmin() ? 'Marque pelo menos um aluno, ou escolha “Todos os alunos”.' : 'Marque pelo menos um aluno.');
     $('#ma-erro').textContent = erro; if (erro) return;
-    const campos = { titulo, fileira_id: $('#ma-fileira').value, nivel: $('#ma-nivel').value || null, fonte: $('#ma-fonte').value.trim() || null, descricao: $('#ma-desc').value.trim() || null, url: t === 'pdf' ? null : url, oficial: !alguns };
-    $('#ma-salvar').disabled = true; $('#ma-salvar').textContent = arquivo ? 'Enviando…' : 'Salvando…';
+    const campos = { titulo, fileira_id: $('#ma-fileira').value, nivel: $('#ma-nivel').value || null, fonte: $('#ma-fonte').value.trim() || null, descricao: $('#ma-desc').value.trim() || null, ...(t === 'video' ? {} : { url: t === 'pdf' ? null : url }), oficial: !alguns };
+    if (t === 'video' && !m) return enviarVideo(g, campos, lista); $('#ma-salvar').disabled = true; $('#ma-salvar').textContent = arquivo ? 'Enviando…' : 'Salvando…';
     const feito = m
       ? await tentar(() => db.editarMaterial(m.id, campos, lista), 'Material salvo.')
       : await tentar(() => db.criarMaterial({ ...campos, tipo: t, criado_por: eq.perfil.id }, t === 'pdf' ? arquivo : null, lista), 'Material na biblioteca.');
@@ -5034,8 +5451,8 @@ async function estudarMaterial(m, yt, volta = 'biblioteca') {
 }
 async function excluirMaterial(id) {
   const m = eq.midias.find(x => x.id === id); if (!m) return;
-  if (!confirm(`Tirar “${m.titulo}” da biblioteca?${m.arquivo_path ? ' O arquivo é apagado.' : ''}`)) return;
-  if (await tentar(() => db.excluirMaterial(m), 'Material removido.')) recarregar('midias', 'midiaAlunos');
+  if (!confirm(`Tirar “${m.titulo}” da biblioteca?${m.tipo === 'video' ? ' O vídeo é apagado do Internet Archive.' : m.arquivo_path ? ' O arquivo é apagado.' : ''}`)) return;
+  if (await tentar(() => (m.tipo === 'video' ? excluirVideo(m) : db.excluirMaterial(m)), 'Material removido.')) recarregar('midias', 'midiaAlunos');
 }
 
 /* ---------- eventos do painel ---------- */
@@ -5529,7 +5946,7 @@ function fecharLegenda() {
 }
 async function abrirLegenda(id) {
   const m = eq.midias.find(x => x.id === id); const yt = m && idYoutube(m.url);
-  if (!yt) return;
+  if (!yt && m?.tipo !== 'video') return;
   fecharLegenda();
   vistaEquipe('legenda');
   Object.assign(ed, { m, pode: podeEditarMaterial(m) });
@@ -5553,7 +5970,7 @@ async function abrirLegenda(id) {
       <div class="leg-barra"><button class="btn btn-primario" id="leg-ler">Preencher as linhas</button><button class="btn btn-linha" id="leg-fechar-colar">Fechar</button></div>
     </div>` : ''}
     <article class="painel"><ol class="lista leg-lista" id="leg-lista"><li><span class="quem vazio-linha">Carregando a legenda…</span></li></ol></article>`;
-  ed.player = playerYoutube($('#leg-video'), yt, { aoErro: (_, msg) => avisoPlayer(msg) });
+  ed.player = (yt ? playerYoutube : playerVideoEquipe)($('#leg-video'), yt || m.url, { aoErro: (_, msg) => avisoPlayer(msg) });
   ed.player.carregado.catch(e => avisoPlayer(e.message));
   try {
     const linhas = await db.legendas(m.id);
@@ -5679,6 +6096,132 @@ $('#e-legenda').addEventListener('click', ev => {
   if (b.id === 'leg-ler') return importarLegenda();
   if (b.id === 'leg-salvar') return salvarLegenda();
 });
+
+</script>
+<script>
+/* vídeo enviado pela escola: o admin sobe o arquivo direto do navegador ao Internet Archive, sem passar pelo Supabase;
+   a equipe vê o estado na biblioteca, exclui pela função archive e edita a legenda com o player do arquivo */
+const S3_ARCHIVE = 'https://s3.us.archive.org/';
+let envioVideo = null;
+
+const novoArchiveId = () => `forward-academy-${Array.from(crypto.getRandomValues(new Uint8Array(8)), b => b.toString(16).padStart(2, '0')).join('')}`;
+// o nome do arquivo no Archive é o do caminho do envio: só letras sem acento, números, hífen e sublinhado
+function nomeNoArchive({ name: nome, type: tipo }) {
+  const ext = (/\.([a-z0-9]{1,5})$/i.exec(nome)?.[1] || { 'video/webm': 'webm', 'video/quicktime': 'mov', 'video/x-matroska': 'mkv' }[tipo] || 'mp4').toLowerCase();
+  const base = nome.replace(/\.[^.]*$/, '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9_-]+/g, '-').replace(/^[-_]+|-+$/g, '').slice(0, 80);
+  return `${base || 'video'}.${ext}`;
+}
+// metadado com acento só passa no cabeçalho dentro de uri(...); parêntese aberto fecharia o uri antes da hora
+const paraCabecalho = s => `uri(${encodeURIComponent(s).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)})`;
+
+function camposVideo() {
+  return `<div class="campo" id="ma-campo-video" hidden><label for="ma-video">Arquivo de vídeo</label><input id="ma-video" type="file" accept="video/*"><span class="ajuda">MP4 fica pronto mais rápido. O vídeo vai para o Internet Archive da escola e fica aberto a quem tiver o link.</span></div>
+      <div class="campo" id="ma-campo-legenda" hidden><label for="ma-legenda">Legenda (opcional)</label><input id="ma-legenda" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip"><span class="ajuda">Arquivo SRT ou WebVTT. Também dá para pôr depois, em “Legenda”.</span></div>
+      <div class="video-envio" id="ma-progresso" hidden><progress id="ma-barra" max="100" value="0" aria-label="Envio do vídeo"></progress><span id="ma-pct">0%</span></div>`;
+}
+function ajustarVideo(novoVideo) {
+  ['#ma-campo-video', '#ma-campo-legenda'].forEach(s => { $(s).hidden = !novoVideo; });
+}
+
+function estadoVideo(m) {
+  if (m.tipo !== 'video' || m.video_estado === 'pronto') return '';
+  if (m.video_estado === 'preparando') return '<span class="estado aguardando video-estado">Preparando no Archive</span>';
+  return `<span class="estado atrasada video-estado">Não ficou pronto</span><span class="video-motivo">${esc(m.video_motivo || 'O Internet Archive não preparou este vídeo.')}</span>`;
+}
+
+function motivoDoArchive(status) {
+  if (status === 401 || status === 403) return 'O Internet Archive recusou o envio: a conta da escola não foi aceita. Tente de novo; se continuar, avise quem cuida do app.';
+  if (status === 429 || status === 503) return 'O Internet Archive está ocupado agora. Espere alguns minutos e tente de novo.';
+  if (status === 400) return 'O Internet Archive não aceitou este arquivo. Confira se é um vídeo e tente de novo.';
+  return `O Internet Archive não aceitou o envio agora (erro ${status}). Tente de novo.`;
+}
+function subirAoArchive(envio, titulo, access, secret, aoProgresso) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest();
+    x.open('PUT', `${S3_ARCHIVE}${envio.archiveId}/${encodeURIComponent(envio.nome)}`);
+    x.setRequestHeader('authorization', `LOW ${access}:${secret}`);
+    x.setRequestHeader('x-archive-auto-make-bucket', '1');
+    x.setRequestHeader('x-archive-meta-mediatype', 'movies');
+    x.setRequestHeader('x-archive-meta-noindex', 'true');
+    x.setRequestHeader('x-archive-meta-title', paraCabecalho(titulo));
+    x.setRequestHeader('x-archive-size-hint', String(envio.arquivo.size));
+    x.upload.onprogress = ev => { if (ev.lengthComputable) aoProgresso(Math.floor((ev.loaded / ev.total) * 100)); };
+    x.onload = () => (x.status >= 200 && x.status < 300 ? resolve() : reject(new Error(motivoDoArchive(x.status))));
+    x.onerror = () => reject(new Error('Sem conexão com o Internet Archive. Confira a internet e tente de novo.'));
+    x.send(envio.arquivo);
+  });
+}
+// legenda baixada da internet costuma vir em Windows-1252: sem UTF-8 válido, lê nesse
+async function textoDoArquivo(f) {
+  const b = await f.arrayBuffer();
+  const t = new TextDecoder('utf-8').decode(b);
+  return t.includes('�') ? new TextDecoder('windows-1252').decode(b) : t;
+}
+
+// "Tentar de novo" continua de onde parou: o arquivo que o Archive já aceitou não sobe outra vez
+async function enviarVideo(g, campos, alunos) {
+  const arquivo = $('#ma-video', g).files[0]; const legenda = $('#ma-legenda', g).files[0];
+  const erro = $('#ma-erro', g); const botao = $('#ma-salvar', g);
+  const barra = $('#ma-barra', g); const pct = $('#ma-pct', g);
+  if (!arquivo) { erro.textContent = 'Escolha o arquivo de vídeo.'; return; }
+  if (arquivo.type && !arquivo.type.startsWith('video/')) { erro.textContent = 'Esse arquivo não é de vídeo. Escolha um vídeo, de preferência MP4.'; return; }
+  const linhas = legenda ? lerLegenda(await textoDoArquivo(legenda)) : [];
+  if (legenda && !linhas.length) { erro.textContent = 'Não reconheci nenhuma linha na legenda. Use um arquivo SRT ou WebVTT.'; return; }
+  if (envioVideo?.arquivo !== arquivo) envioVideo = { arquivo, archiveId: novoArchiveId(), nome: nomeNoArchive(arquivo), subiu: false, midia: null, ligado: false };
+  const envio = envioVideo;
+  const progresso = n => { barra.value = n; pct.textContent = `${n}%`; botao.textContent = `Enviando… ${n}%`; };
+  botao.disabled = true; botao.textContent = 'Enviando…';
+  try {
+    if (!envio.subiu) {
+      $('#ma-progresso', g).hidden = false; progresso(0);
+      const { access, secret } = await db.archive('chaves');
+      await subirAoArchive(envio, campos.titulo, access, secret, progresso);
+      progresso(100); envio.subiu = true;
+    }
+    botao.textContent = 'Salvando…';
+    if (!envio.midia) envio.midia = await db.criarVideo({ ...campos, tipo: 'video', criado_por: eq.perfil.id, archive_id: envio.archiveId, video_estado: 'preparando' });
+    if (alunos.length && !envio.ligado) { await db.ligarAlunos(envio.midia.id, alunos); envio.ligado = true; }
+  } catch (e) {
+    console.warn(e.message);
+    erro.textContent = e.message || 'O envio não terminou. Tente de novo.';
+    botao.disabled = false; botao.textContent = 'Tentar de novo';
+    return;
+  }
+  let aviso = 'Vídeo enviado. Os alunos veem quando o Internet Archive terminar de preparar.', falhou = false;
+  if (linhas.length) {
+    try { await db.salvarLegendas(envio.midia.id, linhas.map(l => ({ inicio_s: l.inicio_s, fim_s: l.fim_s, texto: l.texto, traducao: null }))); }
+    catch (e) { aviso = `O vídeo foi enviado, mas a legenda não foi salva: ${e.message} Corrija em “Legenda”.`; falhou = true; }
+  }
+  envioVideo = null;
+  if (botao.isConnected) fecharCamadas();
+  avisar(aviso, falhou); recarregar('midias', 'midiaAlunos');
+}
+
+async function excluirVideo(m) {
+  const b = $(`[data-excluir-material="${m.id}"]`);
+  if (b) { b.disabled = true; b.textContent = 'Excluindo…'; }
+  try { return await db.archive('excluir', { midia_id: m.id }); } finally { if (b?.isConnected) { b.disabled = false; b.textContent = 'Excluir'; } }
+}
+
+// player do arquivo para o editor de legenda, com os comandos que o editor usa do player do YouTube
+function playerVideoEquipe(caixa, url, { aoErro } = {}) {
+  const v = document.createElement('video');
+  Object.assign(v, { controls: true, playsInline: true, preload: 'metadata' });
+  let fim = null;
+  const ctl = {
+    get pronto() { return v.readyState >= 1; },
+    tempo: () => centesimos(v.currentTime || 0),
+    trecho(ini, f) { fim = f; v.currentTime = ini; v.play().catch(() => {}); return true; },
+    destruir() { v.pause(); v.removeAttribute('src'); v.load(); caixa.replaceChildren(); },
+  };
+  v.addEventListener('timeupdate', () => { if (fim != null && v.currentTime >= fim) { fim = null; v.pause(); } });
+  v.addEventListener('error', () => { if (url && aoErro) aoErro(0, 'O navegador não conseguiu abrir este vídeo. Tente de novo mais tarde.'); });
+  caixa.replaceChildren(v);
+  ctl.carregado = url
+    ? new Promise(resolve => { v.addEventListener('loadedmetadata', () => resolve(ctl), { once: true }); v.src = url; })
+    : Promise.reject(new Error('O vídeo ainda está sendo preparado no Internet Archive. As linhas já podem ser importadas e salvas; “Marcar” e “Repetir trecho” funcionam quando ele ficar pronto.'));
+  return ctl;
+}
 
 </script>
 <script>
@@ -5983,6 +6526,21 @@ $('#priv-voltar').addEventListener('click', () => {
   rotaPrivacidade();
 });
 
+// o vídeo enviado fica pronto quando alguém abre o app: a função confere no Archive e a biblioteca na tela se atualiza
+async function conferirVideos(perfil) {
+  try {
+    const r = await db.archive('conferir');
+    if (!(r?.prontos + r?.falharam > 0)) return;
+    if (perfil.papel !== 'aluno') { if (eq.perfil === perfil) await recarregar('midias'); return; }
+    if (al.perfil !== perfil) return;
+    const [midias, meus] = await Promise.all([db.midias(), db.midiaAlunos()]);
+    Object.assign(al, { midias, meus: new Set(meus.map(x => x.midia_id)) });
+    renderBibliotecaAluno();
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
 async function abrirSessao() {
   mostrarTela('carregando');
   try {
@@ -5997,6 +6555,7 @@ async function abrirSessao() {
     if (perfil.trocar_senha) avisar('Senha criada. Use ela das próximas vezes.');
     if (perfil.papel === 'aluno') { await carregarAluno(perfil); mostrarTela('aluno'); vistaAluno('agenda'); }
     else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('hoje'); }
+    conferirVideos(perfil);
     hidratar();
     iniciarPush(perfil);
     seguirVoltaGoogle();
@@ -6018,7 +6577,7 @@ $('#form-entrar').addEventListener('submit', async ev => {
 // sair recarrega a página: nada do usuário anterior fica na memória
 let saindo = false;
 $('#sair').addEventListener('click', async () => {
-  saindo = true; pararSino(); await fecharLousas(); await sairDoPush(); await db.sair();
+  saindo = true; pararSino(); await Promise.all([fecharLousas(), guardarPosicao()]); await sairDoPush(); await db.sair();
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   location.reload();
 });

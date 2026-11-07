@@ -1721,7 +1721,8 @@ function apiDoYoutube() {
 function montarPlayer(caixa, motor) {
   const ouvintes = { estado: new Set(), tempo: new Set(), velocidade: new Set(), erro: new Set() };
   const emitir = (nome, valor) => ouvintes[nome].forEach(fn => fn(valor));
-  let relogio = null, trecho = null;
+  let relogio = null, trecho = null, ultimoTempo = null;
+  const emitirTempo = t => { ultimoTempo = t; emitir('tempo', t); };
   const pararTrecho = () => {
     if (!trecho) return;
     clearInterval(trecho.timer);
@@ -1740,7 +1741,7 @@ function montarPlayer(caixa, motor) {
     ir(s) {
       if (!motor.pronto()) return;
       motor.ir(Math.max(0, s));
-      emitir('tempo', centesimos(Math.max(0, s)));
+      emitirTempo(centesimos(Math.max(0, s)));
     },
     velocidade: () => (trecho?.voltar || (motor.pronto() ? motor.taxa() : 1)),
     mudarVelocidade(r) {
@@ -1768,7 +1769,7 @@ function montarPlayer(caixa, motor) {
     },
     ao(nome, fn) { ouvintes[nome].add(fn); return () => ouvintes[nome].delete(fn); },
     destruir() {
-      pararTrecho(); clearInterval(relogio);
+      pararTrecho(); clearInterval(relogio); clearInterval(vigia);
       Object.values(ouvintes).forEach(s => s.clear());
       motor.destruir();
       caixa.replaceChildren();
@@ -1777,14 +1778,16 @@ function montarPlayer(caixa, motor) {
   const mudouEstado = e => {
     if (trecho?.visto && (e === 'pausado' || e === 'fim')) pararTrecho();
     clearInterval(relogio); relogio = null;
-    if (e === 'tocando') relogio = setInterval(() => emitir('tempo', ctl.tempo()), 100);
+    if (e === 'tocando') relogio = setInterval(() => emitirTempo(ctl.tempo()), 100);
     emitir('estado', e);
-    emitir('tempo', ctl.tempo());
+    emitirTempo(ctl.tempo());
   };
+  // fora do 'tocando' o player não avisa o salto feito pela barra dele ou pela API: o tempo é lido aqui
+  const vigia = setInterval(() => { if (!relogio && motor.pronto() && ctl.tempo() !== ultimoTempo) emitirTempo(ctl.tempo()); }, 250);
   const deuErro = msg => { pararTrecho(); emitir('erro', msg); };
   // a velocidade mudada pelo menu do próprio player também fica entre 0,5 e 2
   const mudouTaxa = r => { const v = limitarVelocidade(r); if (v !== r) motor.mudarTaxa(v); else emitir('velocidade', ctl.velocidade()); };
-  return { ctl, mudouEstado, mudouTempo: () => emitir('tempo', ctl.tempo()), deuErro, mudouTaxa };
+  return { ctl, mudouEstado, mudouTempo: () => emitirTempo(ctl.tempo()), deuErro, mudouTaxa };
 }
 
 // player oficial do YouTube dentro de `caixa`; aoErro(codigo, mensagem) é opcional; `inicio` em segundos; `semTelaCheia` tira o botão de tela cheia do player
@@ -2270,12 +2273,14 @@ const db = {
   async legendas(midia) {
     const todas = [];
     for (let de = 0; ; de += 1000) {
-      const parte = ok(await sb.from('legendas').select('inicio_s,fim_s,texto,traducao').eq('midia_id', midia).order('inicio_s').range(de, de + 999));
+      const parte = ok(await sb.from('legendas').select('id,inicio_s,fim_s,texto,traducao').eq('midia_id', midia).order('inicio_s').range(de, de + 999));
       todas.push(...parte);
       if (parte.length < 1000) return todas;
     }
   },
   async salvarLegendas(midia, linhas) { return ok(await sb.rpc('salvar_legendas', { p_midia: midia, p_linhas: linhas })); },
+  // linhas ainda sem português: a função palavra traduz um lote e devolve { traducoes: [{ id, traducao }], faltam, fora }
+  async traduzirLegenda(midia_id) { return this.funcao('palavra', 'traduzir_legenda', { midia_id }); },
 
   /* ---------- dicionário: Edge Function palavra ---------- */
   // palavra nova leva até ~5 s na função; o limite daqui só existe para a caixa não ficar presa
@@ -4239,12 +4244,36 @@ function fecharEstudo() {
   if (tinha) renderBibliotecaAluno();
 }
 function desenharLegenda() {
-  const en = $('#legenda-texto'), pt = $('#legenda-traducao'); if (!en) return;
+  const en = $('#legenda-texto'); if (!en) return;
   const l = es.linhas[es.atual];
   en.innerHTML = l ? palavrasEmBotao(l.texto, es.atual) : '';
+  desenharTraducao();
+  $$('#transcricao .linha').forEach((el, i) => el.setAttribute('aria-current', String(i === es.atual)));
+}
+function desenharTraducao() {
+  const pt = $('#legenda-traducao'), l = es.linhas[es.atual]; if (!pt) return;
   pt.textContent = l ? l.traducao : '';
   pt.hidden = !es.traducao || !l?.traducao;
-  $$('#transcricao .linha').forEach((el, i) => el.setAttribute('aria-current', String(i === es.atual)));
+}
+function juntarTraducoes(lista) {
+  const pt = new Map((lista || []).filter(l => l.traducao).map(l => [l.id, l.traducao]));
+  es.linhas.forEach(l => { if (!l.traducao && pt.has(l.id)) l.traducao = pt.get(l.id); });
+  desenharTraducao();
+}
+// as linhas sem português vão ao servidor aos lotes; com o tradutor fora do ar, fica para a próxima abertura
+async function buscarTraducoes(midia, player) {
+  const vivo = () => es.player === player, falta = () => vivo() && es.linhas.some(l => !l.traducao);
+  for (let vez = 0; vez < 30 && falta(); vez++) {
+    let r;
+    try { r = await db.traduzirLegenda(midia); } catch (e) { return; }
+    if (!vivo() || !r || r.fora) return;
+    juntarTraducoes(r.traducoes);
+    if (!falta() || r.traducoes?.length) continue;
+    // o que falta está com o pedido de outro aluno: lê o que ele já gravou
+    if (r.faltam) await new Promise(ok => setTimeout(ok, 3000));
+    try { if (vivo()) juntarTraducoes(await db.legendas(midia)); } catch (e) { return; }
+    if (!r.faltam) return;
+  }
 }
 function marcarLinha(n) { if (n !== es.atual) { es.atual = n; desenharLegenda(); } }
 function irParaLinha(n) {
@@ -4311,13 +4340,14 @@ async function abrirVideo(m, fonte, box) {
     return;
   }
   if (es.player !== player) return;
-  es.linhas = linhas.map(l => ({ inicio_s: Number(l.inicio_s), fim_s: Number(l.fim_s), texto: l.texto, traducao: l.traducao || '' }));
+  es.linhas = linhas.map(l => ({ id: l.id, inicio_s: Number(l.inicio_s), fim_s: Number(l.fim_s), texto: l.texto, traducao: l.traducao || '' }));
   es.linhas.forEach((l, i) => registrarFrase(`v${i}`, l.texto, c => {
     const achada = palavraNoIndice(l.texto, c);
     return achada ? $$(`#v-estudo .pal[data-pal-n="${i}"][data-pal-i="${achada.i}"]`) : [];
   }));
   desenharTextosVideo();
   carregarTentativas(m.id);
+  buscarTraducoes(m.id, player);
 }
 // no modo Ditado o texto das linhas sai da página: no lugar da legenda e da transcrição fica o painel do ditado
 function desenharTextosVideo() {

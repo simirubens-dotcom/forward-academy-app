@@ -5379,7 +5379,7 @@ function formMaterial(id) {
   const g = gavetaForm('Biblioteca', m ? 'Editar material' : 'Novo material', `
     <form class="form-gaveta" novalidate>
       <div class="duas">
-        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link', 'video'].filter(t => t !== 'video' || ehAdmin() || m?.tipo === 'video').map(t => `<option value="${t}" ${m?.tipo === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
+        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link', 'video'].filter(t => t !== 'video' || m?.tipo === 'video').map(t => `<option value="${t}" ${m?.tipo === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
         <div class="campo"><label for="ma-fileira">Fileira</label><select id="ma-fileira">${eq.fileiras.map(f => `<option value="${f.id}" ${m?.fileira_id === f.id ? 'selected' : ''}>${esc(f.titulo)}</option>`).join('')}</select></div>
       </div>
       <div class="campo"><label for="ma-titulo">Título</label><input id="ma-titulo" value="${esc(m?.titulo || '')}" ${m ? 'data-foco' : ''}></div>

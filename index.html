@@ -910,6 +910,33 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
   .estudo-yt{grid-template-areas:"video" "legenda" "lado" "transc";grid-template-rows:none}
   .estudo-yt>.estudo-lado,.estudo-pdf>.estudo-lado{max-height:none;overflow:visible}
 }
+/* estudo do vídeo do aluno, seco: a área cabe na altura da tela; nela, o vídeo na largura toda, a frase, a barra numa linha e um painel por vez */
+#v-estudo.seco{max-width:max(calc((100dvh - 300px) * 16 / 9),320px);margin-inline:auto}
+#tela-aluno:has(#v-estudo.seco:not([hidden])) .app-topo{display:none}
+#v-estudo.seco .estudo-topo{flex-wrap:nowrap;gap:12px;margin-bottom:10px}
+#v-estudo.seco .estudo-topo .btn-texto{flex:none}
+#v-estudo.seco .estudo-topo h2{flex:1 1 auto;min-width:0;font-size:1.15rem;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.estudo-yt.estudo-seco{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:none;grid-template-rows:none;gap:10px}
+.estudo-yt.estudo-seco>*{grid-area:auto;max-width:none;min-width:0}
+.estudo-seco .video-yt{max-width:none}
+.estudo-seco #estudo-aviso:empty{display:none}
+.estudo-seco .legenda-atual{min-height:64px;padding:10px 16px}
+.estudo-seco .player-barra{flex-wrap:nowrap;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:3px}
+.estudo-seco .player-barra>*{flex:none}
+.estudo-seco .player-barra :is(.pilula,.icone-btn){height:36px}
+.estudo-seco .player-barra .icone-btn{width:36px;border-color:var(--campo-borda);color:var(--fg)}
+.estudo-seco .pl-ap{min-width:40px;padding:0 8px}
+.estudo-seco .pl-campo select{height:36px;padding:0 6px}
+.estudo-seco #pl-modo{width:8.6em}
+.pl-sep{width:1px;height:22px;margin:0 2px;background:var(--line)}
+.estudo-seco .player-barra :is(.pl-trad[aria-pressed="true"],.pl-painel[aria-expanded="true"]){background:var(--btn-bg);color:var(--btn-fg);border-color:transparent}
+.pl-painel:disabled{opacity:.45;cursor:default}
+.estudo-mais{display:grid;gap:12px;padding:16px 20px}
+.mais-acoes{display:flex;flex-wrap:wrap;gap:10px}
+.estudo-mais h3{margin:0 0 4px;font-size:15px;font-weight:600}
+.estudo-mais p{margin:0}
+.mais-teclas summary{min-height:24px;font-size:14px;font-weight:600;cursor:pointer}
+.mais-teclas p{margin-top:6px;font-size:13.5px;color:var(--fg-2)}
 .dic{scroll-margin:120px 0 96px;min-width:0;overflow-wrap:anywhere}
 .dic .prof-ia{padding-top:0}
 /* professor de IA: pergunta e resposta embaixo do dicionário */
@@ -927,6 +954,20 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .dic-ex{display:block;margin-top:2px;font-style:italic;color:var(--fg-2)}
 .dic-credito{font-size:12.5px;color:var(--fg-2)}
 .dic-credito a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.ia-topo .dic-ipa{margin-right:auto;font-size:14px;color:var(--fg-2)}
+.dic-sentido{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.45}
+.dic-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dic-acoes [aria-expanded="false"] svg{transform:rotate(180deg)}
+.dic-resto{display:grid;gap:14px}
+/* caixa da palavra no vídeo do aluno: curta, com minimizar e fechar na linha da palavra */
+.estudo-seco .dic{position:relative}
+.estudo-seco .dic:not(.minimizada)>.painel-topo{position:absolute;top:10px;right:12px;padding:0}
+.estudo-seco .dic:not(.minimizada) #dic-titulo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.estudo-seco .dic .prof-ia{gap:6px;padding:12px 16px}
+.estudo-seco .dic .ia-topo{padding-right:84px}
+.estudo-seco .prof-ia h3.dic-palavra{font-size:24px}
+.estudo-seco .dic .ia-pt{font-size:17px}
+@media (min-width:821px){.estudo-seco .dic{scroll-margin:12px}}
 .vocab-lista li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center}
 .vocab-lista b{overflow-wrap:anywhere}
 .vocab-frase{display:block;margin-top:4px;font-size:13.5px;color:var(--fg-2);overflow-wrap:anywhere}
@@ -1179,8 +1220,6 @@ button.aviso:focus-visible{outline-offset:-3px}
 .pl-campo{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%;font-size:13.5px;font-weight:600;color:var(--fg)}
 .pl-campo select{flex:1 1 auto;min-width:0;max-width:100%;height:40px;padding:0 10px;border-radius:11px;border:1px solid var(--campo-borda);background:var(--bg);color:var(--fg);font:inherit;font-size:14px;font-weight:400}
 .pl-tela{border-color:var(--campo-borda);color:var(--fg)}
-.pl-atalhos{flex-basis:100%;margin:0;font-size:12.5px}
-@media (hover:none){.pl-atalhos{display:none}}
 .legenda-atual .legenda-texto,.legenda-atual .legenda-traducao{transition:filter .2s}
 .estudo-yt[data-legenda="borrado"] .legenda-atual:not(.revelada) :is(.legenda-texto,.legenda-traducao),
 .estudo-yt[data-legenda="en"] .legenda-atual:not(.revelada) .legenda-traducao{filter:blur(6px)}
@@ -1189,11 +1228,11 @@ button.aviso:focus-visible{outline-offset:-3px}
 .estudo-video:fullscreen{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:12px 16px 72px;max-width:none;background:#000}
 .estudo-video:fullscreen .video-yt{position:absolute;inset:0;max-width:none;aspect-ratio:auto;border-radius:0}
 .estudo-video:fullscreen .player-barra{position:relative;z-index:3;grid-area:1/1;justify-self:start;padding:8px 10px;border-radius:12px;background:rgba(11,16,38,.9)}
-.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-campo,.pl-tela){color:#F0EDE4}
-.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-tela,select){border-color:rgba(240,237,228,.6)}
+.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-campo,.pl-tela,.pl-trad){color:#F0EDE4}
+.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-tela,.pl-trad,select){border-color:rgba(240,237,228,.6)}
 .estudo-video:fullscreen .player-barra select{background:#0B1026;color:#F0EDE4}
-.estudo-video:fullscreen .player-barra .pl-ap[aria-pressed="true"]{background:#F0EDE4;color:#1A2142}
-.estudo-video:fullscreen .pl-atalhos{display:none}
+.estudo-video:fullscreen .player-barra :is(.pl-ap,.pl-trad)[aria-pressed="true"]{background:#F0EDE4;color:#1A2142}
+.estudo-video:fullscreen .player-barra :is(.pl-sep,.pl-painel){display:none}
 .estudo-video:fullscreen>.estudo-legenda{position:relative;z-index:2;grid-area:3/1;justify-self:center;width:min(100%,1100px)}
 .estudo-video:fullscreen>.estudo-legenda>:not(.legenda-atual){display:none}
 .estudo-video:fullscreen .legenda-atual{min-height:0;background:rgba(11,16,38,.85);box-shadow:none}
@@ -1474,7 +1513,7 @@ button.aviso:focus-visible{outline-offset:-3px}
 <script src="supabase-2.49.4.js"></script>
 <script>
 const CONFIG = {"url": "https://xxlxuxilbgkwaaawnpov.supabase.co", "publicavel": "sb_publishable_Wo5DJaddMFwTZkU5KB9RVw_KbdSkJTT", "vapid": "BGVGyg6QUeiS1eHVJnR-uDMO3if01LOc4ZHMxZER1VjY2EZHAlbW3Ly9KaOdBmioXbc7IHtDOr4FHUyEktQRLUQ", "whatsapp": "5511932332456"};
-const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "caret-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M212.24,164.24a6,6,0,0,1-8.48,0L128,88.49,52.24,164.24a6,6,0,0,1-8.48-8.48l80-80a6,6,0,0,1,8.48,0l80,80A6,6,0,0,1,212.24,164.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "corners-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154,96V48a6,6,0,0,1,12,0V90h42a6,6,0,0,1,0,12H160A6,6,0,0,1,154,96ZM96,154H48a6,6,0,0,0,0,12H90v42a6,6,0,0,0,12,0V160A6,6,0,0,0,96,154Zm112,0H160a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V166h42a6,6,0,0,0,0-12ZM96,42a6,6,0,0,0-6,6V90H48a6,6,0,0,0,0,12H96a6,6,0,0,0,6-6V48A6,6,0,0,0,96,42Z\"/></svg>", "corners-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M214,48V88a6,6,0,0,1-12,0V54H168a6,6,0,0,1,0-12h40A6,6,0,0,1,214,48ZM88,202H54V168a6,6,0,0,0-12,0v40a6,6,0,0,0,6,6H88a6,6,0,0,0,0-12Zm120-40a6,6,0,0,0-6,6v34H168a6,6,0,0,0,0,12h40a6,6,0,0,0,6-6V168A6,6,0,0,0,208,162ZM88,42H48a6,6,0,0,0-6,6V88a6,6,0,0,0,12,0V54H88a6,6,0,0,0,0-12Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "film-strip": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM38,86h84v84H38Zm96-12V54h36V74Zm-12,0H86V54h36Zm0,108v20H86V182Zm12,0h36v20H134Zm0-12V86h84v84ZM218,56V74H182V54h34A2,2,0,0,1,218,56ZM40,54H74V74H38V56A2,2,0,0,1,40,54ZM38,200V182H74v20H40A2,2,0,0,1,38,200Zm178,2H182V182h36v18A2,2,0,0,1,216,202Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "minus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "speaker-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66ZM206,128a37.94,37.94,0,0,1-9.5,25.14,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93A38,38,0,0,1,206,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
+const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "article": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42Zm2,158a2,2,0,0,1-2,2H40a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2ZM182,96a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,96Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,128Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,160Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "bookmark-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M184,34H72A14,14,0,0,0,58,48V224a6,6,0,0,0,9.18,5.09l60.81-38,60.83,38A6,6,0,0,0,198,224V48A14,14,0,0,0,184,34Zm2,179.17-54.83-34.26a6,6,0,0,0-6.36,0L70,213.17V48a2,2,0,0,1,2-2H184a2,2,0,0,1,2,2Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "caret-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M212.24,164.24a6,6,0,0,1-8.48,0L128,88.49,52.24,164.24a6,6,0,0,1-8.48-8.48l80-80a6,6,0,0,1,8.48,0l80,80A6,6,0,0,1,212.24,164.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "corners-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154,96V48a6,6,0,0,1,12,0V90h42a6,6,0,0,1,0,12H160A6,6,0,0,1,154,96ZM96,154H48a6,6,0,0,0,0,12H90v42a6,6,0,0,0,12,0V160A6,6,0,0,0,96,154Zm112,0H160a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V166h42a6,6,0,0,0,0-12ZM96,42a6,6,0,0,0-6,6V90H48a6,6,0,0,0,0,12H96a6,6,0,0,0,6-6V48A6,6,0,0,0,96,42Z\"/></svg>", "corners-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M214,48V88a6,6,0,0,1-12,0V54H168a6,6,0,0,1,0-12h40A6,6,0,0,1,214,48ZM88,202H54V168a6,6,0,0,0-12,0v40a6,6,0,0,0,6,6H88a6,6,0,0,0,0-12Zm120-40a6,6,0,0,0-6,6v34H168a6,6,0,0,0,0,12h40a6,6,0,0,0,6-6V168A6,6,0,0,0,208,162ZM88,42H48a6,6,0,0,0-6,6V88a6,6,0,0,0,12,0V54H88a6,6,0,0,0,0-12Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "dots-three": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "film-strip": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM38,86h84v84H38Zm96-12V54h36V74Zm-12,0H86V54h36Zm0,108v20H86V182Zm12,0h36v20H134Zm0-12V86h84v84ZM218,56V74H182V54h34A2,2,0,0,1,218,56ZM40,54H74V74H38V56A2,2,0,0,1,40,54ZM38,200V182H74v20H40A2,2,0,0,1,38,200Zm178,2H182V182h36v18A2,2,0,0,1,216,202Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "keyboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224,50H32A14,14,0,0,0,18,64V192a14,14,0,0,0,14,14H224a14,14,0,0,0,14-14V64A14,14,0,0,0,224,50Zm2,142a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V64a2,2,0,0,1,2-2H224a2,2,0,0,1,2,2Zm-20-64a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,128Zm0-32a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,96ZM70,160a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12h8A6,6,0,0,1,70,160Zm96,0a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,160Zm40,0a6,6,0,0,1-6,6h-8a6,6,0,0,1,0-12h8A6,6,0,0,1,206,160Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "minus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "speaker-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66ZM206,128a37.94,37.94,0,0,1-9.5,25.14,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93A38,38,0,0,1,206,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "translate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M245.37,213.32l-56-112a6,6,0,0,0-10.74,0l-22.3,44.6A90,90,0,0,1,105,127.19,101.73,101.73,0,0,0,133.82,62H160a6,6,0,0,0,0-12H102V32a6,6,0,0,0-12,0V50H32a6,6,0,0,0,0,12h89.79A89.71,89.71,0,0,1,96,119.23,89.81,89.81,0,0,1,75.11,86,6,6,0,1,0,63.8,90,101.66,101.66,0,0,0,87,127.2,89.56,89.56,0,0,1,32,146a6,6,0,0,0,0,12,101.55,101.55,0,0,0,64-22.63,102.11,102.11,0,0,0,54.53,22.17l-27.89,55.78a6,6,0,0,0,10.74,5.36L147.71,190h72.58l14.34,28.68A6,6,0,0,0,240,222a5.87,5.87,0,0,0,2.68-.64A6,6,0,0,0,245.37,213.32ZM153.71,178,184,117.42,214.29,178Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
 </script>
 <script>
 /* base: utilidades de tela, sem banco. Mesmas funções do protótipo, sem o relógio fixo da demonstração. */
@@ -1790,20 +1829,21 @@ function montarPlayer(caixa, motor) {
   return { ctl, mudouEstado, mudouTempo: () => emitirTempo(ctl.tempo()), deuErro, mudouTaxa };
 }
 
-// player oficial do YouTube dentro de `caixa`; aoErro(codigo, mensagem) é opcional; `inicio` em segundos; `semTelaCheia` tira o botão de tela cheia do player
-function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = false } = {}) {
+// player oficial do YouTube dentro de `caixa`; aoErro(codigo, mensagem) é opcional; `inicio` em segundos; `semTelaCheia` tira o botão de tela cheia do player; `tocar` começa sozinho; `semCC` desliga a legenda do YouTube ao abrir
+function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = false, tocar = false, semCC = false } = {}) {
   const alvo = document.createElement('div');
   caixa.replaceChildren(alvo);
-  let yt = null, pronto = false;
+  let yt = null, pronto = false, comecou = false, ccVisto = !semCC;
   const motor = {
     tipo: 'youtube',
     pronto: () => pronto,
-    tempo: () => yt.getCurrentTime(),
+    // até tocar a primeira vez, o YouTube lê 0 enquanto busca o `inicio`
+    tempo: () => (comecou ? yt.getCurrentTime() : Math.max(yt.getCurrentTime(), inicio)),
     duracao: () => yt.getDuration(),
     estado: () => ESTADO_YT[yt.getPlayerState()] || 'parado',
     tocar: () => yt.playVideo(),
     pausar: () => yt.pauseVideo(),
-    ir: s => yt.seekTo(s, true),
+    ir: s => { comecou = true; yt.seekTo(s, true); },
     taxa: () => yt.getPlaybackRate(),
     mudarTaxa: r => yt.setPlaybackRate(r),
     destruir() { pronto = false; try { yt?.destroy(); } catch (e) { /* player ainda não montado */ } },
@@ -1815,12 +1855,14 @@ function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = fals
       host: 'https://www.youtube.com',
       videoId: idVideo,
       width: '100%', height: '100%',
-      playerVars: { rel: 0, playsinline: 1, origin: location.origin, ...(inicio >= 1 ? { start: Math.floor(inicio) } : {}), ...(semTelaCheia ? { fs: 0 } : {}) },
+      playerVars: { rel: 0, playsinline: 1, origin: location.origin, ...(inicio >= 1 ? { start: Math.floor(inicio) } : {}), ...(semTelaCheia ? { fs: 0 } : {}), ...(tocar ? { autoplay: 1 } : {}) },
       events: {
         onReady: () => { pronto = true; resolve(ctl); },
         onError: ev => { const msg = mensagemDoPlayer(ev.data); deuErro(msg); if (aoErro) aoErro(ev.data, msg); },
-        onStateChange: ev => mudouEstado(ESTADO_YT[ev.data] || 'parado'),
+        onStateChange: ev => { if (ev.data === 1 || ev.data === 2) comecou = true; mudouEstado(ESTADO_YT[ev.data] || 'parado'); },
         onPlaybackRateChange: ev => mudouTaxa(ev.data),
+        // só a 1ª carga do módulo de legendas: depois o botão CC do player volta a ser do aluno
+        onApiChange: () => { if (!ccVisto && yt.getOptions().includes('captions')) { ccVisto = true; yt.setOption('captions', 'track', {}); } },
       },
     });
   }));
@@ -1828,7 +1870,7 @@ function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = fals
 }
 
 // vídeo enviado: o MP4 do Internet Archive num <video> com os controles do navegador
-function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false } = {}) {
+function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false, tocar = false } = {}) {
   const v = document.createElement('video');
   Object.assign(v, { controls: true, playsInline: true, preload: 'metadata' });
   v.setAttribute('controlslist', semTelaCheia ? 'noplaybackrate nofullscreen' : 'noplaybackrate');
@@ -1864,6 +1906,7 @@ function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false } 
       if (inicio > 0 && inicio < v.duration) v.currentTime = inicio;
       pronto = true;
       resolve(ctl);
+      if (tocar) motor.tocar();
     }, { once: true });
     v.src = url;
   });
@@ -3510,6 +3553,7 @@ function vistaAluno(v) {
   if (v !== 'estudo') fecharEstudo();
   mostrarVista('v', 'data-vista-aluno', v === 'estudo' ? 'biblioteca' : v, VISTAS_ALUNO);
   if (v === 'estudo') { VISTAS_ALUNO.forEach(x => { $(`#v-${x}`).hidden = x !== 'estudo'; }); }
+  if (v === 'biblioteca') apiDoYoutube().catch(() => {});
 }
 
 /* ---------- aviso do sino: abre a aula ou a lição, lida de novo do banco ---------- */
@@ -3549,19 +3593,21 @@ async function abrirEstudo(id) {
   fecharEstudo();
   fecharCamadas();
   vistaAluno('estudo');
-  const v = $('#v-estudo');
+  const v = $('#v-estudo'), video = m.tipo === 'youtube' || m.tipo === 'video';
+  // no vídeo o topo é só voltar e título: visto, dúvida e descrição ficam na barra do estudo
+  v.classList.toggle('seco', video);
   v.innerHTML = `
     <div class="estudo-topo">
       <button class="btn-texto" data-vista-aluno="biblioteca">${ico('caret-left')}Biblioteca</button>
       <h2>${esc(m.titulo)}</h2>
-      <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
+      ${video ? '' : `<div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
       ${botaoVisto(m.id)}
-      ${botaoDuvida(`o material "${m.titulo}"`)}
+      ${botaoDuvida(`o material "${m.titulo}"`)}`}
     </div>
     <div id="estudo-conteudo"></div>
-    ${m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
+    ${!video && m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
   const box = $('#estudo-conteudo');
-  if (m.tipo === 'youtube' || m.tipo === 'video') {
+  if (video) {
     const fonte = m.tipo === 'video' ? m.url && { url: m.url } : idYoutube(m.url) && { youtube: idYoutube(m.url) };
     if (fonte) abrirVideo(m, fonte, box);
     else box.innerHTML = `<div class="caixa-aviso erro">${m.tipo === 'video' ? 'Este vídeo ainda não está pronto. Volte daqui a pouco.' : 'O link deste vídeo não é do YouTube. Avise o Pedro.'}</div>`;
@@ -3602,8 +3648,10 @@ $('#tela-aluno').addEventListener('click', ev => {
   if (ds.veloc) return escolherVelocidade(ds.veloc);
   if (ds.tirarPal) return tirarPalavra(ds.tirarPal);
   if (b.id === 'dic-salvar') return salvarPalavra();
+  if (b.id === 'dic-mais') return alternarMaisDic();
   if (b.id === 'legenda-traduzir') { es.traducao = !es.traducao; b.setAttribute('aria-pressed', String(es.traducao)); return desenharLegenda(); }
-  if (b.id === 'ditado-alternar') return alternarDitado();
+  if (ds.painel) return abrirPainel(ds.painel);
+  if (b.id === 'ditado-alternar') return abrirPainel('ditado');
   if (ds.ditLinha !== undefined) return escolherLinhaDitado(Number(ds.ditLinha));
   if (ds.ditRepetir !== undefined) return tocarTrechoDitado();
   if (ds.ditProxima !== undefined) return escolherLinhaDitado(dit.linha + 1);
@@ -3670,7 +3718,8 @@ function botoesAula(a) {
   return `${conf}<button class="btn btn-amarelo" data-entrar="${a.id}" ${podeEntrar(a) ? '' : 'disabled'}>${ico('video-camera')}Entrar</button>`;
 }
 const avisoMeet = a => (/^https:\/\/meet\.google\.com\//i.test(linkSala(a.sala) || '') ? '<span class="ajuda sala-aviso">No Google Meet, toque em “Pedir para participar” e espere o professor aceitar a sua entrada na sala.</span>' : '');
-const botaoDuvida = assunto => `<a class="btn btn-linha" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`Olá, Pedro! Tenho uma dúvida sobre ${assunto}.`)}" target="_blank" rel="noopener noreferrer">${ico('whatsapp-logo')}Mandar dúvida no WhatsApp</a>`;
+const urlDuvida = assunto => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`Olá, Pedro! Tenho uma dúvida sobre ${assunto}.`)}`;
+const botaoDuvida = assunto => `<a class="btn btn-linha" href="${urlDuvida(assunto)}" target="_blank" rel="noopener noreferrer">${ico('whatsapp-logo')}Mandar dúvida no WhatsApp</a>`;
 function renderLadoAluno() {
   const a = proximaAula();
   if (a) {
@@ -3973,6 +4022,8 @@ async function guardarLink() {
 async function apagarLink(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
   if (!confirm(`Apagar “${m.titulo}” da sua biblioteca? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
+  // sai do estudo antes: o ponto do vídeo e a lousa gravam enquanto o link ainda existe
+  if (!$('#v-estudo').hidden) vistaAluno('biblioteca');
   if (!await tentar(() => db.apagarLink(id), 'Link apagado.')) return;
   al.midias = al.midias.filter(x => x.id !== id);
   al.vistos.delete(id);
@@ -3992,10 +4043,11 @@ async function alternarVisto(b) {
 }
 function abrirMaterialAluno(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
-  const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null, ponto = pontoGuardado(m.id);
+  if (['youtube', 'video', 'pdf'].includes(m.tipo)) return abrirEstudo(m.id);
+  const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null;
   const principal = m.tipo === 'link'
     ? (url ? `<a class="btn btn-primario" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${ico('arrow-square-out')}Abrir o link</a>` : '')
-    : `<button class="btn btn-primario" data-estudar="${m.id}">${ico(m.tipo === 'pdf' ? 'books' : 'play')}${ponto ? `Continuar de ${fRelogio(ponto)}` : 'Estudar aqui'}</button>`;
+    : `<button class="btn btn-primario" data-estudar="${m.id}">${ico('play')}Estudar aqui</button>`;
   $('#modal').innerHTML = `
     <div class="modal-capa">${capaMaterial(m)}<button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button></div>
     <div class="modal-corpo">
@@ -4225,8 +4277,8 @@ function tocarPalavraPdf(el) {
 
 </script>
 <script>
-/* vídeo do estudo (YouTube ou enviado pela escola): player no fluxo da página, legenda e transcrição abaixo dele e o ponto em que o aluno parou */
-const es = { player: null, linhas: [], atual: -1, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null, posicao: null };
+/* vídeo do estudo (YouTube ou enviado pela escola): o player na largura da área, a frase embaixo, a barra e um painel por vez; o ponto em que o aluno parou */
+const es = { player: null, linhas: [], atual: -1, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set() };
 const fRelogio = s => { const t = Math.floor(s), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h ? `${h}:${d2(m)}:${d2(t % 60)}` : `${m}:${d2(t % 60)}`; };
 const linhaNoTempo = t => es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s);
 
@@ -4240,7 +4292,7 @@ function fecharEstudo() {
   if (es.som) es.som.pause();
   if (es.redim) es.redim.disconnect();
   if (es.lousa) es.lousa.fechar();
-  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null, posicao: null });
+  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set() });
   if (tinha) renderBibliotecaAluno();
 }
 function desenharLegenda() {
@@ -4304,27 +4356,59 @@ function guardarPosicao({ saida = false } = {}) {
 }
 addEventListener('pagehide', () => guardarPosicao({ saida: true }));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guardarPosicao({ saida: true }); });
+/* ---------- barra: um painel por vez; o que o painel busca no servidor só sai quando ele abre ---------- */
+const PAINEIS_VIDEO = { transc: '#estudo-transc', lousa: '#lousa-lugar', vocab: '#vocab', mais: '#estudo-mais' };
+const botoesPaineis = m => `<span class="pl-sep" aria-hidden="true"></span>
+    <button class="icone-btn pl-painel" data-painel="transc" aria-expanded="false" aria-controls="estudo-transc" aria-label="Transcrição" title="Transcrição" disabled>${ico('article')}</button>
+    <button class="icone-btn pl-painel" data-painel="ditado" aria-expanded="false" aria-controls="estudo-legenda" aria-label="Ditado" title="Ditado" disabled>${ico('keyboard')}</button>
+    <button class="icone-btn pl-painel" data-painel="lousa" aria-expanded="false" aria-controls="lousa-lugar" aria-label="Lousa" title="Lousa">${ico('pencil-simple-line')}</button>
+    <button class="icone-btn pl-painel" data-painel="vocab" aria-expanded="false" aria-controls="vocab" aria-label="Meu vocabulário" title="Meu vocabulário">${ico('bookmark-simple')}</button>
+    <a class="icone-btn pl-painel" href="${esc(urlDuvida(`o material "${m.titulo}"`))}" target="_blank" rel="noopener noreferrer" aria-label="Dúvida no WhatsApp" title="Dúvida no WhatsApp">${ico('whatsapp-logo')}</a>
+    <button class="icone-btn pl-painel" data-painel="mais" aria-expanded="false" aria-controls="estudo-mais" aria-label="Mais opções" title="Mais opções">${ico('dots-three')}</button>`;
+const painelMais = m => `<article class="painel estudo-mais" id="estudo-mais" hidden>
+    <div class="mais-acoes">${botaoVisto(m.id)}${doAluno(m) ? `<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
+    ${m.descricao ? `<section><h3>Sobre este material</h3><p>${esc(m.descricao)}</p></section>` : ''}
+    <details class="mais-teclas"><summary>Ajuda das teclas</summary><p>${TEXTO_TECLAS}</p></details>
+  </article>`;
+function abrirLousa() {
+  const lugar = $('#lousa-lugar'), lousa = es.lousa = new Lousa({ midia: es.midia, dono: al.perfil.id });
+  lousa.barra(lugar);
+  lousa.folha(lugar);
+  lousa.mostrarFolha(true);
+  lousa.carregar();
+}
+// tocar de novo no painel aberto fecha; o ditado ocupa o lugar da frase
+function abrirPainel(nome) {
+  if (!es.player) return;
+  es.painel = es.painel === nome ? '' : nome;
+  if (dit.ativo !== (es.painel === 'ditado')) alternarDitado();
+  Object.entries(PAINEIS_VIDEO).forEach(([p, s]) => { $(s).hidden = p !== es.painel; });
+  $$('#player-barra [data-painel]').forEach(b => b.setAttribute('aria-expanded', String(b.dataset.painel === es.painel)));
+  if (es.painel && !es.buscou.has(es.painel)) {
+    es.buscou.add(es.painel);
+    if (es.painel === 'transc') carregarTentativas(es.midia);
+    else if (es.painel === 'vocab') carregarVocab();
+    else if (es.painel === 'lousa') abrirLousa();
+  }
+  const alvo = es.painel === 'ditado' ? '#estudo-legenda' : PAINEIS_VIDEO[es.painel];
+  if (alvo) $(alvo).scrollIntoView({ block: 'nearest', behavior: semMovimento.matches ? 'auto' : 'smooth' });
+}
 async function abrirVideo(m, fonte, box) {
-  box.innerHTML = `<div class="estudo estudo-yt">
+  box.innerHTML = `<div class="estudo-yt estudo-seco">
       <div class="estudo-video">
         <div class="video-yt" id="estudo-player"></div>
-        ${barraPlayer()}
         <div id="estudo-aviso"></div>
       </div>
       <div class="estudo-legenda" id="estudo-legenda"><p class="ajuda">Carregando a legenda…</p></div>
-      <aside class="estudo-lado">
-        <div class="lousa-lugar" id="lousa-lugar"></div>
-        ${CAIXA_DIC}
-        <article class="painel" id="vocab"></article>
-      </aside>
-      <div class="estudo-transc" id="estudo-transc"></div>
+      ${barraPlayer(botoesPaineis(m))}
+      ${CAIXA_DIC}
+      <div class="estudo-transc" id="estudo-transc" hidden></div>
+      <div class="lousa-lugar" id="lousa-lugar" hidden></div>
+      <article class="painel" id="vocab" hidden></article>
+      ${painelMais(m)}
     </div>`;
-  const lousa = es.lousa = new Lousa({ midia: m.id, dono: al.perfil.id });
-  lousa.barra($('#lousa-lugar', box));
-  lousa.folha($('#lousa-lugar', box));
-  lousa.carregar();
   const inicio = pontoGuardado(m.id);
-  const player = abrirPlayer($('#estudo-player'), fonte, { inicio, semTelaCheia: true });
+  const player = abrirPlayer($('#estudo-player'), fonte, { inicio, semTelaCheia: true, tocar: true, semCC: true });
   es.posicao = { midia: m.id, gravada: inicio, ultima: Date.now(), mexeu: false };
   player.ao('erro', avisoVideo);
   player.ao('tempo', t => { marcarLinha(linhaNoTempo(t)); if (Date.now() - es.posicao.ultima >= 10000) guardarPosicao(); });
@@ -4332,7 +4416,6 @@ async function abrirVideo(m, fonte, box) {
   es.player = player;
   ligarRecursos(player);
   es.midia = m.id;
-  carregarVocab();
   player.carregado.catch(e => avisoVideo(e.message));
   let linhas;
   try { linhas = await db.legendas(m.id); } catch (e) {
@@ -4346,23 +4429,21 @@ async function abrirVideo(m, fonte, box) {
     return achada ? $$(`#v-estudo .pal[data-pal-n="${i}"][data-pal-i="${achada.i}"]`) : [];
   }));
   desenharTextosVideo();
-  carregarTentativas(m.id);
   buscarTraducoes(m.id, player);
 }
-// no modo Ditado o texto das linhas sai da página: no lugar da legenda e da transcrição fica o painel do ditado
+// no modo Ditado o texto das linhas sai da página: no lugar da frase fica o painel do ditado e a transcrição se esvazia
 function desenharTextosVideo() {
   const tem = es.linhas.length > 0, ditado = tem && dit.ativo;
-  $('#estudo-legenda').innerHTML = tem ? `
-      ${ditado ? '' : '<div class="legenda-atual" aria-live="polite"><p class="legenda-texto" id="legenda-texto"></p><p class="legenda-traducao" id="legenda-traducao" hidden></p></div>'}
-      <div class="legenda-barra">${ditado ? '' : `<button class="pilula" id="legenda-traduzir" aria-pressed="${es.traducao}">Tradução da frase</button>`}<button class="pilula" id="ditado-alternar">${ditado ? 'Sair do ditado' : 'Ditado'}</button></div>
-      ${ditado ? painelDitado() : ''}`
-    : '<div class="caixa-aviso">Este vídeo ainda não tem legenda</div>';
+  $('#estudo-legenda').innerHTML = !tem ? '<div class="caixa-aviso">Este vídeo ainda não tem legenda</div>'
+    : ditado ? `<div class="legenda-barra"><button class="pilula" id="ditado-alternar">Sair do ditado</button></div>${painelDitado()}`
+      : '<div class="legenda-atual" aria-live="polite"><p class="legenda-texto" id="legenda-texto"></p><p class="legenda-traducao" id="legenda-traducao" hidden></p></div>';
   $('#estudo-transc').innerHTML = tem && !ditado ? `
       <article class="painel transcricao">
         <div class="painel-topo"><h2>Transcrição</h2><span class="ajuda">Toque no tempo para ir até a frase e na palavra para ver o significado</span></div>
         <div id="transcricao">${es.linhas.map((l, i) => `<div class="linha"><button class="linha-t" data-ir-linha="${i}" aria-label="Ir para ${fRelogio(l.inicio_s)}">${fRelogio(l.inicio_s)}</button><div class="linha-corpo"><p>${palavrasEmBotao(l.texto, i)}</p>${acoesPron(`v${i}`, true)}</div></div>`).join('')}</div>
       </article>` : '';
-  $('#dic').hidden = !tem || ditado;
+  $$('#player-barra [data-painel="transc"], #player-barra [data-painel="ditado"]').forEach(b => { b.disabled = !tem; });
+  if (!tem || ditado) $('#dic').hidden = true;
   pron.frases.forEach((_, chave) => desenharHistorico(chave));
   es.atual = linhaNoTempo(es.player.tempo());
   desenharLegenda();
@@ -4411,22 +4492,28 @@ async function abrirPalavra(n, i, texto) {
   if (es.sel?.n === n && es.sel?.i === i) return $('#dic').classList.contains('minimizada') ? abrirCaixaDic() : fecharPalavra();
   if (es.player) es.player.pausar();
   abrirCaixaDic();
+  if (!es.buscou.has('vocab')) { es.buscou.add('vocab'); carregarVocab(); }
   es.sel = { n, i };
   $$('#v-estudo .pal[aria-pressed="true"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
   $$(`#v-estudo .pal[data-pal-n="${n}"][data-pal-i="${i}"]`).forEach(b => b.setAttribute('aria-pressed', 'true'));
   return consultarPalavra(texto, linha.texto, i);
+}
+// no vídeo a caixa fica embaixo da barra, fora da tela no PC: rola até ela em qualquer largura
+function mostrarDic() {
+  if (!document.fullscreenElement && (telaEstreita.matches || es.player)) $('#dic').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'nearest' });
 }
 // i é a posição da palavra entre as palavras da frase, para marcá-la na caixa
 async function consultarPalavra(texto, frase, i) {
   const pedido = ++es.pedido;
   es.dic = { texto, frase, i, carregando: true };
   desenharDic();
-  if (telaEstreita.matches) $('#dic').scrollIntoView({ behavior: semMovimento.matches ? 'auto' : 'smooth', block: 'nearest' });
+  mostrarDic();
   let r = null, erro = '';
   try { r = await db.palavra(texto, frase.slice(0, 500)); } catch (e) { console.warn(e); erro = e.message || DICIONARIO_FORA; }
   if (pedido !== es.pedido) return;
   es.dic = { texto, frase, i, r, erro };
   desenharDic();
+  mostrarDic();
 }
 function desenharDic() {
   const box = $('#dic-corpo'); if (!box) return;
@@ -4443,19 +4530,31 @@ function desenharDic() {
   const pagAudio = audio && paginaDoAudio(audio);
   const ipa = typeof r.ipa === 'string' ? r.ipa : '';
   const forma = achou && lema && lema.toLowerCase() !== r.palavra;
-  const meta = [ipa ? `<span class="dic-ipa">${esc(ipa)}</span>` : '', forma ? `forma de <span lang="en">${esc(lema)}</span>` : ''].filter(Boolean).join(' · ');
+  const aviso = typeof r.aviso === 'string' && r.aviso;
+  const sentido = classes.length && typeof classes[0].definicoes[0]?.texto === 'string' ? classes[0].definicoes[0].texto : '';
+  // curta: palavra, tradução, um sentido, Salvar e crédito; o resto e o professor de IA só no "Mais"
   box.innerHTML = `
-    <div class="ia-topo"><h3 class="dic-palavra" lang="en">${esc(tituloDic(d))}</h3>${d.carregando ? '' : `<button class="icone-btn" data-ouvir aria-label="Ouvir a pronúncia">${ico('speaker-high')}</button>`}</div>
+    <div class="ia-topo"><h3 class="dic-palavra" lang="en">${esc(tituloDic(d))}</h3>${ipa ? `<span class="dic-ipa">${esc(ipa)}</span>` : ''}${d.carregando ? '' : `<button class="icone-btn" data-ouvir aria-label="Ouvir a pronúncia">${ico('speaker-high')}</button>`}</div>
     ${d.carregando ? '<p class="ajuda" role="status">Procurando no dicionário…</p>' : ''}
     ${d.erro ? `<div class="caixa-aviso dic-aviso">${esc(d.erro)}</div>` : ''}
-    ${typeof r.aviso === 'string' && r.aviso ? `<div class="caixa-aviso dic-aviso">${esc(r.aviso)}</div>` : ''}
-    ${meta ? `<p class="ia-meta">${meta}</p>` : ''}
+    ${aviso ? `<div class="caixa-aviso dic-aviso">${esc(aviso)}</div>` : ''}
     ${typeof r.traducao === 'string' && r.traducao ? `<p class="ia-pt">${esc(r.traducao)}</p>` : ''}
-    ${classes.map(c => `<div><h3>${esc(c.classe)}</h3><ol class="dic-defs">${c.definicoes.map(x => `<li><span lang="en">${esc(x?.texto)}</span>${x?.exemplo ? `<span class="dic-ex" lang="en">${esc(x.exemplo)}</span>` : ''}</li>`).join('')}</ol></div>`).join('')}
-    ${chips('Sinônimos', textosDe(r.sinonimos))}${chips('Antônimos', textosDe(r.antonimos))}
-    ${d.frase && !d.carregando ? `<div><h3>Na frase</h3><p class="ia-frase" lang="en">${fraseMarcada(d.frase, d.i)}</p>${typeof r.frase_traducao === 'string' && r.frase_traducao ? `<p class="ajuda dic-frase-pt">${esc(r.frase_traducao)}</p>` : ''}</div>` : ''}
-    ${achou && (classes.length || !(typeof r.aviso === 'string' && r.aviso)) ? `<button class="btn btn-primario" id="dic-salvar" ${salva ? 'disabled' : ''}>${ico(salva ? 'check' : 'bookmark-simple')}${salva ? 'Já está no seu vocabulário' : 'Salvar no meu vocabulário'}</button>` : ''}
-    ${lema ? `<p class="dic-credito">Dicionário: <a href="${esc(`https://en.wiktionary.org/wiki/${encodeURIComponent(lema)}`)}" target="_blank" rel="noopener">Wiktionary (CC BY-SA)</a>${pagAudio ? ` · áudio: <a href="${esc(pagAudio)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : ''}</p>` : ''}`;
+    ${sentido ? `<p class="dic-sentido" lang="en" title="${esc(sentido)}">${esc(sentido)}</p>` : ''}
+    ${d.carregando ? '' : `<div class="dic-acoes">${achou && (classes.length || !aviso) ? `<button class="btn btn-primario" id="dic-salvar" ${salva ? 'disabled' : ''}>${ico(salva ? 'check' : 'bookmark-simple')}${salva ? 'Já está no seu vocabulário' : 'Salvar'}</button>` : ''}<button class="btn btn-linha" id="dic-mais" aria-expanded="${!!d.mais}" aria-controls="dic-resto dic-ia">Mais${ico('caret-up')}</button></div>`}
+    ${lema ? `<p class="dic-credito">Dicionário: <a href="${esc(`https://en.wiktionary.org/wiki/${encodeURIComponent(lema)}`)}" target="_blank" rel="noopener">Wiktionary (CC BY-SA)</a>${pagAudio ? ` · áudio: <a href="${esc(pagAudio)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : ''}</p>` : ''}
+    <div class="dic-resto" id="dic-resto" ${d.mais ? '' : 'hidden'}>
+      ${forma ? `<p class="ia-meta">forma de <span lang="en">${esc(lema)}</span></p>` : ''}
+      ${classes.map(c => `<div><h3>${esc(c.classe)}</h3><ol class="dic-defs">${c.definicoes.map(x => `<li><span lang="en">${esc(x?.texto)}</span>${x?.exemplo ? `<span class="dic-ex" lang="en">${esc(x.exemplo)}</span>` : ''}</li>`).join('')}</ol></div>`).join('')}
+      ${chips('Sinônimos', textosDe(r.sinonimos))}${chips('Antônimos', textosDe(r.antonimos))}
+      ${d.frase && !d.carregando ? `<div><h3>Na frase</h3><p class="ia-frase" lang="en">${fraseMarcada(d.frase, d.i)}</p>${typeof r.frase_traducao === 'string' && r.frase_traducao ? `<p class="ajuda dic-frase-pt">${esc(r.frase_traducao)}</p>` : ''}</div>` : ''}
+    </div>`;
+}
+function alternarMaisDic() {
+  const d = es.dic; if (!d) return;
+  d.mais = !d.mais;
+  $('#dic-resto').hidden = !d.mais;
+  $('#dic-ia').hidden = !d.mais;
+  $('#dic-mais').setAttribute('aria-expanded', String(d.mais));
 }
 function falar(texto) {
   if (!('speechSynthesis' in window)) { avisar('Este navegador não tem voz para ler a palavra.', true); return; }
@@ -4516,12 +4615,15 @@ const CAMPO_TEXTO = 'input, textarea, [contenteditable=""], [contenteditable="tr
 const rp = { ap: false, modo: 'visivel', veloc: 1, mousePausou: false, ouvindo: null, apLinha: -1, apT: 0, linhaVista: -1, dicas: new Map(), dicaTimer: null, movidos: [] };
 
 const fVelocidade = v => `${String(v).replace('.', ',')}x`;
-const barraPlayer = () => `<div class="player-barra" id="player-barra" role="group" aria-label="Controles do vídeo">
+const TEXTO_TECLAS = 'Teclas: A ou ← volta uma legenda, S repete, D ou → avança, espaço toca e pausa, Q liga a pausa automática.';
+// extra: os botões dos painéis do estudo, no fim da mesma linha
+const barraPlayer = (extra = '') => `<div class="player-barra" id="player-barra" role="group" aria-label="Controles do vídeo">
     <button class="pilula pl-ap" id="pl-ap" aria-pressed="${rp.ap}" aria-label="AP, pausa automática no fim de cada legenda" title="Pausa automática no fim de cada legenda (tecla Q)">AP</button>
-    <label class="pl-campo"><span>Legenda</span><select id="pl-modo">${Object.entries(MODOS_LEGENDA).map(([k, t]) => `<option value="${k}"${k === rp.modo ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
-    <label class="pl-campo"><span>Velocidade</span><select id="pl-veloc">${VELOCIDADES_VIDEO.map(v => `<option value="${v}"${v === rp.veloc ? ' selected' : ''}>${fVelocidade(v)}</option>`).join('')}</select></label>
+    <label class="pl-campo" title="Legenda"><span class="sr">Legenda</span><select id="pl-modo">${Object.entries(MODOS_LEGENDA).map(([k, t]) => `<option value="${k}"${k === rp.modo ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <label class="pl-campo" title="Velocidade"><span class="sr">Velocidade</span><select id="pl-veloc">${VELOCIDADES_VIDEO.map(v => `<option value="${v}"${v === rp.veloc ? ' selected' : ''}>${fVelocidade(v)}</option>`).join('')}</select></label>
     ${document.fullscreenEnabled ? `<button class="icone-btn pl-tela" id="pl-tela" aria-label="Tela cheia" title="Tela cheia">${ico('corners-out')}</button>` : ''}
-    <p class="ajuda pl-atalhos">Teclas: A ou ← volta uma legenda, S repete, D ou → avança, espaço toca e pausa, Q liga a pausa automática.</p>
+    <button class="icone-btn pl-trad" id="legenda-traduzir" aria-pressed="${es.traducao}" aria-label="Tradução da frase" title="Tradução da frase">${ico('translate')}</button>
+    ${extra}
   </div>`;
 
 function ligarRecursos(player) {
@@ -4589,7 +4691,7 @@ document.addEventListener('keydown', ev => {
   if (alvo !== document.body && alvo !== document.documentElement && !vista.contains(alvo)) return;
   const tecla = ev.key.length === 1 ? ev.key.toLowerCase() : ev.key;
   // no select as setas e o espaço são dele; no botão escolhido pelo teclado o espaço aperta o botão
-  if (alvo.matches('select') ? ['ArrowLeft', 'ArrowRight', ' '].includes(tecla) : tecla === ' ' && alvo.matches('button:focus-visible, a:focus-visible')) return;
+  if (alvo.matches('select') ? ['ArrowLeft', 'ArrowRight', ' '].includes(tecla) : tecla === ' ' && alvo.matches('button:focus-visible, a:focus-visible, summary:focus-visible')) return;
   if (tecla === 'Escape' && document.fullscreenElement) { document.exitFullscreen().catch(() => {}); return; }
   if (!ATALHOS[tecla]) return;
   ev.preventDefault();
@@ -4674,15 +4776,16 @@ function ouvirTrecho(chave, devagar = false) {
   if (!pl.trecho(l.inicio_s, l.fim_s, devagar ? { velocidade: OUVIR_DEVAGAR } : {})) acabouOuvir();
 }
 
-/* ---------- tela cheia: o vídeo, a legenda e a caixa da palavra vão juntos ---------- */
+/* ---------- tela cheia: o vídeo, a legenda, a barra e a caixa da palavra vão juntos ---------- */
 function levarParaTela(caixa) {
-  rp.movidos = ['#estudo-legenda', '#dic'].map(s => $(s)).filter(Boolean).map(el => [el, el.parentNode, el.nextSibling, el.hidden]);
+  rp.movidos = ['#estudo-legenda', '#player-barra', '#dic'].map(s => $(s)).filter(Boolean).map(el => [el, el.parentNode, el.nextSibling, el.hidden]);
   rp.movidos.forEach(([el]) => caixa.append(el));
   // na tela cheia a caixa da palavra só aparece com uma palavra escolhida
   if (!es.sel) $('#dic')?.setAttribute('hidden', '');
 }
+// de trás para a frente: o vizinho de cada um já voltou para o lugar
 function voltarDaTela() {
-  rp.movidos.forEach(([el, pai, depois, oculto]) => {
+  [...rp.movidos].reverse().forEach(([el, pai, depois, oculto]) => {
     if (pai.isConnected) pai.insertBefore(el, depois?.parentNode === pai ? depois : null);
     if (el.id === 'dic' && !es.sel) el.hidden = oculto;
   });
@@ -4850,7 +4953,7 @@ function cortarPergunta(v) { const s = v.slice(0, IA_LIMITE); return /[\uD800-\u
 function desenharIA() {
   const box = $('#dic-ia'); if (!box || ia.pedido === es.pedido) return;
   Object.assign(ia, { pedido: es.pedido, enviando: false });
-  box.hidden = !es.dic;
+  box.hidden = !es.dic?.mais;
   if (!es.dic) { box.replaceChildren(); return; }
   box.innerHTML = iaLigada() ? `
     <form class="ia-form" id="ia-form" novalidate>

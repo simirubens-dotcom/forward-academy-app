@@ -1049,6 +1049,38 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 @media (max-width:720px){#lista-alunos li{flex-wrap:wrap}#lista-alunos .acoes-linha{flex-basis:100%}}
 .estudo-topo .btn-texto{min-height:24px}
 
+/* páginas da Biblioteca do aluno: abas no topo, uma página por vez; muitas abas rolam dentro da barra */
+.bib-barra{display:flex;align-items:center;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.bib-abas{position:relative;display:flex;min-width:0;overflow-x:auto;scrollbar-width:thin}
+.bib-aba{flex:none;max-width:240px;padding:10px 14px 9px;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--fg-2);font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (hover:hover){.bib-aba:hover{color:var(--fg)}}
+.bib-aba:focus-visible{outline:2px solid var(--fg);outline-offset:-4px}
+.bib-aba[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--fg)}
+.bib-nova{flex:none;width:38px;height:38px;margin-bottom:3px;border:2px dashed var(--line);border-radius:10px;background:transparent;color:var(--fg-2);font-size:24px;font-weight:300;line-height:1}
+.bib-nova:hover,.bib-nova:focus-visible{border-color:var(--fg-2);color:var(--fg)}
+.bib-paginas{overflow-x:clip}
+html:has(#tela-aluno:not([hidden]) #v-biblioteca:not([hidden])){overscroll-behavior-x:none}
+#bib-pagina>.pagina-topo+.fileira{margin-top:0}
+.pagina-topo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:24px}
+.pagina-topo .btn{padding:9px 12px;font-size:12px}
+:is(.pagina-topo,.fileira-acoes) .icone-btn{width:38px;height:38px;color:var(--fg)}
+:is(.pagina-topo,.fileira-acoes) .icone-btn:disabled{opacity:.35;cursor:default}
+#bib-pagina .fileira-topo{flex-wrap:wrap;align-items:center}
+#bib-pagina .fileira-topo h3{margin-right:auto;overflow-wrap:anywhere}
+.fileira-acoes{display:flex;gap:6px}
+.fileira-acoes .ico{width:18px;height:18px;color:var(--fg)}
+.ico.vira{transform:rotate(180deg)}
+.mover-lista{display:grid;gap:18px}
+.mover-grupo{display:grid;gap:8px}
+.mover-grupo h3{margin:0;font-size:14px;font-weight:600;color:var(--fg-2)}
+.mover-grupo small{margin-left:auto;font-size:13px;font-weight:400;color:var(--fg-2)}
+.criar-opcao:disabled{opacity:.6;cursor:default}
+@media (max-width:520px){.bib-aba{padding:10px 11px 9px;font-size:14px}}
+@media (pointer:coarse){.bib-abas{scrollbar-width:none}}
+@media (prefers-reduced-motion:no-preference){.entra-dir{animation:paginaDir .22s var(--ease-out) both}.entra-esq{animation:paginaEsq .22s var(--ease-out) both}}
+@keyframes paginaDir{from{opacity:0;transform:translateX(32px)}}
+@keyframes paginaEsq{from{opacity:0;transform:translateX(-32px)}}
+
 /* biblioteca pessoal do aluno, "Criar" e visto */
 .card-criar{align-self:start;aspect-ratio:16/10;align-content:center;justify-items:center;gap:2px;border:2px dashed var(--line);border-radius:13px;color:var(--fg-2);font-size:15px;font-weight:600;transition:border-color .15s,color .15s}
 .card-criar:hover,.card-criar:focus-visible{border-color:var(--fg-2);color:var(--fg)}
@@ -1076,7 +1108,6 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .capa-amostra.grafite{background:#252526}
 .capa-amostra.amarelo{background:var(--amarelo)}
 .capa-opcao input:checked+.capa-amostra{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--fg)}.capa-opcao input:focus-visible+.capa-amostra{outline:2px solid var(--fg);outline-offset:3px}
-.minha-vazia{margin:0}
 .selo-visto{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);font-size:12.5px;font-weight:600}
 .selo-visto .ico{width:14px;height:14px}
 .card-continuar{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--fg);font-size:12.5px;font-weight:600}
@@ -1309,7 +1340,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou), o ponto em que você parou em cada vídeo (para continuar dali) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Dos vídeos do seu aparelho que você põe na biblioteca, guardamos só o título, a capa, o tamanho do arquivo e a legenda que você escolher; o vídeo e o nome do arquivo ficam só no seu aparelho e não vão para a internet. Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou), o ponto em que você parou em cada vídeo (para continuar dali) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Dos vídeos do seu aparelho que você põe na biblioteca, guardamos só o título, a capa, o tamanho do arquivo e a legenda que você escolher; o vídeo e o nome do arquivo ficam só no seu aparelho e não vão para a internet. Da sua biblioteca, guardamos também os nomes das páginas e das fileiras que você cria, a ordem delas e a fileira de cada item; a última página que você abriu fica guardada só no seu aparelho. Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1398,17 +1429,22 @@ button.aviso:focus-visible{outline-offset:-3px}
     </section>
 
     <section class="vista" id="v-biblioteca" aria-label="Biblioteca" hidden>
-      <div class="filtros" style="margin-top:0">
-        <label class="busca"><span data-icone="magnifying-glass"></span><span class="sr">Buscar na biblioteca</span><input id="bib-busca" type="search" placeholder="Buscar na biblioteca"></label>
-        <div class="niveis" role="group" aria-label="Filtrar por nível" id="bib-niveis"></div>
+      <div class="bib-barra" id="bib-barra">
+        <div class="bib-abas" id="bib-abas" role="tablist" aria-label="Páginas da biblioteca"></div>
+        <button class="bib-nova" id="bib-nova" type="button" aria-label="Nova página" title="Nova página">+</button>
       </div>
-      <div id="bib-conteudo"></div>
-      <section class="fileira minha" aria-labelledby="minha-titulo">
-        <div class="fileira-topo"><h3 id="minha-titulo">Minha biblioteca</h3><span id="minha-conta"></span></div>
-        <div id="minha-links"></div>
-        <input class="sr" id="ap-video" type="file" accept="video/*,.mp4,.m4v,.webm,.mkv,.mov" tabindex="-1" aria-hidden="true">
-        <input class="sr" id="ap-legenda" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip" tabindex="-1" aria-hidden="true">
-      </section>
+      <div class="bib-paginas" id="bib-paginas">
+        <div id="bib-forward" role="tabpanel" aria-labelledby="aba-forward">
+          <div class="filtros" style="margin-top:0">
+            <label class="busca"><span data-icone="magnifying-glass"></span><span class="sr">Buscar na biblioteca</span><input id="bib-busca" type="search" placeholder="Buscar na biblioteca"></label>
+            <div class="niveis" role="group" aria-label="Filtrar por nível" id="bib-niveis"></div>
+          </div>
+          <div id="bib-conteudo"></div>
+        </div>
+        <div id="bib-pagina" role="tabpanel" hidden></div>
+      </div>
+      <input class="sr" id="ap-video" type="file" accept="video/*,.mp4,.m4v,.webm,.mkv,.mov" tabindex="-1" aria-hidden="true">
+      <input class="sr" id="ap-legenda" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip" tabindex="-1" aria-hidden="true">
     </section>
 
     <section class="vista" id="v-licoes" aria-label="Lições" hidden>
@@ -1998,6 +2034,13 @@ function erroLink(e) {
   if (e?.code === '42501') return 'Sem permissão para guardar este link.';
   return traduzirErro(e);
 }
+// recusa de página e de fileira do aluno: o teto já vem do banco com a mensagem pronta
+function erroPagina(e) {
+  if (e?.code === 'P0001' && e.message) return e.message;
+  if (e?.code === '23514') return 'O nome precisa ter de 1 a 80 caracteres.';
+  if (e?.code === '42501') return 'Sem permissão para mudar esta página.';
+  return traduzirErro(e);
+}
 // recusa de curso e de aula-modelo: o banco diz no texto qual regra falhou
 function erroCurso(e) {
   const m = String(e?.message || '');
@@ -2322,6 +2365,32 @@ const db = {
   },
   async linksDoAluno(aluno) {
     return ok(await sb.from('midias').select('id,tipo,titulo,url,capa,criado_em').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
+  },
+  // ordem não é única: o id desempata, nas páginas e nas fileiras
+  async paginas(aluno) {
+    return ok(await sb.from('paginas').select('id,titulo,ordem,secoes(id,titulo,ordem)').eq('aluno_id', aluno)
+      .order('ordem').order('id').order('ordem', { referencedTable: 'secoes' }).order('id', { referencedTable: 'secoes' }));
+  },
+  async criarPagina(titulo, ordem) {
+    const { data, error } = await sb.from('paginas').insert({ titulo, ordem }).select('id,titulo,ordem').single();
+    if (error) throw new Error(erroPagina(error));
+    return { ...data, secoes: [] };
+  },
+  async criarFileira(pagina_id, titulo, ordem) {
+    const { data, error } = await sb.from('secoes').insert({ pagina_id, titulo, ordem }).select('id,titulo,ordem').single();
+    if (error) throw new Error(erroPagina(error));
+    return data;
+  },
+  // tabela 'paginas' ou 'secoes'; sem permissão a API responde 200 com a lista vazia
+  async mudarNaPagina(tabela, id, campos) {
+    const { data, error } = await sb.from(tabela).update(campos).eq('id', id).select('id');
+    if (error) throw new Error(erroPagina(error));
+    if (!data.length) throw new Error(`Esta ${tabela === 'paginas' ? 'página' : 'fileira'} não foi alterada: ela já tinha saído ou você não tem permissão.`);
+  },
+  async apagarNaPagina(tabela, id) {
+    const { data, error } = await sb.from(tabela).delete().eq('id', id).select('id');
+    if (error) throw new Error(erroPagina(error));
+    if (!data.length) throw new Error(`Esta ${tabela === 'paginas' ? 'página' : 'fileira'} não foi apagada: ela já tinha saído ou você não tem permissão.`);
   },
   // ids dos vídeos que têm ao menos uma linha de legenda
   async comLegenda(ids) {
@@ -3577,16 +3646,17 @@ async function abrirAnexo(c) {
 </script>
 <script>
 /* área do aluno com dado real: agenda, lições, biblioteca e estudo */
-const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), posicoes: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [] };
+const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), posicoes: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [], paginas: [], pagina: 'forward' };
 const VISTAS_ALUNO = ['agenda', 'biblioteca', 'licoes', 'estudo'];
 
 async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(), carregarAparelho(),
+  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes, paginas] = await Promise.all([
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(), db.paginas(perfil.id), carregarAparelho(),
   ]);
-  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
+  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, paginas, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
+  al.pagina = paginaGuardada();
   renderAluno();
   iniciarSino($('#tela-aluno .app-acoes'), levarAlunoAoAviso);
 }
@@ -3600,7 +3670,7 @@ function vistaAluno(v) {
   if (v !== 'estudo') fecharEstudo();
   mostrarVista('v', 'data-vista-aluno', v === 'estudo' ? 'biblioteca' : v, VISTAS_ALUNO);
   if (v === 'estudo') { VISTAS_ALUNO.forEach(x => { $(`#v-${x}`).hidden = x !== 'estudo'; }); }
-  if (v === 'biblioteca') apiDoYoutube().catch(() => {});
+  if (v === 'biblioteca') { apiDoYoutube().catch(() => {}); mostrarAbaAtual(); }
 }
 
 /* ---------- aviso do sino: abre a aula ou a lição, lida de novo do banco ---------- */
@@ -4016,10 +4086,7 @@ function renderBibliotecaAluno() {
   $('#bib-conteudo').innerHTML = blocos || (escola.length || al.cursos.length
     ? `<div class="vazio">${ico('magnifying-glass')}<b>Nada encontrado</b><span>Tente outro termo ou limpe o filtro de nível.</span></div>`
     : `<div class="vazio">${ico('books')}<b>A biblioteca ainda está vazia</b><span>Os materiais que o Pedro puser aparecem aqui.</span></div>`);
-  const links = al.midias.filter(doAluno).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
-  $('#minha-conta').textContent = links.length ? contaVistos(links) : '';
-  $('#minha-links').innerHTML = `<div class="trilha">${CARD_CRIAR}${links.map(cardMaterial).join('')}</div>`
-    + (links.length ? '' : '<p class="ajuda minha-vazia">Toque em “Criar” para guardar um vídeo do YouTube, uma página ou um vídeo do seu aparelho.</p>');
+  renderPaginasAluno();
 }
 
 /* link da biblioteca pessoal: as mesmas regras do banco */
@@ -4060,7 +4127,7 @@ async function guardarLink() {
   const tipo = tipoDoLink(url), capa = $('#criar-link input[name="capa"]:checked')?.value || 'miniatura';
   botao.disabled = true;
   try {
-    al.midias.push(await db.guardarLink({ tipo, titulo, url, pessoal_de: al.perfil.id, ...(tipo === 'youtube' || capa !== 'miniatura' ? { capa } : {}) }));
+    al.midias.push(await db.guardarLink({ tipo, titulo, url, pessoal_de: al.perfil.id, secao_id: ap.secao, ...(tipo === 'youtube' || capa !== 'miniatura' ? { capa } : {}) }));
     fecharCamadas();
     renderBibliotecaAluno();
     avisar('Link guardado na sua biblioteca.');
@@ -4107,14 +4174,14 @@ function abrirMaterialAluno(id) {
       <h2 id="modal-titulo">${esc(m.titulo)}</h2>
       <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span>${m.fonte ? `<span class="etq">${esc(m.fonte)}</span>` : ''}</div>
       ${m.descricao ? `<p>${esc(m.descricao)}</p>` : ''}
-      <div class="modal-acoes">${principal}${botaoVisto(m.id)}${doAluno(m) ? `<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
+      <div class="modal-acoes">${principal}${botaoVisto(m.id)}${doAluno(m) ? `${botaoMover(m.id)}<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
     </div>`;
   abrirCamada($('#modal'));
 }
 
 </script>
 <script>
-/* "Criar" da Minha biblioteca: link do YouTube ou de página e vídeo do aparelho.
+/* "Criar" de cada fileira das páginas do aluno: link do YouTube ou de página e vídeo do aparelho, gravados naquela fileira.
    O vídeo do aparelho toca do arquivo do aluno e nada dele sobe; no banco ficam título, capa, tamanho e legenda.
    No aparelho (IndexedDB) ficam o nome do arquivo, o tamanho e, onde o navegador tem showOpenFilePicker, o acesso ao
    arquivo para reabrir sem escolher de novo. Sem esse acesso, ou com a permissão negada, a capa pede o arquivo e confere o tamanho. */
@@ -4124,8 +4191,8 @@ const LEGENDA_MAX = 2 * 1024 * 1024;
 const NOME_COR = { marinho: 'Azul-marinho', bege: 'Bege', grafite: 'Grafite', amarelo: 'Amarelo' };
 const OUTRO_APARELHO = 'Este vídeo está em outro aparelho';
 const AVISO_TAMANHO = 'Este arquivo não parece o mesmo vídeo: o tamanho é diferente do arquivo usado ao criar. Usar mesmo assim?';
-const CARD_CRIAR = '<button class="card card-criar" id="criar" aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>';
-const ap = { locais: new Set(), escolhido: null, handle: null, linhas: [], sugestao: '', espera: null };
+const cardCriar = secao => `<button class="card card-criar" data-criar-secao="${secao}" aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>`;
+const ap = { locais: new Set(), escolhido: null, handle: null, linhas: [], sugestao: '', espera: null, secao: null };
 const tamanhoLegivel = n => `${(n / 1048576).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} MB`;
 
 /* ---------- o que fica no aparelho: { midia, nome, tamanho, handle? } por item ---------- */
@@ -4278,7 +4345,7 @@ async function criarAparelho() {
   const capa = $('#criar-aparelho input[name="capa"]:checked').value, linhas = ap.linhas, handle = ap.handle;
   botao.disabled = true;
   let m;
-  try { m = await db.guardarLink({ tipo: 'aparelho', titulo, capa, tamanho_bytes: f.size, pessoal_de: al.perfil.id }); } catch (e) {
+  try { m = await db.guardarLink({ tipo: 'aparelho', titulo, capa, tamanho_bytes: f.size, pessoal_de: al.perfil.id, secao_id: ap.secao }); } catch (e) {
     $('#ap-erro').textContent = e.message;
     botao.disabled = false;
     return;
@@ -4341,7 +4408,7 @@ async function legendaNoEstudo() {
 /* ---------- eventos: o "Criar" fica na Biblioteca e o resto no modal ---------- */
 document.addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b || !al.perfil) return;
-  if (b.id === 'criar') return abrirCriar();
+  if (b.dataset.criarSecao) { ap.secao = b.dataset.criarSecao; return abrirCriar(); }
   if (b.dataset.criar === 'link') return abrirCriarLink();
   if (b.dataset.criar === 'aparelho') return abrirCriarAparelho();
   if (b.id === 'ap-escolher-video') return escolherVideo();
@@ -4354,6 +4421,273 @@ $('#modal').addEventListener('submit', ev => {
   if (ev.target.id === 'criar-link') { ev.preventDefault(); guardarLink(); }
   else if (ev.target.id === 'criar-aparelho') { ev.preventDefault(); criarAparelho(); }
 });
+
+</script>
+<script>
+/* páginas da Biblioteca do aluno: a Forward (o que a escola mostra) e as páginas dele, uma por vez, com as abas no topo.
+   Cada página tem fileiras com o "Criar" e as capas; a página aberta fica guardada no aparelho, por aluno, sem ir ao servidor. */
+const FORWARD = 'forward';
+const CHAVE_PAGINA = 'forward-bib-pagina:';
+const idsPaginas = () => [FORWARD, ...al.paginas.map(p => p.id)];
+
+function paginaGuardada() {
+  let id = null;
+  try { id = localStorage.getItem(CHAVE_PAGINA + al.perfil.id); } catch (e) { /* sem armazenamento local */ }
+  return al.paginas.some(p => p.id === id) ? id : FORWARD;
+}
+function guardarPagina(id) {
+  try { localStorage.setItem(CHAVE_PAGINA + al.perfil.id, id); } catch (e) { /* sem armazenamento local */ }
+}
+
+/* ---------- abas e página aberta ---------- */
+const abaHtml = (id, titulo) => `<button class="bib-aba" role="tab" id="aba-${id}" data-bib-pagina="${id}" aria-controls="${id === FORWARD ? 'bib-forward' : 'bib-pagina'}" aria-selected="${id === al.pagina}" tabindex="${id === al.pagina ? 0 : -1}" title="${esc(titulo)}">${esc(titulo)}</button>`;
+const botaoFileira = (s, acao, rotulo, icone, desligado) => `<button class="icone-btn" data-fileira-acao="${acao}" data-fileira="${s.id}" aria-label="${rotulo} “${esc(s.titulo)}”" title="${rotulo}"${desligado ? ' disabled' : ''}>${icone}</button>`;
+function secaoHtml(s, i, lista) {
+  const itens = al.midias.filter(m => m.secao_id === s.id).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
+  return `<section class="fileira" data-secao="${s.id}" aria-labelledby="secao-${s.id}">
+    <div class="fileira-topo"><h3 id="secao-${s.id}">${esc(s.titulo)}</h3><span>${itens.length ? contaVistos(itens) : ''}</span>
+      <div class="fileira-acoes">${botaoFileira(s, 'subir', 'Subir a fileira', ico('caret-up'), i === 0)}${botaoFileira(s, 'descer', 'Descer a fileira', ico('caret-up', 'vira'), i === lista.length - 1)}${botaoFileira(s, 'renomear', 'Renomear a fileira', ico('pencil-simple-line'))}${botaoFileira(s, 'apagar', 'Apagar a fileira', ico('trash'))}</div></div>
+    <div class="trilha">${cardCriar(s.id)}${itens.map(cardMaterial).join('')}</div>
+  </section>`;
+}
+function topoPagina(p) {
+  const i = al.paginas.indexOf(p);
+  return `<div class="pagina-topo" role="group" aria-label="Página “${esc(p.titulo)}”">
+    <button class="icone-btn" data-pagina-acao="esq" aria-label="Mover a página para a esquerda" title="Mover para a esquerda"${i === 0 ? ' disabled' : ''}>${ico('caret-left')}</button>
+    <button class="icone-btn" data-pagina-acao="dir" aria-label="Mover a página para a direita" title="Mover para a direita"${i === al.paginas.length - 1 ? ' disabled' : ''}>${ico('caret-right')}</button>
+    <button class="btn btn-linha" data-pagina-acao="renomear">${ico('pencil-simple-line')}Renomear página</button>
+    <button class="btn btn-linha" data-pagina-acao="apagar">${ico('trash')}Apagar página</button>
+    <button class="btn btn-linha" data-pagina-acao="fileira">${ico('plus')}Nova fileira</button>
+  </div>`;
+}
+function renderPagina() {
+  const p = al.paginas.find(x => x.id === al.pagina), box = $('#bib-pagina');
+  $('#bib-forward').hidden = !!p;
+  box.hidden = !p;
+  if (!p) { box.innerHTML = ''; return; }
+  box.setAttribute('aria-labelledby', `aba-${p.id}`);
+  box.innerHTML = topoPagina(p) + (p.secoes.length ? p.secoes.map(secaoHtml).join('')
+    : `<div class="vazio">${ico('books')}<b>Esta página ainda não tem fileiras</b></div>`);
+}
+function renderPaginasAluno() {
+  if (!idsPaginas().includes(al.pagina)) al.pagina = FORWARD;
+  const abas = $('#bib-abas'), x = abas.scrollLeft;
+  abas.innerHTML = abaHtml(FORWARD, 'Forward') + al.paginas.map(p => abaHtml(p.id, p.titulo)).join('');
+  abas.scrollLeft = x;
+  renderPagina();
+}
+// a aba aberta fica à vista rolando só a barra, nunca o documento
+function mostrarAbaAtual() {
+  const barra = $('#bib-abas'), aba = $(`#aba-${al.pagina}`);
+  if (!aba || !barra.clientWidth) return;
+  if (aba.offsetLeft < barra.scrollLeft) barra.scrollLeft = aba.offsetLeft;
+  else if (aba.offsetLeft + aba.offsetWidth > barra.scrollLeft + barra.clientWidth) barra.scrollLeft = aba.offsetLeft + aba.offsetWidth - barra.clientWidth;
+}
+function abrirPagina(id) {
+  const ids = idsPaginas();
+  if (!ids.includes(id) || id === al.pagina) return;
+  const passo = ids.indexOf(id) - ids.indexOf(al.pagina);
+  al.pagina = id;
+  guardarPagina(id);
+  $$('#bib-abas [role="tab"]').forEach(b => { const sel = b.dataset.bibPagina === id; b.setAttribute('aria-selected', String(sel)); b.tabIndex = sel ? 0 : -1; });
+  renderPagina();
+  const painel = id === FORWARD ? $('#bib-forward') : $('#bib-pagina');
+  painel.classList.remove('entra-dir', 'entra-esq');
+  void painel.offsetWidth;
+  painel.classList.add(passo > 0 ? 'entra-dir' : 'entra-esq');
+  mostrarAbaAtual();
+}
+
+/* ---------- "+": nova página no fim, com nome ---------- */
+let salvarNome = null;
+// janela de um campo só: nome em branco não sai do navegador; a recusa do banco (o teto, por exemplo) aparece nela
+function pedirNome(titulo, rotulo, salvar, valor = '') {
+  salvarNome = salvar;
+  telaCriar(titulo, `<form class="criar-form" id="nome-form" novalidate>
+      <div class="campo"><label for="nome-campo">${esc(rotulo)}</label><input id="nome-campo" maxlength="80" autocomplete="off" aria-describedby="nome-erro" value="${esc(valor)}" data-foco><span class="erro-msg" id="nome-erro" role="alert"></span></div>
+      <div class="modal-acoes"><button class="btn btn-primario" id="nome-salvar" type="submit">${ico('check')}Salvar</button></div>
+    </form>`);
+}
+function novaPagina() {
+  pedirNome('Nova página', 'Nome da página', async nome => {
+    const p = await db.criarPagina(nome, al.paginas.reduce((n, x) => Math.max(n, x.ordem + 1), 0));
+    al.paginas.push(p);
+    renderPaginasAluno();
+    abrirPagina(p.id);
+  });
+}
+
+/* ---------- página e fileira: renomear, mudar de lugar, apagar ---------- */
+const paginaDaFileira = id => al.paginas.find(p => p.secoes.some(s => s.id === id));
+let mexendo = false;
+// um pedido de cada vez: dois toques seguidos não embaralham a ordem
+async function umaVez(fazer) {
+  if (mexendo) return;
+  mexendo = true;
+  try { await fazer(); } finally { mexendo = false; }
+}
+async function recarregarPaginas() {
+  try { al.paginas = await db.paginas(al.perfil.id); } catch (e) { console.warn('páginas', e); }
+  renderPaginasAluno();
+}
+function renomear(tabela, alvo) {
+  const pagina = tabela === 'paginas';
+  pedirNome(pagina ? 'Renomear página' : 'Renomear fileira', pagina ? 'Nome da página' : 'Nome da fileira', async nome => {
+    await db.mudarNaPagina(tabela, alvo.id, { titulo: nome });
+    alvo.titulo = nome;
+    renderPaginasAluno();
+  }, alvo.titulo);
+}
+function novaFileira(p) {
+  pedirNome('Nova fileira', 'Nome da fileira', async nome => {
+    p.secoes.push(await db.criarFileira(p.id, nome, p.secoes.reduce((n, s) => Math.max(n, s.ordem + 1), 0)));
+    renderPagina();
+  });
+}
+// a ordem gravada vira a posição na lista; só vai ao banco quem mudou de lugar
+async function trocarDeLugar(tabela, lista, i, passo) {
+  const nova = [...lista];
+  [nova[i], nova[i + passo]] = [nova[i + passo], nova[i]];
+  const mudou = nova.map((x, n) => [x, n]).filter(([x, n]) => x.ordem !== n);
+  if (!await tentar(() => Promise.all(mudou.map(([x, n]) => db.mudarNaPagina(tabela, x.id, { ordem: n }))))) { await recarregarPaginas(); return null; }
+  mudou.forEach(([x, n]) => { x.ordem = n; });
+  return nova;
+}
+async function moverPagina(p, acao) {
+  const i = al.paginas.indexOf(p), passo = acao === 'esq' ? -1 : 1;
+  if (!al.paginas[i + passo]) return;
+  const nova = await trocarDeLugar('paginas', al.paginas, i, passo); if (!nova) return;
+  al.paginas = nova;
+  renderPaginasAluno();
+  mostrarAbaAtual();
+  $(`#bib-pagina [data-pagina-acao="${acao}"]`)?.focus();
+}
+async function moverFileira(s, acao) {
+  const p = paginaDaFileira(s.id), i = p.secoes.indexOf(s), passo = acao === 'subir' ? -1 : 1;
+  if (!p.secoes[i + passo]) return;
+  const nova = await trocarDeLugar('secoes', p.secoes, i, passo); if (!nova) return;
+  p.secoes = nova;
+  renderPagina();
+  $(`#bib-pagina [data-fileira="${s.id}"][data-fileira-acao="${acao}"]`)?.focus();
+}
+// sem item, apaga sem perguntar
+function confirmaApagar(oque, titulo, itens) {
+  if (!itens.length) return true;
+  const n = itens.length, aparelho = itens.some(m => m.tipo === 'aparelho');
+  return confirm(`Apagar ${oque} “${titulo}”? ${n === 1 ? 'O item dela também sai' : `Os ${n} itens dela também saem`} da sua biblioteca, com a legenda, a folha da lousa e o visto.${aparelho ? ' O arquivo do vídeo continua no seu aparelho.' : ''} Não dá para desfazer.`);
+}
+async function esquecerItens(itens) {
+  for (const m of itens) if (m.tipo === 'aparelho') await esquecerNoAparelho(m.id);
+  const ids = new Set(itens.map(m => m.id));
+  al.midias = al.midias.filter(m => !ids.has(m.id));
+  ids.forEach(id => al.vistos.delete(id));
+}
+async function apagarPagina(p) {
+  const fileiras = p.secoes.map(s => s.id), itens = al.midias.filter(m => fileiras.includes(m.secao_id));
+  if (!confirmaApagar('a página', p.titulo, itens)) return;
+  if (!await tentar(() => db.apagarNaPagina('paginas', p.id), 'Página apagada.')) return;
+  await esquecerItens(itens);
+  const ids = idsPaginas();
+  al.pagina = ids[ids.indexOf(p.id) - 1];
+  guardarPagina(al.pagina);
+  al.paginas = al.paginas.filter(x => x !== p);
+  renderPaginasAluno();
+  mostrarAbaAtual();
+}
+async function apagarFileira(s) {
+  const p = paginaDaFileira(s.id), itens = al.midias.filter(m => m.secao_id === s.id);
+  if (!confirmaApagar('a fileira', s.titulo, itens)) return;
+  if (!await tentar(() => db.apagarNaPagina('secoes', s.id), 'Fileira apagada.')) return;
+  await esquecerItens(itens);
+  p.secoes = p.secoes.filter(x => x !== s);
+  renderPagina();
+}
+
+/* ---------- mover um item para qualquer fileira do aluno: a página dele vem primeiro ---------- */
+const botaoMover = id => `<button class="btn btn-linha" data-mover="${id}">${ico('arrow-right')}Mover para</button>`;
+function abrirMover(id) {
+  const m = al.midias.find(x => x.id === id); if (!m) return;
+  const atual = paginaDaFileira(m.secao_id), paginas = atual ? [atual, ...al.paginas.filter(p => p !== atual)] : al.paginas;
+  const grupos = paginas.filter(p => p.secoes.length).map(p => `<section class="mover-grupo" aria-labelledby="mover-${p.id}"><h3 id="mover-${p.id}">${esc(p.titulo)}</h3>
+      ${p.secoes.map(s => (s.id === m.secao_id ? `<button class="criar-opcao" aria-current="true" disabled>${esc(s.titulo)}<small>Está aqui</small></button>`
+        : `<button class="criar-opcao" data-mover-para="${s.id}" data-foco>${esc(s.titulo)}</button>`)).join('')}</section>`).join('');
+  telaCriar('Mover para', `<p class="ajuda">Escolha a fileira de “${esc(m.titulo)}”.</p><div class="mover-lista" id="mover-lista" data-midia="${m.id}">${grupos}</div>`);
+}
+async function moverItem(id, secao) {
+  const m = al.midias.find(x => x.id === id), p = paginaDaFileira(secao), s = p?.secoes.find(x => x.id === secao);
+  if (!m || !s) return;
+  if (!await tentar(() => db.alterarLink(id, { secao_id: secao }), `Movido para ${p.titulo} › ${s.titulo}.`)) return;
+  m.secao_id = secao;
+  fecharCamadas();
+  renderPagina();
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b || !al.perfil) return;
+  const ds = b.dataset, p = al.paginas.find(x => x.id === al.pagina), s = ds.fileira && paginaDaFileira(ds.fileira)?.secoes.find(x => x.id === ds.fileira);
+  if (ds.paginaAcao && p) {
+    if (ds.paginaAcao === 'renomear') return renomear('paginas', p);
+    if (ds.paginaAcao === 'fileira') return novaFileira(p);
+    return umaVez(() => (ds.paginaAcao === 'apagar' ? apagarPagina(p) : moverPagina(p, ds.paginaAcao)));
+  }
+  if (ds.fileiraAcao && s) {
+    if (ds.fileiraAcao === 'renomear') return renomear('secoes', s);
+    return umaVez(() => (ds.fileiraAcao === 'apagar' ? apagarFileira(s) : moverFileira(s, ds.fileiraAcao)));
+  }
+  if (ds.mover) return abrirMover(ds.mover);
+  if (ds.moverPara) umaVez(() => moverItem($('#mover-lista').dataset.midia, ds.moverPara));
+});
+$('#bib-barra').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  if (b.id === 'bib-nova') return novaPagina();
+  if (b.dataset.bibPagina) abrirPagina(b.dataset.bibPagina);
+});
+$('#bib-abas').addEventListener('keydown', ev => {
+  const ids = idsPaginas(), i = ids.indexOf(al.pagina);
+  const alvo = { ArrowRight: ids[i + 1], ArrowLeft: ids[i - 1], Home: ids[0], End: ids.at(-1) }[ev.key];
+  if (!alvo) return;
+  ev.preventDefault();
+  abrirPagina(alvo);
+  $(`#aba-${alvo}`).focus();
+});
+$('#modal').addEventListener('submit', async ev => {
+  const form = ev.target; if (form.id !== 'nome-form') return;
+  ev.preventDefault();
+  const campo = $('#nome-campo'), erro = $('#nome-erro'), botao = $('#nome-salvar'), nome = campo.value.trim();
+  erro.textContent = nome ? '' : 'Escreva o nome.';
+  campo.setAttribute('aria-invalid', String(!nome));
+  if (!nome) return campo.focus();
+  botao.disabled = true;
+  try {
+    await salvarNome(nome);
+    if (form.isConnected) fecharCamadas();
+  } catch (e) {
+    erro.textContent = e.message;
+    botao.disabled = false;
+  }
+});
+// deslizar o dedo em qualquer ponto da Biblioteca troca de página; numa fileira que ainda rola naquele sentido, o gesto é da fileira
+let toque = null;
+const naBiblioteca = () => !$('#tela-aluno').hidden && !$('#v-biblioteca').hidden && $('#fundo').hidden;
+// o encaixe das capas deixa a fileira parada a poucos pixels da borda
+const FOLGA_TRILHA = 8;
+document.addEventListener('touchstart', ev => {
+  const t = ev.touches[0], r = ev.target.closest('.trilha');
+  toque = ev.touches.length !== 1 || !naBiblioteca() || ev.target.closest('#bib-abas') ? null
+    : { x: t.clientX, y: t.clientY, esq: !!r && r.scrollLeft > FOLGA_TRILHA, dir: !!r && r.scrollLeft + r.clientWidth < r.scrollWidth - FOLGA_TRILHA };
+}, { passive: true });
+document.addEventListener('touchend', ev => {
+  const o = toque, t = ev.changedTouches[0];
+  toque = null;
+  if (!o || ev.touches.length) return;
+  const dx = t.clientX - o.x, dy = t.clientY - o.y;
+  if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5 || (dx < 0 ? o.dir : o.esq)) return;
+  const ids = idsPaginas(), i = ids.indexOf(al.pagina) + (dx < 0 ? 1 : -1);
+  if (i >= 0 && i < ids.length) abrirPagina(ids[i]);
+}, { passive: true });
+document.addEventListener('touchcancel', () => { toque = null; });
+$('#bib-paginas').addEventListener('animationend', ev => ev.target.classList.remove('entra-dir', 'entra-esq'));
 
 </script>
 <script>
@@ -4678,7 +5012,7 @@ const botoesPaineis = m => `<span class="pl-sep" aria-hidden="true"></span>
     <a class="icone-btn pl-painel" href="${esc(urlDuvida(`o material "${m.titulo}"`))}" target="_blank" rel="noopener noreferrer" aria-label="Dúvida no WhatsApp" title="Dúvida no WhatsApp">${ico('whatsapp-logo')}</a>
     <button class="icone-btn pl-painel" data-painel="mais" aria-expanded="false" aria-controls="estudo-mais" aria-label="Mais opções" title="Mais opções">${ico('dots-three')}</button>`;
 const painelMais = m => `<article class="painel estudo-mais" id="estudo-mais" hidden>
-    <div class="mais-acoes">${botaoVisto(m.id)}${doAluno(m) ? `<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
+    <div class="mais-acoes">${botaoVisto(m.id)}${doAluno(m) ? `${botaoMover(m.id)}<button class="btn btn-linha" data-apagar-link="${m.id}">${ico('trash')}Apagar</button>` : ''}</div>
     ${m.descricao ? `<section><h3>Sobre este material</h3><p>${esc(m.descricao)}</p></section>` : ''}
     <details class="mais-teclas"><summary>Ajuda das teclas</summary><p>${TEXTO_TECLAS}</p></details>
   </article>`;

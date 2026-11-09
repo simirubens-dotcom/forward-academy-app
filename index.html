@@ -860,6 +860,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .capa-tipo.pdf{background:var(--bege);color:#1A2142}
 .capa-tipo.youtube,.capa-tipo.video{background:var(--marinho);color:#F0EDE4}
 .capa-tipo.link,.capa-tipo.audio{background:#252526;color:#F0EDE4}
+.capa-tipo.amarelo{background:var(--amarelo);color:#1A2142}
 .card-capa>img.yt{object-fit:cover}
 
 /* estudo: vídeo do YouTube e PDF dentro da Forward */
@@ -1040,16 +1041,41 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .video-envio{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
 .video-envio progress{flex:1;height:10px;accent-color:var(--fg)}
 .bib-equipe .quem b,.bib-equipe .quem small,.prog-equipe .quem b,.prog-equipe .quem small{white-space:normal;overflow-wrap:anywhere}
-@media (max-width:520px){.bib-equipe .acoes-linha{grid-column:1/-1}}
+.mat-ico.capa-cor{position:relative;overflow:hidden}
+.mat-ico.capa-cor .capa-tipo{display:grid;place-items:center;padding:0}
+.bib-equipe .ap-linha{flex-wrap:wrap}
+.bib-equipe .aviso-aparelho{flex-basis:100%;margin:0}
+@media (max-width:520px){.bib-equipe li{flex-wrap:wrap}.bib-equipe .acoes-linha{flex-basis:100%}}
 @media (max-width:720px){#lista-alunos li{flex-wrap:wrap}#lista-alunos .acoes-linha{flex-basis:100%}}
 .estudo-topo .btn-texto{min-height:24px}
 
-/* biblioteca pessoal do aluno e visto */
-.form-link{display:grid;gap:14px;padding:18px 20px;margin-bottom:18px}
-.form-link p{margin:0}
-.form-link-campos{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}
-.form-link-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
-@media (max-width:640px){.form-link-campos{grid-template-columns:1fr}.form-link{padding:16px}}
+/* biblioteca pessoal do aluno, "Criar" e visto */
+.card-criar{align-self:start;aspect-ratio:16/10;align-content:center;justify-items:center;gap:2px;border:2px dashed var(--line);border-radius:13px;color:var(--fg-2);font-size:15px;font-weight:600;transition:border-color .15s,color .15s}
+.card-criar:hover,.card-criar:focus-visible{border-color:var(--fg-2);color:var(--fg)}
+.criar-mais{font-size:34px;line-height:1;font-weight:300}
+.criar .gaveta-fechar{background:var(--surface-2);color:var(--fg)}
+.criar h2{padding-right:44px}
+.criar-menu{display:grid;gap:10px}
+.criar-opcao{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--fg);font-size:16px;font-weight:600;text-align:left}
+.criar-opcao:hover{border-color:var(--fg-2)}
+.criar-opcao .ico{width:24px;height:24px}
+.criar-ajuda summary{cursor:pointer;font-size:14px;font-weight:600}
+.criar-ajuda p{margin-top:8px}
+.criar-form{display:grid;gap:14px}
+.criar-arquivo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0}
+.criar-arquivo .ajuda{overflow-wrap:anywhere}
+.legenda-falta{margin-top:10px}
+.capa-escolha{display:flex;flex-wrap:wrap;gap:10px 12px;min-width:0;margin:0;padding:0;border:0}
+.capa-escolha legend{padding:0;margin-bottom:6px}
+.capa-opcao{position:relative;display:grid;justify-items:center;gap:4px;font-size:12.5px;color:var(--fg-2);cursor:pointer}
+.capa-opcao input{position:absolute;opacity:0;pointer-events:none}
+.capa-amostra{display:block;width:72px;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.capa-amostra img{width:100%;height:100%;object-fit:cover}
+.capa-amostra.marinho{background:var(--marinho)}
+.capa-amostra.bege{background:var(--bege)}
+.capa-amostra.grafite{background:#252526}
+.capa-amostra.amarelo{background:var(--amarelo)}
+.capa-opcao input:checked+.capa-amostra{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--fg)}.capa-opcao input:focus-visible+.capa-amostra{outline:2px solid var(--fg);outline-offset:3px}
 .minha-vazia{margin:0}
 .selo-visto{display:inline-flex;align-items:center;gap:4px;justify-self:start;padding:2px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);font-size:12.5px;font-weight:600}
 .selo-visto .ico{width:14px;height:14px}
@@ -1283,7 +1309,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       </section>
       <section>
         <h2>Que dados guardamos</h2>
-        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou), o ponto em que você parou em cada vídeo (para continuar dali) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
+        <p>Nome, e-mail, nível de inglês, as aulas, a matrícula nos cursos (o curso, os dias da semana e o horário), as lições e as respostas que você envia, as palavras que você salva no vocabulário, as anotações que você faz na lousa (os traços sobre o material e na folha pautada), os links que você guarda na sua biblioteca (o endereço e o título), os materiais que você marca como vistos (e quando marcou), o ponto em que você parou em cada vídeo (para continuar dali) e as suas tentativas de pronúncia (a frase, o texto que o navegador reconheceu e a nota) e de ditado (a linha da legenda, o que você escreveu e a nota) e quantas perguntas você fez à IA em cada dia (só o número, sem o texto). Dos vídeos do seu aparelho que você põe na biblioteca, guardamos só o título, a capa, o tamanho do arquivo e a legenda que você escolher; o vídeo e o nome do arquivo ficam só no seu aparelho e não vão para a internet. Os avisos do app (aula marcada, remarcada ou cancelada, lição nova, corrigida ou entregue, curso aplicado a você) ficam guardados, lidos ou não, até a pessoa ser excluída. O áudio da sua voz no “Ler em voz alta” (o treino de pronúncia) não é guardado. Os anexos que você envia na lição de casa (o áudio gravado, a foto e o PDF) ficam guardados até a lição ou o aluno ser excluído. Do aluno menor de idade, guardamos também o nome e o e-mail do responsável, a data em que ele autorizou e, se ele autorizou a IA, quando e por quem da equipe ela foi ligada. Se você liga os avisos no celular, guardamos a inscrição do seu navegador no serviço de push dele (o endereço dessa inscrição e as chaves que cifram a mensagem); ela é apagada quando você desliga os avisos, quando sai do app, quando o serviço de push avisa que ela venceu ou quando a pessoa é excluída.</p>
       </section>
       <section>
         <h2>Para quê</h2>
@@ -1379,15 +1405,9 @@ button.aviso:focus-visible{outline-offset:-3px}
       <div id="bib-conteudo"></div>
       <section class="fileira minha" aria-labelledby="minha-titulo">
         <div class="fileira-topo"><h3 id="minha-titulo">Minha biblioteca</h3><span id="minha-conta"></span></div>
-        <form class="painel form-link" id="form-link" novalidate>
-          <p class="ajuda">Guarde aqui vídeos do YouTube e páginas que você achar. O vídeo abre no estudo; a página abre fora do app. O seu professor e a escola também veem os seus links.</p>
-          <div class="form-link-campos">
-            <div class="campo"><label for="link-url">Link</label><input id="link-url" type="url" inputmode="url" autocomplete="off" placeholder="https://" aria-describedby="link-url-erro"><span class="erro-msg" id="link-url-erro"></span></div>
-            <div class="campo"><label for="link-titulo">Título</label><input id="link-titulo" autocomplete="off" placeholder="Como você quer chamar este link" aria-describedby="link-titulo-erro"><span class="erro-msg" id="link-titulo-erro"></span></div>
-          </div>
-          <div class="form-link-acoes"><button class="btn btn-primario" id="link-guardar" type="submit"><span data-icone="plus"></span>Guardar link</button><span class="erro-msg" id="link-erro" role="alert"></span></div>
-        </form>
         <div id="minha-links"></div>
+        <input class="sr" id="ap-video" type="file" accept="video/*,.mp4,.m4v,.webm,.mkv,.mov" tabindex="-1" aria-hidden="true">
+        <input class="sr" id="ap-legenda" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip" tabindex="-1" aria-hidden="true">
       </section>
     </section>
 
@@ -1653,8 +1673,9 @@ const NOME_ESTADO = { pendente: 'Para fazer', atrasada: 'Atrasada', entregue: 'A
 const ICONE_ESTADO = { pendente: 'clock', atrasada: 'warning-circle', entregue: 'paper-plane-tilt', corrigida: 'seal-check' };
 const NOME_AVAL = { mandou_bem: 'Mandou bem', vamos_ajustar: 'Vamos ajustar' };
 const estadoTarefa = t => (t.status === 'pendente' && new Date(t.prazo) < new Date()) ? 'atrasada' : t.status;
-const ICONE_TIPO = { youtube: 'youtube-logo', pdf: 'file-pdf', audio: 'headphones', link: 'arrow-square-out', video: 'film-strip' };
-const NOME_TIPO = { youtube: 'Vídeo do YouTube', pdf: 'PDF', audio: 'Áudio', link: 'Link', video: 'Vídeo enviado' };
+const ICONE_TIPO = { youtube: 'youtube-logo', pdf: 'file-pdf', audio: 'headphones', link: 'arrow-square-out', video: 'film-strip', aparelho: 'film-strip' };
+const NOME_TIPO = { youtube: 'Vídeo do YouTube', pdf: 'PDF', audio: 'Áudio', link: 'Link', video: 'Vídeo enviado', aparelho: 'Vídeo do aparelho' };
+const CORES_CAPA = ['marinho', 'bege', 'grafite', 'amarelo'];
 const NIVEIS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const CORES_ALUNO = ['#5B7FD1', '#3E9A72', '#D4A94F', '#C9705A', '#9B7BC7', '#4FA3B8', '#B86B9B', '#7C9A3E'];
 
@@ -1663,10 +1684,11 @@ function idYoutube(url) {
   const m = String(url || '').match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/);
   return m ? m[1] : null;
 }
+// capa nula no YouTube é a miniatura; capa de cor vale para qualquer tipo
 function capaMaterial(m) {
-  const yt = m.tipo === 'youtube' && idYoutube(m.url);
+  const yt = m.tipo === 'youtube' && (!m.capa || m.capa === 'miniatura') && idYoutube(m.url);
   if (yt) return `<img class="yt" src="https://i.ytimg.com/vi/${yt}/hqdefault.jpg" alt="" loading="lazy">`;
-  return `<div class="capa-tipo ${esc(m.tipo)}"><small>${esc(NOME_TIPO[m.tipo] || '')}${m.nivel ? `, nível ${esc(m.nivel)}` : ''}</small><b>${esc(m.titulo)}</b></div>`;
+  return `<div class="capa-tipo ${esc(CORES_CAPA.includes(m.capa) ? m.capa : m.tipo)}"><small>${esc(NOME_TIPO[m.tipo] || '')}${m.nivel ? `, nível ${esc(m.nivel)}` : ''}</small><b>${esc(m.titulo)}</b></div>`;
 }
 
 // camada obrigatória (troca da senha provisória) não fecha por Esc nem por clique fora
@@ -1724,6 +1746,12 @@ function lerLegenda(colado) {
   }));
   return saida;
 }
+// legenda baixada da internet costuma vir em Windows-1252: sem UTF-8 válido, lê nesse
+async function textoDoArquivo(f) {
+  const b = await f.arrayBuffer();
+  const t = new TextDecoder('utf-8').decode(b);
+  return t.includes('�') ? new TextDecoder('windows-1252').decode(b) : t;
+}
 
 </script>
 <script>
@@ -1739,6 +1767,7 @@ const ERRO_PLAYER = {
 };
 const mensagemDoPlayer = codigo => ERRO_PLAYER[codigo] || 'O player do YouTube deu erro. Tente de novo.';
 const ERRO_ARQUIVO = 'O navegador não conseguiu tocar este vídeo. Tente de novo mais tarde.';
+const ERRO_FORMATO = 'Este navegador não toca o formato deste vídeo. Use um arquivo MP4 (H.264), o formato que mais toca nos navegadores.';
 const ESTADO_YT = { [-1]: 'parado', 0: 'fim', 1: 'tocando', 2: 'pausado', 3: 'carregando', 5: 'parado' };
 const VELOCIDADE_MIN = 0.5, VELOCIDADE_MAX = 2;
 const limitarVelocidade = r => Math.min(VELOCIDADE_MAX, Math.max(VELOCIDADE_MIN, Number(r) || 1));
@@ -1874,11 +1903,12 @@ function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = fals
   return ctl;
 }
 
-// vídeo enviado: o MP4 do Internet Archive num <video> com os controles do navegador
+// vídeo enviado (MP4 do Internet Archive) ou do aparelho (endereço blob: do arquivo) num <video> com os controles do navegador
 function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false, tocar = false } = {}) {
   const v = document.createElement('video');
   Object.assign(v, { controls: true, playsInline: true, preload: 'metadata' });
   v.setAttribute('controlslist', semTelaCheia ? 'noplaybackrate nofullscreen' : 'noplaybackrate');
+  const local = url.startsWith('blob:');
   let pronto = false;
   const motor = {
     tipo: 'video',
@@ -1900,14 +1930,16 @@ function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false, t
   v.addEventListener('waiting', () => { if (!v.paused) mudouEstado('carregando'); });
   v.addEventListener('seeked', mudouTempo);
   v.addEventListener('ratechange', () => mudouTaxa(v.playbackRate));
+  const falhou = msg => { deuErro(msg); if (aoErro) aoErro(v.error?.code || 0, msg); };
   v.addEventListener('error', () => {
     if (!v.getAttribute('src')) return;
-    deuErro(ERRO_ARQUIVO);
-    if (aoErro) aoErro(v.error?.code || 0, ERRO_ARQUIVO);
+    falhou(local && [3, 4].includes(v.error?.code) ? ERRO_FORMATO : ERRO_ARQUIVO);
   });
   caixa.replaceChildren(v);
   ctl.carregado = new Promise(resolve => {
     v.addEventListener('loadedmetadata', () => {
+      // o Chrome toca só o som quando não decodifica a imagem do arquivo (MKV com MPEG-4, HEVC sem suporte no aparelho)
+      if (local && !v.videoWidth) { v.removeAttribute('src'); v.load(); falhou(ERRO_FORMATO); return; }
       if (inicio > 0 && inicio < v.duration) v.currentTime = inicio;
       pronto = true;
       resolve(ctl);
@@ -1918,7 +1950,7 @@ function playerArquivo(caixa, url, { aoErro, inicio = 0, semTelaCheia = false, t
   return ctl;
 }
 
-// fonte: { youtube: '<id do vídeo>' } ou { url: '<MP4 do Archive>' }
+// fonte: { youtube: '<id do vídeo>' } ou { url: '<MP4 do Archive ou blob: do aparelho>' }
 const abrirPlayer = (caixa, fonte, opcoes) => (fonte.youtube ? playerYoutube(caixa, fonte.youtube, opcoes) : playerArquivo(caixa, fonte.url, opcoes));
 
 </script>
@@ -1960,6 +1992,7 @@ function erroLink(e) {
   if (e?.code === '23514' && /midias_pessoal_url/.test(m)) return 'O link precisa começar com https://, ter um domínio (como www.exemplo.com), não ter espaço e ter até 2.048 caracteres.';
   if (e?.code === '23514' && /midias_pessoal_youtube/.test(m)) return 'Esse endereço não é de um vídeo do YouTube.';
   if (e?.code === '23514' && /midias_titulo_check/.test(m)) return 'O título precisa ter de 1 a 160 caracteres.';
+  if (e?.code === '23514' && /midias_aparelho|midias_capa/.test(m)) return 'O banco recusou este vídeo: confira o arquivo e a capa.';
   if (e?.code === '23514') return 'O banco recusou este link.';
   if (e?.code === '23502') return 'Falta o título ou o link.';
   if (e?.code === '42501') return 'Sem permissão para guardar este link.';
@@ -2288,7 +2321,12 @@ const db = {
     if (!ok(await sb.from('midias').delete().eq('id', id).select('id')).length) throw new Error('Este link não foi apagado: ele já tinha saído ou você não tem permissão.');
   },
   async linksDoAluno(aluno) {
-    return ok(await sb.from('midias').select('id,tipo,titulo,url,criado_em').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
+    return ok(await sb.from('midias').select('id,tipo,titulo,url,capa,criado_em').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
+  },
+  // ids dos vídeos que têm ao menos uma linha de legenda
+  async comLegenda(ids) {
+    const r = await Promise.all(ids.map(id => sb.from('legendas').select('midia_id').eq('midia_id', id).limit(1)));
+    return new Set(r.flatMap(x => ok(x)).map(x => x.midia_id));
   },
 
   /* ---------- visto: o aluno marca e desmarca o seu; a equipe só lê ---------- */
@@ -2316,7 +2354,7 @@ const db = {
     });
   },
 
-  /* ---------- legenda: grava só pela função salvar_legendas ---------- */
+  /* ---------- legenda: grava só pelas funções salvar_legendas e salvar_legenda_aparelho ---------- */
   // a API devolve no máximo 1.000 linhas por pedido, e um vídeo pode ter 2.000
   async legendas(midia) {
     const todas = [];
@@ -2327,8 +2365,12 @@ const db = {
     }
   },
   async salvarLegendas(midia, linhas) { return ok(await sb.rpc('salvar_legendas', { p_midia: midia, p_linhas: linhas })); },
+  // vídeo do aparelho: só o aluno dono grava; troca a legenda inteira
+  async salvarLegendaAparelho(midia, linhas) { return ok(await sb.rpc('salvar_legenda_aparelho', { p_midia: midia, p_linhas: linhas })); },
   // linhas ainda sem português: a função palavra traduz um lote e devolve { traducoes: [{ id, traducao }], faltam, fora }
   async traduzirLegenda(midia_id) { return this.funcao('palavra', 'traduzir_legenda', { midia_id }); },
+  // vídeo do aparelho: só a linha pedida; devolve { texto, traducao, fora }
+  async traduzirLinha(midia_id, texto) { return this.funcao('palavra', 'traduzir_linha', { midia_id, texto }); },
 
   /* ---------- dicionário: Edge Function palavra ---------- */
   // palavra nova leva até ~5 s na função; o limite daqui só existe para a caixa não ficar presa
@@ -3542,7 +3584,7 @@ async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
   const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(),
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(), carregarAparelho(),
   ]);
   Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
   renderAluno();
@@ -3592,13 +3634,13 @@ async function levarAlunoAoAviso(tipo, id) {
   return true;
 }
 
-/* ---------- estudo: abre o material ---------- */
-async function abrirEstudo(id) {
+/* ---------- estudo: abre o material; o vídeo do aparelho vem com o arquivo escolhido ---------- */
+async function abrirEstudo(id, arquivo) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
   fecharEstudo();
   fecharCamadas();
   vistaAluno('estudo');
-  const v = $('#v-estudo'), video = m.tipo === 'youtube' || m.tipo === 'video';
+  const v = $('#v-estudo'), video = ['youtube', 'video', 'aparelho'].includes(m.tipo);
   // no vídeo o topo é só voltar e título: visto, dúvida e descrição ficam na barra do estudo
   v.classList.toggle('seco', video);
   v.innerHTML = `
@@ -3613,7 +3655,8 @@ async function abrirEstudo(id) {
     ${!video && m.descricao ? `<article class="painel nota-estudo"><div class="painel-topo"><h2>Sobre este material</h2></div><p style="margin:0;padding:0 20px 18px">${esc(m.descricao)}</p></article>` : ''}`;
   const box = $('#estudo-conteudo');
   if (video) {
-    const fonte = m.tipo === 'video' ? m.url && { url: m.url } : idYoutube(m.url) && { youtube: idYoutube(m.url) };
+    if (m.tipo === 'aparelho' && arquivo) es.blob = URL.createObjectURL(arquivo);
+    const fonte = es.blob ? { url: es.blob } : m.tipo === 'video' ? m.url && { url: m.url } : idYoutube(m.url) && { youtube: idYoutube(m.url) };
     if (fonte) abrirVideo(m, fonte, box);
     else box.innerHTML = `<div class="caixa-aviso erro">${m.tipo === 'video' ? 'Este vídeo ainda não está pronto. Volte daqui a pouco.' : 'O link deste vídeo não é do YouTube. Avise o Pedro.'}</div>`;
   } else if (m.tipo === 'audio') {
@@ -3690,7 +3733,6 @@ document.addEventListener('click', ev => {
   if (b.dataset.tarefa && b.closest('#gaveta')) { fecharCamadas(); al.licaoSel = b.dataset.tarefa; vistaAluno('licoes'); renderLicoes(); }
 });
 $('#bib-busca').addEventListener('input', ev => { al.busca = ev.target.value; renderBibliotecaAluno(); });
-$('#form-link').addEventListener('submit', ev => { ev.preventDefault(); guardarLink(); });
 
 </script>
 <script>
@@ -3907,11 +3949,12 @@ const contaVistos = itens => `${itens.filter(m => al.vistos.has(m.id)).length} d
 const dominio = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return 'Link'; } };
 const rotuloVisto = visto => (visto ? `${ico('check')}Visto` : 'Marcar como visto');
 const botaoVisto = id => `<button class="btn btn-linha btn-visto" data-visto="${id}" aria-pressed="${al.vistos.has(id)}">${rotuloVisto(al.vistos.has(id))}</button>`;
+const metaMaterial = m => (m.tipo === 'aparelho' ? (ap.locais.has(m.id) ? NOME_TIPO.aparelho : OUTRO_APARELHO) : doAluno(m) ? dominio(m.url) : m.fonte || 'Forward');
 function cardMaterial(m) {
   return `<button class="card" data-material="${m.id}">
     <span class="card-capa">${capaMaterial(m)}</span>
     <span class="card-titulo">${esc(m.titulo)}</span>
-    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(doAluno(m) ? dominio(m.url) : m.fonte || 'Forward')}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
+    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(metaMaterial(m))}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
     ${al.vistos.has(m.id) ? `<span class="selo-visto">${ico('check')}Visto</span>` : ''}
     ${progressoVideo(m.id)}
   </button>`;
@@ -3975,9 +4018,8 @@ function renderBibliotecaAluno() {
     : `<div class="vazio">${ico('books')}<b>A biblioteca ainda está vazia</b><span>Os materiais que o Pedro puser aparecem aqui.</span></div>`);
   const links = al.midias.filter(doAluno).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
   $('#minha-conta').textContent = links.length ? contaVistos(links) : '';
-  $('#minha-links').innerHTML = links.length
-    ? `<div class="trilha">${links.map(cardMaterial).join('')}</div>`
-    : `<p class="ajuda minha-vazia">Nenhum link guardado ainda. Cole acima o link de um vídeo do YouTube ou de uma página que comece com https://, dê um título e toque em “Guardar link”.</p>`;
+  $('#minha-links').innerHTML = `<div class="trilha">${CARD_CRIAR}${links.map(cardMaterial).join('')}</div>`
+    + (links.length ? '' : '<p class="ajuda minha-vazia">Toque em “Criar” para guardar um vídeo do YouTube, uma página ou um vídeo do seu aparelho.</p>');
 }
 
 /* link da biblioteca pessoal: as mesmas regras do banco */
@@ -4014,10 +4056,12 @@ async function guardarLink() {
   $('#link-titulo-erro').textContent = erroTitulo;
   $('#link-erro').textContent = '';
   if (erroUrl || erroTitulo) return (erroUrl ? campoUrl : campoTitulo).focus();
+  // a miniatura só existe no YouTube: a página sem cor fica com a capa do tipo
+  const tipo = tipoDoLink(url), capa = $('#criar-link input[name="capa"]:checked')?.value || 'miniatura';
   botao.disabled = true;
   try {
-    al.midias.push(await db.guardarLink({ tipo: tipoDoLink(url), titulo, url, pessoal_de: al.perfil.id }));
-    campoUrl.value = ''; campoTitulo.value = '';
+    al.midias.push(await db.guardarLink({ tipo, titulo, url, pessoal_de: al.perfil.id, ...(tipo === 'youtube' || capa !== 'miniatura' ? { capa } : {}) }));
+    fecharCamadas();
     renderBibliotecaAluno();
     avisar('Link guardado na sua biblioteca.');
   } catch (e) {
@@ -4026,10 +4070,13 @@ async function guardarLink() {
 }
 async function apagarLink(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
-  if (!confirm(`Apagar “${m.titulo}” da sua biblioteca? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
+  const aparelho = m.tipo === 'aparelho';
+  if (!confirm(aparelho ? `Apagar “${m.titulo}” da sua biblioteca? A legenda, a folha da lousa, o visto e o ponto onde você parou também saem. O arquivo do vídeo continua no seu aparelho. Não dá para desfazer.`
+    : `Apagar “${m.titulo}” da sua biblioteca? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
   // sai do estudo antes: o ponto do vídeo e a lousa gravam enquanto o link ainda existe
   if (!$('#v-estudo').hidden) vistaAluno('biblioteca');
-  if (!await tentar(() => db.apagarLink(id), 'Link apagado.')) return;
+  if (!await tentar(() => db.apagarLink(id), aparelho ? 'Vídeo apagado.' : 'Link apagado.')) return;
+  if (aparelho) await esquecerNoAparelho(id);
   al.midias = al.midias.filter(x => x.id !== id);
   al.vistos.delete(id);
   fecharCamadas();
@@ -4048,6 +4095,7 @@ async function alternarVisto(b) {
 }
 function abrirMaterialAluno(id) {
   const m = al.midias.find(x => x.id === id); if (!m) return;
+  if (m.tipo === 'aparelho') return abrirAparelho(m);
   if (['youtube', 'video', 'pdf'].includes(m.tipo)) return abrirEstudo(m.id);
   const url = m.tipo === 'link' && /^https:\/\//.test(m.url || '') ? m.url : null;
   const principal = m.tipo === 'link'
@@ -4063,6 +4111,249 @@ function abrirMaterialAluno(id) {
     </div>`;
   abrirCamada($('#modal'));
 }
+
+</script>
+<script>
+/* "Criar" da Minha biblioteca: link do YouTube ou de página e vídeo do aparelho.
+   O vídeo do aparelho toca do arquivo do aluno e nada dele sobe; no banco ficam título, capa, tamanho e legenda.
+   No aparelho (IndexedDB) ficam o nome do arquivo, o tamanho e, onde o navegador tem showOpenFilePicker, o acesso ao
+   arquivo para reabrir sem escolher de novo. Sem esse acesso, ou com a permissão negada, a capa pede o arquivo e confere o tamanho. */
+const AP_BANCO = 'forward-academy', AP_DEPOSITO = 'videos-do-aparelho';
+const EXT_VIDEO = ['.mp4', '.m4v', '.webm', '.mkv', '.mov'];
+const LEGENDA_MAX = 2 * 1024 * 1024;
+const NOME_COR = { marinho: 'Azul-marinho', bege: 'Bege', grafite: 'Grafite', amarelo: 'Amarelo' };
+const OUTRO_APARELHO = 'Este vídeo está em outro aparelho';
+const AVISO_TAMANHO = 'Este arquivo não parece o mesmo vídeo: o tamanho é diferente do arquivo usado ao criar. Usar mesmo assim?';
+const CARD_CRIAR = '<button class="card card-criar" id="criar" aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>';
+const ap = { locais: new Set(), escolhido: null, handle: null, linhas: [], sugestao: '', espera: null };
+const tamanhoLegivel = n => `${(n / 1048576).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} MB`;
+
+/* ---------- o que fica no aparelho: { midia, nome, tamanho, handle? } por item ---------- */
+let bancoAparelho = null;
+function abrirBancoAparelho() {
+  bancoAparelho = bancoAparelho || new Promise((ok, falha) => {
+    const r = indexedDB.open(AP_BANCO, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore(AP_DEPOSITO, { keyPath: 'midia' });
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => falha(r.error);
+  }).catch(e => { bancoAparelho = null; throw e; });
+  return bancoAparelho;
+}
+async function noAparelho(modo, fazer) {
+  const banco = await abrirBancoAparelho();
+  return new Promise((ok, falha) => {
+    const t = banco.transaction(AP_DEPOSITO, modo), pedido = fazer(t.objectStore(AP_DEPOSITO));
+    t.oncomplete = () => ok(pedido.result);
+    t.onerror = t.onabort = () => falha(t.error);
+  });
+}
+// sem IndexedDB (janela anônima, armazenamento bloqueado) a biblioteca abre igual e toda capa pede o arquivo
+async function carregarAparelho() {
+  try { ap.locais = new Set(await noAparelho('readonly', d => d.getAllKeys())); } catch (e) { console.warn('IndexedDB', e); }
+}
+async function lerDoAparelho(midia) {
+  try { return await noAparelho('readonly', d => d.get(midia)); } catch (e) { console.warn('IndexedDB', e); return null; }
+}
+async function guardarNoAparelho(reg) {
+  try { await noAparelho('readwrite', d => d.put(reg)); ap.locais.add(reg.midia); } catch (e) { console.warn('IndexedDB', e); }
+}
+async function esquecerNoAparelho(midia) {
+  try { await noAparelho('readwrite', d => d.delete(midia)); ap.locais.delete(midia); } catch (e) { console.warn('IndexedDB', e); }
+}
+
+/* ---------- seletor pelo <input type=file>: um pedido por vez; cancelar devolve null ---------- */
+function escolherArquivo(inp) {
+  if (ap.espera) ap.espera(null);
+  return new Promise(ok => { ap.espera = ok; inp.value = ''; inp.click(); });
+}
+['#ap-video', '#ap-legenda'].forEach(s => {
+  const inp = $(s), fim = f => { const ok = ap.espera; ap.espera = null; if (ok) ok(f); };
+  inp.addEventListener('change', () => fim(inp.files[0] || null));
+  inp.addEventListener('cancel', () => fim(null));
+});
+
+/* ---------- janela do Criar: menu, link e arquivo do aparelho ---------- */
+function telaCriar(titulo, corpo) {
+  const modal = $('#modal'), aberto = modal.classList.contains('aberto');
+  modal.innerHTML = `<div class="modal-corpo criar">
+      <button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button>
+      <h2 id="modal-titulo">${esc(titulo)}</h2>
+      ${corpo}
+    </div>`;
+  if (!aberto) return abrirCamada(modal);
+  modal.querySelector('[data-foco]')?.focus({ preventScroll: true });
+}
+function abrirCriar() {
+  telaCriar('Criar', `
+    <div class="criar-menu" id="criar-menu" role="group" aria-label="O que criar">
+      <button class="criar-opcao" data-criar="link" data-foco>${ico('youtube-logo')}Link do YouTube</button>
+      <button class="criar-opcao" data-criar="aparelho">${ico('film-strip')}Arquivo do aparelho</button>
+    </div>
+    <details class="criar-ajuda" id="criar-ajuda">
+      <summary>Como conseguir vídeo e legenda</summary>
+      <p>Use um vídeo que você já tem no aparelho. A legenda é um arquivo .srt do mesmo episódio, com o mesmo tempo do vídeo (.vtt também serve). MP4 é o formato que mais toca no navegador.</p>
+    </details>`);
+}
+const amostraCor = c => `<label class="capa-opcao"><input type="radio" name="capa" value="${c}"><span class="capa-amostra ${c}"></span>${NOME_COR[c]}</label>`;
+function escolhaCapa(miniatura) {
+  return `<fieldset class="capa-escolha"><legend class="rotulo">Capa</legend>
+      ${miniatura ? '<label class="capa-opcao"><input type="radio" name="capa" value="miniatura"><span class="capa-amostra" id="capa-miniatura"></span>Miniatura do vídeo</label>' : ''}
+      ${CORES_CAPA.map(amostraCor).join('')}
+    </fieldset>`;
+}
+function abrirCriarLink() {
+  telaCriar('Link do YouTube', `
+    <form class="criar-form" id="criar-link" novalidate>
+      <p class="ajuda">Cole o link de um vídeo do YouTube ou de uma página que comece com https://. O vídeo abre no estudo; a página abre fora do app. O seu professor e a escola também veem os seus links.</p>
+      <div class="campo"><label for="link-url">Link</label><input id="link-url" type="url" inputmode="url" autocomplete="off" placeholder="https://" aria-describedby="link-url-erro" data-foco><span class="erro-msg" id="link-url-erro"></span></div>
+      <div class="campo"><label for="link-titulo">Título</label><input id="link-titulo" autocomplete="off" placeholder="Como você quer chamar este link" aria-describedby="link-titulo-erro"><span class="erro-msg" id="link-titulo-erro"></span></div>
+      ${escolhaCapa(true)}
+      <div class="modal-acoes"><button class="btn btn-primario" id="link-guardar" type="submit">${ico('plus')}Guardar link</button><span class="erro-msg" id="link-erro" role="alert"></span></div>
+    </form>`);
+  $('#criar-link input[name="capa"]').checked = true;
+  $('#link-url').addEventListener('input', ev => {
+    const id = idYoutube(normalizarLink(ev.target.value));
+    $('#capa-miniatura').innerHTML = id ? `<img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="">` : '';
+  });
+}
+function abrirCriarAparelho() {
+  Object.assign(ap, { escolhido: null, handle: null, linhas: [], sugestao: '' });
+  telaCriar('Arquivo do aparelho', `
+    <form class="criar-form" id="criar-aparelho" novalidate>
+      <p class="ajuda">O vídeo fica só neste aparelho e toca daqui, sem subir para a internet. No app ficam o título, a capa, o tamanho do arquivo e a legenda; o seu professor e a escola também veem esses dados.</p>
+      <div class="campo"><span class="rotulo">Vídeo</span>
+        <div class="criar-arquivo"><button class="btn btn-linha" type="button" id="ap-escolher-video" data-foco>${ico('film-strip')}Escolher o vídeo</button><span class="ajuda" id="ap-video-nome"></span></div>
+        <span class="erro-msg" id="ap-video-erro" role="alert"></span></div>
+      <div class="campo"><span class="rotulo">Legenda (opcional)</span>
+        <div class="criar-arquivo"><button class="btn btn-linha" type="button" id="ap-escolher-legenda">${ico('article')}Escolher a legenda</button><span class="ajuda" id="ap-legenda-nome">Arquivo .srt ou .vtt</span></div>
+        <span class="erro-msg" id="ap-legenda-erro" role="alert"></span></div>
+      <div class="campo"><label for="ap-titulo">Título</label><input id="ap-titulo" autocomplete="off" placeholder="Como você quer chamar este vídeo" aria-describedby="ap-titulo-erro"><span class="erro-msg" id="ap-titulo-erro"></span></div>
+      ${escolhaCapa(false)}
+      <div class="modal-acoes"><button class="btn btn-primario" id="ap-criar" type="submit">${ico('play')}Criar e abrir</button><span class="erro-msg" id="ap-erro" role="alert"></span></div>
+    </form>`);
+  $('#criar-aparelho input[name="capa"]').checked = true;
+}
+
+/* ---------- arquivo do aparelho: escolher, criar e abrir na hora ---------- */
+// onde há showOpenFilePicker o acesso ao arquivo fica guardado para reabrir; nos outros navegadores vai pelo <input type=file>
+async function escolherVideo() {
+  let f = null, handle = null;
+  if (window.showOpenFilePicker) {
+    try {
+      [handle] = await showOpenFilePicker({ types: [{ description: 'Vídeo', accept: { 'video/*': EXT_VIDEO } }] });
+      f = await handle.getFile();
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      console.warn('seletor de arquivo', e);
+      handle = null;
+    }
+  }
+  if (!f) f = await escolherArquivo($('#ap-video'));
+  if (!f || !$('#criar-aparelho')) return;
+  const titulo = $('#ap-titulo'), sugestao = [...f.name.replace(/\.[^.]*$/, '')].slice(0, 160).join('');
+  if (!titulo.value.trim() || titulo.value === ap.sugestao) titulo.value = sugestao;
+  Object.assign(ap, { escolhido: f, handle, sugestao });
+  $('#ap-video-nome').textContent = `${f.name} (${tamanhoLegivel(f.size)})`;
+  $('#ap-video-erro').textContent = '';
+}
+// legenda que não se lê não trava a criação: o vídeo fica sem legenda e o aviso continua à vista
+async function escolherLegenda() {
+  const f = await escolherArquivo($('#ap-legenda'));
+  if (!f || !$('#criar-aparelho')) return;
+  const linhas = f.size <= LEGENDA_MAX ? lerLegenda(await textoDoArquivo(f)) : [];
+  if (!$('#criar-aparelho')) return;
+  ap.linhas = linhas;
+  $('#ap-legenda-nome').textContent = linhas.length ? `${f.name} (${linhas.length} ${linhas.length === 1 ? 'linha' : 'linhas'})` : f.name;
+  $('#ap-legenda-erro').textContent = linhas.length ? '' : 'Não reconheci nenhuma linha nesta legenda. Escolha um arquivo .srt ou .vtt, ou crie sem legenda.';
+}
+async function criarAparelho() {
+  const f = ap.escolhido, campo = $('#ap-titulo'), titulo = campo.value.trim(), botao = $('#ap-criar');
+  const erroVideo = !f ? 'Escolha o arquivo do vídeo.' : !f.size ? 'Este arquivo está vazio. Escolha outro.' : '';
+  const erroTitulo = !titulo ? 'Dê um título ao vídeo.' : caracteres(titulo) > 160 ? `O título pode ter até 160 caracteres (este tem ${caracteres(titulo)}).` : '';
+  $('#ap-video-erro').textContent = erroVideo;
+  $('#ap-titulo-erro').textContent = erroTitulo;
+  campo.setAttribute('aria-invalid', String(!!erroTitulo));
+  $('#ap-erro').textContent = '';
+  if (erroVideo || erroTitulo) return (erroVideo ? $('#ap-escolher-video') : campo).focus();
+  const capa = $('#criar-aparelho input[name="capa"]:checked').value, linhas = ap.linhas, handle = ap.handle;
+  botao.disabled = true;
+  let m;
+  try { m = await db.guardarLink({ tipo: 'aparelho', titulo, capa, tamanho_bytes: f.size, pessoal_de: al.perfil.id }); } catch (e) {
+    $('#ap-erro').textContent = e.message;
+    botao.disabled = false;
+    return;
+  }
+  al.midias.push(m);
+  if (linhas.length) {
+    try { await db.salvarLegendaAparelho(m.id, linhas.map(l => ({ inicio_s: l.inicio_s, fim_s: l.fim_s, texto: l.texto }))); } catch (e) { avisar(`O vídeo foi criado, mas a legenda não foi gravada: ${e.message}`, true); }
+  }
+  await guardarNoAparelho({ midia: m.id, nome: f.name, tamanho: f.size, ...(handle ? { handle } : {}) });
+  renderBibliotecaAluno();
+  abrirEstudo(m.id, f);
+}
+
+/* ---------- reabrir pela capa ---------- */
+// no máximo um "Permitir"; permissão negada ou arquivo que mudou de lugar caem no pedido do arquivo
+async function arquivoDoHandle(h) {
+  try {
+    const p = await h.queryPermission({ mode: 'read' });
+    if (p === 'granted' || (p === 'prompt' && await h.requestPermission({ mode: 'read' }) === 'granted')) return await h.getFile();
+  } catch (e) { console.warn('arquivo do aparelho', e); }
+  return null;
+}
+async function abrirAparelho(m) {
+  const reg = await lerDoAparelho(m.id);
+  const f = reg?.handle ? await arquivoDoHandle(reg.handle) : null;
+  if (f) return abrirEstudo(m.id, f);
+  // o seletor só abre logo depois de um toque: se a janela do "Permitir" demorou, pede um toque novo
+  if (navigator.userActivation?.isActive === false) {
+    return telaCriar(m.titulo, `<p>Escolha de novo o arquivo deste vídeo.</p>
+      <div class="modal-acoes"><button class="btn btn-primario" data-pedir-arquivo="${m.id}" data-foco>${ico('film-strip')}Escolher o arquivo</button></div>`);
+  }
+  pedirArquivo(m);
+}
+async function pedirArquivo(m) {
+  const f = await escolherArquivo($('#ap-video'));
+  if (f && (f.size === Number(m.tamanho_bytes) || confirm(AVISO_TAMANHO))) abrirEstudo(m.id, f);
+}
+
+/* ---------- legenda escolhida depois, no estudo do vídeo sem legenda ---------- */
+async function legendaNoEstudo() {
+  const midia = es.midia, player = es.player, botao = $('#estudo-escolher-legenda'), erro = $('#estudo-legenda-erro');
+  const f = await escolherArquivo($('#ap-legenda'));
+  if (!f || es.player !== player) return;
+  const linhas = f.size <= LEGENDA_MAX ? lerLegenda(await textoDoArquivo(f)) : [];
+  if (es.player !== player) return;
+  erro.textContent = linhas.length ? '' : 'Não reconheci nenhuma linha nesta legenda. Escolha um arquivo .srt ou .vtt.';
+  if (!linhas.length) return;
+  botao.disabled = true;
+  try {
+    await db.salvarLegendaAparelho(midia, linhas.map(l => ({ inicio_s: l.inicio_s, fim_s: l.fim_s, texto: l.texto })));
+    const lidas = await db.legendas(midia);
+    if (es.player === player) usarLinhas(lidas);
+  } catch (e) {
+    if (es.player !== player) return;
+    erro.textContent = e.message;
+    botao.disabled = false;
+  }
+}
+
+/* ---------- eventos: o "Criar" fica na Biblioteca e o resto no modal ---------- */
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b || !al.perfil) return;
+  if (b.id === 'criar') return abrirCriar();
+  if (b.dataset.criar === 'link') return abrirCriarLink();
+  if (b.dataset.criar === 'aparelho') return abrirCriarAparelho();
+  if (b.id === 'ap-escolher-video') return escolherVideo();
+  if (b.id === 'ap-escolher-legenda') return escolherLegenda();
+  if (b.id === 'estudo-escolher-legenda') return legendaNoEstudo();
+  const m = b.dataset.pedirArquivo && al.midias.find(x => x.id === b.dataset.pedirArquivo);
+  if (m) pedirArquivo(m);
+});
+$('#modal').addEventListener('submit', ev => {
+  if (ev.target.id === 'criar-link') { ev.preventDefault(); guardarLink(); }
+  else if (ev.target.id === 'criar-aparelho') { ev.preventDefault(); criarAparelho(); }
+});
 
 </script>
 <script>
@@ -4282,10 +4573,12 @@ function tocarPalavraPdf(el) {
 
 </script>
 <script>
-/* vídeo do estudo (YouTube ou enviado pela escola): o player na largura da área, a frase embaixo, a barra e um painel por vez; o ponto em que o aluno parou */
-const es = { player: null, linhas: [], atual: -1, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set() };
+/* vídeo do estudo (YouTube, enviado pela escola ou do aparelho do aluno): o player na largura da área, a frase embaixo, a barra e um painel por vez; o ponto em que o aluno parou.
+   O vídeo do aparelho toca por um endereço blob: do arquivo, revogado ao fechar o estudo. */
+const es = { player: null, linhas: [], atual: -1, traducao: false, midia: null, sel: null, dic: null, pedido: 0, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set(), blob: null };
 const fRelogio = s => { const t = Math.floor(s), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h ? `${h}:${d2(m)}:${d2(t % 60)}` : `${m}:${d2(t % 60)}`; };
 const linhaNoTempo = t => es.linhas.findIndex(l => l.inicio_s <= t && t < l.fim_s);
+const doAparelho = () => al.midias.find(m => m.id === es.midia)?.tipo === 'aparelho';
 
 function fecharEstudo() {
   const tinha = !!es.posicao;
@@ -4294,10 +4587,11 @@ function fecharEstudo() {
   fecharDitado();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   if (es.player) es.player.destruir();
+  if (es.blob) URL.revokeObjectURL(es.blob);
   if (es.som) es.som.pause();
   if (es.redim) es.redim.disconnect();
   if (es.lousa) es.lousa.fechar();
-  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set() });
+  Object.assign(es, { player: null, linhas: [], atual: -1, midia: null, sel: null, dic: null, pedido: es.pedido + 1, som: null, textos: null, redim: null, lousa: null, posicao: null, painel: '', buscou: new Set(), blob: null });
   if (tinha) renderBibliotecaAluno();
 }
 function desenharLegenda() {
@@ -4305,7 +4599,20 @@ function desenharLegenda() {
   const l = es.linhas[es.atual];
   en.innerHTML = l ? palavrasEmBotao(l.texto, es.atual) : '';
   desenharTraducao();
+  traduzirLinhaAtual();
   $$('#transcricao .linha').forEach((el, i) => el.setAttribute('aria-current', String(i === es.atual)));
+}
+// no vídeo do aparelho o servidor traduz só a linha na tela, e só com a tradução ligada
+function traduzirLinhaAtual() {
+  const l = es.linhas[es.atual], player = es.player;
+  if (!es.traducao || !l || l.traducao || l.pedida || !doAparelho()) return;
+  const iguais = es.linhas.filter(x => x.texto === l.texto);
+  iguais.forEach(x => { x.pedida = true; });
+  db.traduzirLinha(es.midia, l.texto).then(r => {
+    if (es.player !== player || !r?.traducao) return;
+    iguais.forEach(x => { x.traducao = r.traducao; });
+    desenharTraducao();
+  }, e => console.warn('tradução da frase', e));
 }
 function desenharTraducao() {
   const pt = $('#legenda-traducao'), l = es.linhas[es.atual]; if (!pt) return;
@@ -4428,18 +4735,26 @@ async function abrirVideo(m, fonte, box) {
     return;
   }
   if (es.player !== player) return;
+  usarLinhas(linhas);
+  if (m.tipo !== 'aparelho') buscarTraducoes(m.id, player);
+}
+// também chamada quando o aluno escolhe a legenda do vídeo do aparelho no estudo
+function usarLinhas(linhas) {
   es.linhas = linhas.map(l => ({ id: l.id, inicio_s: Number(l.inicio_s), fim_s: Number(l.fim_s), texto: l.texto, traducao: l.traducao || '' }));
   es.linhas.forEach((l, i) => registrarFrase(`v${i}`, l.texto, c => {
     const achada = palavraNoIndice(l.texto, c);
     return achada ? $$(`#v-estudo .pal[data-pal-n="${i}"][data-pal-i="${achada.i}"]`) : [];
   }));
   desenharTextosVideo();
-  buscarTraducoes(m.id, player);
 }
+const semLegenda = () => (doAparelho()
+  ? `<div class="caixa-aviso">Este vídeo ainda não tem legenda. Escolha o arquivo .srt ou .vtt deste vídeo.
+      <div class="criar-arquivo legenda-falta"><button class="btn btn-linha" id="estudo-escolher-legenda">${ico('article')}Escolher a legenda</button><span class="erro-msg" id="estudo-legenda-erro" role="alert"></span></div></div>`
+  : '<div class="caixa-aviso">Este vídeo ainda não tem legenda</div>');
 // no modo Ditado o texto das linhas sai da página: no lugar da frase fica o painel do ditado e a transcrição se esvazia
 function desenharTextosVideo() {
   const tem = es.linhas.length > 0, ditado = tem && dit.ativo;
-  $('#estudo-legenda').innerHTML = !tem ? '<div class="caixa-aviso">Este vídeo ainda não tem legenda</div>'
+  $('#estudo-legenda').innerHTML = !tem ? semLegenda()
     : ditado ? `<div class="legenda-barra"><button class="pilula" id="ditado-alternar">Sair do ditado</button></div>${painelDitado()}`
       : '<div class="legenda-atual" aria-live="polite"><p class="legenda-texto" id="legenda-texto"></p><p class="legenda-traducao" id="legenda-traducao" hidden></p></div>';
   $('#estudo-transc').innerHTML = tem && !ditado ? `
@@ -5302,40 +5617,65 @@ async function verAnotacao(i) {
   }
 }
 function voltarAnotacoes(i) { fecharLousaGaveta(); listarAnotacoes(i); }
-const bibAluno = { aluno: null, links: [] };
+const bibAluno = { aluno: null, links: [], comLegenda: new Set(), vistos: new Map() };
 async function verBibliotecaAluno(id) {
   const p = pessoa(id); if (!p) return;
-  const links = await tentar(() => db.linksDoAluno(id));
-  if (!links) return;
-  Object.assign(bibAluno, { aluno: p, links });
+  const lido = await tentar(async () => {
+    const links = await db.linksDoAluno(id);
+    const aparelhos = links.filter(l => l.tipo === 'aparelho').map(l => l.id);
+    if (!aparelhos.length) return { links, comLegenda: new Set(), vistos: new Map() };
+    const [comLegenda, vistos] = await Promise.all([db.comLegenda(aparelhos), db.vistos(id)]);
+    return { links, comLegenda, vistos: new Map(vistos.map(v => [v.midia_id, v.visto_em])) };
+  });
+  if (!lido) return;
+  Object.assign(bibAluno, { aluno: p }, lido);
   gavetaForm(p.nome, 'Biblioteca', '<div id="bib-aluno"></div>', [`<button class="btn btn-primario" data-fechar>Fechar</button>`]);
   listarLinksAluno();
 }
 function listarLinksAluno() {
   const box = $('#bib-aluno'); if (!box) return;
   const { aluno: p, links } = bibAluno;
-  const abrir = l => (l.tipo === 'youtube'
+  const ap = l => l.tipo === 'aparelho';
+  const abrir = l => (ap(l)
+    ? `<button class="btn btn-linha" data-ver-link="${l.id}" aria-label="Ver ${esc(l.titulo)}" aria-expanded="false" aria-controls="aviso-ap-${l.id}">Ver</button>`
+    : l.tipo === 'youtube'
     ? `<button class="btn btn-linha" data-ver-link="${l.id}" aria-label="Ver ${esc(l.titulo)}">Ver</button>`
     : /^https:\/\//.test(l.url || '') ? `<a class="btn btn-linha" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${esc(l.titulo)} em outra aba">Abrir</a>` : '');
+  const capa = l => (ap(l) && CORES_CAPA.includes(l.capa)
+    ? `<span class="mat-ico capa-cor" role="img" aria-label="Capa ${l.capa}"><span class="capa-tipo ${l.capa}">${ico(ICONE_TIPO.aparelho)}</span></span>`
+    : `<span class="mat-ico">${ico(ICONE_TIPO[l.tipo] || 'link-simple')}</span>`);
+  const estado = l => (ap(l)
+    ? ` · <span class="ap-legenda">${bibAluno.comLegenda.has(l.id) ? 'com legenda' : 'sem legenda'}</span> · <span class="ap-visto">${bibAluno.vistos.has(l.id) ? `visto em ${dataSP(bibAluno.vistos.get(l.id))}` : 'não visto'}</span>`
+    : '');
   box.innerHTML = links.length
     ? `<p class="ajuda">${links.length} ${links.length === 1 ? 'link guardado' : 'links guardados'} por ${esc(primeiroNome(p.nome))}</p>
-      <ul class="lista bib-equipe">${links.map(l => `<li class="mat-linha">
-        <span class="mat-ico">${ico(ICONE_TIPO[l.tipo] || 'link-simple')}</span>
-        <span class="quem"><b>${esc(l.titulo)}</b><small>${esc(NOME_TIPO[l.tipo])} · ${dataSP(l.criado_em)}</small></span>
+      <ul class="lista bib-equipe">${links.map(l => `<li class="mat-linha${ap(l) ? ' ap-linha' : ''}">
+        ${capa(l)}
+        <span class="quem"><b>${esc(l.titulo)}</b><small>${esc(NOME_TIPO[l.tipo])} · ${dataSP(l.criado_em)}${estado(l)}</small></span>
         <span class="acoes-linha">${abrir(l)}<button class="btn btn-linha" data-tirar-link="${l.id}" aria-label="Apagar ${esc(l.titulo)}">Apagar</button></span>
+        ${ap(l) ? `<p class="caixa-aviso aviso-aparelho" id="aviso-ap-${l.id}" hidden>O vídeo está no aparelho de ${esc(primeiroNome(p.nome))} e só abre lá: ele não vai para a internet.</p>` : ''}
       </li>`).join('')}</ul>`
     : `<div class="caixa-aviso">${esc(primeiroNome(p.nome))} ainda não guardou nenhum link.</div>`;
 }
 function verLinkAluno(id) {
-  const l = bibAluno.links.find(x => x.id === id); const yt = l && idYoutube(l.url);
+  const l = bibAluno.links.find(x => x.id === id);
+  if (l?.tipo === 'aparelho') return avisoAparelho(id);
+  const yt = l && idYoutube(l.url);
   if (!yt) return;
   fecharCamadas();
   estudarMaterial(l, yt, 'alunos');
 }
+function avisoAparelho(id) {
+  const aviso = $(`#aviso-ap-${id}`), b = $(`#bib-aluno [data-ver-link="${id}"]`); if (!aviso || !b) return;
+  aviso.hidden = !aviso.hidden;
+  b.setAttribute('aria-expanded', String(!aviso.hidden));
+}
 async function tirarLinkAluno(id) {
   const l = bibAluno.links.find(x => x.id === id), p = bibAluno.aluno; if (!l || !p) return;
-  if (!confirm(`Apagar “${l.titulo}” da biblioteca de ${primeiroNome(p.nome)}? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
-  if (!await tentar(() => db.apagarLink(id), 'Link apagado.')) return;
+  const aparelho = l.tipo === 'aparelho';
+  if (!confirm(aparelho ? `Apagar “${l.titulo}” da biblioteca de ${primeiroNome(p.nome)}? A legenda, a folha da lousa e o visto deste vídeo também saem. O arquivo continua no aparelho de ${primeiroNome(p.nome)}. Não dá para desfazer.`
+    : `Apagar “${l.titulo}” da biblioteca de ${primeiroNome(p.nome)}? A folha da lousa e o visto deste link também saem. Não dá para desfazer.`)) return;
+  if (!await tentar(() => db.apagarLink(id), aparelho ? 'Vídeo apagado.' : 'Link apagado.')) return;
   bibAluno.links = bibAluno.links.filter(x => x.id !== id);
   eq.midias = eq.midias.filter(x => x.id !== id);
   listarLinksAluno();
@@ -6289,13 +6629,6 @@ function subirAoArchive(envio, titulo, access, secret, aoProgresso) {
     x.send(envio.arquivo);
   });
 }
-// legenda baixada da internet costuma vir em Windows-1252: sem UTF-8 válido, lê nesse
-async function textoDoArquivo(f) {
-  const b = await f.arrayBuffer();
-  const t = new TextDecoder('utf-8').decode(b);
-  return t.includes('�') ? new TextDecoder('windows-1252').decode(b) : t;
-}
-
 // "Tentar de novo" continua de onde parou: o arquivo que o Archive já aceitou não sobe outra vez
 async function enviarVideo(g, campos, alunos) {
   const arquivo = $('#ma-video', g).files[0]; const legenda = $('#ma-legenda', g).files[0];

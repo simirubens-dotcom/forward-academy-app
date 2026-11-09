@@ -833,7 +833,6 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .secao-topo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
 .secao-topo h2{margin:0;font-family:var(--serif);font-weight:400;font-size:28px}
 .lista .acoes-linha{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.lista li.inativo .quem b{color:var(--fg-2)}
 .lista .vazio-linha{color:var(--fg-2);font-size:14px}
 
 /* formulário dentro da gaveta */
@@ -1036,7 +1035,7 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .mat-linha{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center}
 .mat-linha .mat-ico{width:44px;height:44px;border-radius:12px;background:var(--surface-2)}
 .para-quem{font-size:12.5px;color:var(--fg-2)}
-.mat-linha .video-estado{display:flex;width:fit-content;margin-top:6px}
+.card-eq .video-estado{display:flex;width:fit-content}
 .video-motivo{display:block;margin-top:4px;font-size:12.5px;color:var(--erro)}
 .video-envio{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
 .video-envio progress{flex:1;height:10px;accent-color:var(--fg)}
@@ -1046,7 +1045,6 @@ input[type="checkbox"],input[type="radio"]{accent-color:var(--enfase)}
 .bib-equipe .ap-linha{flex-wrap:wrap}
 .bib-equipe .aviso-aparelho{flex-basis:100%;margin:0}
 @media (max-width:520px){.bib-equipe li{flex-wrap:wrap}.bib-equipe .acoes-linha{flex-basis:100%}}
-@media (max-width:720px){#lista-alunos li{flex-wrap:wrap}#lista-alunos .acoes-linha{flex-basis:100%}}
 .estudo-topo .btn-texto{min-height:24px}
 
 /* páginas da Biblioteca do aluno: abas no topo, uma página por vez; muitas abas rolam dentro da barra */
@@ -1298,6 +1296,44 @@ button.aviso:focus-visible{outline-offset:-3px}
 .estudo-video:fullscreen>.dic{position:relative;z-index:3;grid-area:2/1;justify-self:end;align-self:start;width:min(380px,100%);max-height:100%;overflow-y:auto}
 .estudo-video:fullscreen>#estudo-aviso{position:relative;z-index:3;grid-area:2/1;align-self:start}
 
+/* pastas da equipe: capas da vista inicial, uma pasta por pessoa e a pasta aberta */
+.pastas-capas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:18px}
+.pasta-capa{display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:6px;min-height:200px;padding:24px;border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--sombra);text-align:left;transition:transform .16s var(--ease-out)}
+.pasta-capa .ico{width:34px;height:34px;margin-bottom:auto}
+.pasta-capa b{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,2.4vw,2rem);line-height:1.1}
+.pasta-capa small{font-size:13.5px}
+.pasta-capa.marinho{background:var(--marinho);color:#F0EDE4}
+.pasta-capa.bege{background:var(--bege);color:#1A2142}
+.pasta-capa.grafite{background:#252526;color:#F0EDE4}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.pasta-capa:hover{transform:translateY(-2px)}}
+@media (max-width:520px){.pasta-capa{min-height:140px;padding:20px}}
+.pastas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:16px}
+.pasta{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;height:100%;min-height:118px;padding:24px 16px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--sombra);color:var(--fg);text-align:left;overflow:hidden}
+.pasta::before{content:"";position:absolute;inset:0 0 auto;height:10px;background:var(--cor,var(--line))}
+.pasta-nome{font-size:16px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.pasta-sub,.pasta-conta{font-size:13px;color:var(--fg-2)}
+.pasta-conta{margin-top:auto}
+.pasta-grupo{background:var(--surface-2);box-shadow:none}
+.pastas-vazio{grid-column:1/-1;color:var(--fg-2);font-size:14px}
+@media (hover:hover){.pasta:hover .pasta-nome{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}}
+.pasta-cab{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding-left:14px;border-left:6px solid var(--cor)}
+.pasta-quem{flex:1 1 240px;min-width:0}
+.pasta-quem h2{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,2.4vw,2.1rem);line-height:1.1;overflow-wrap:anywhere}
+.pasta-quem .ajuda{margin:4px 0 0;overflow-wrap:anywhere}
+.pasta-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding:14px;border-radius:var(--r-card);background:var(--surface);box-shadow:var(--sombra)}
+.pasta-acoes[hidden]{display:none}
+.pasta-acoes .btn{padding:9px 12px;font-size:12px}
+.card-eq .card-acoes{display:flex;flex-wrap:wrap;gap:6px}
+.card-eq .card-acoes .btn{padding:8px 10px;font-size:11.5px;letter-spacing:.05em}
+.card-eq .aviso-aparelho{margin:0;font-size:13px}
+.trilha.nivel-capas{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr));overflow-x:visible}
+.pasta-paginas{margin-top:44px}
+.pasta-paginas>.secao-topo{margin-bottom:6px}
+.pasta-pagina{margin-top:26px}
+.pasta-pagina>h3{margin:0;font-size:20px;font-weight:600}
+.pasta-pagina .fileira{margin-top:14px}
+.pasta-pagina .fileira-topo h4{margin:0;font-size:16px;font-weight:600}
+
 </style>
 
 <div class="barra">
@@ -1464,12 +1500,10 @@ button.aviso:focus-visible{outline-offset:-3px}
 <main id="tela-equipe" class="tela app" hidden>
   <aside class="trilho" aria-label="Painel do professor">
     <img class="trilho-marca" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iMjA3LjUzNyIgaGVpZ2h0PSIyMTQuNzYiIHZpZXdCb3g9IjAgMCAyMDcuNTM3IDIxNC43NiI+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXBfMSI+CjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLC0xLDAsMjE0Ljc2KSIgZD0iTTAgMjE0Ljc2SDIwNy41MzdWMEgwWiIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+CjxnIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIj4KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTAyLjQ5MjMsNzQuOTY5ODk4KSIgZD0iTTAgMCA2My4xNjcgLjAwMiA2My4xODUgMjUuMTUzIDE5LjU0IDI1LjE0M1oiIGZpbGw9IiNmZmZmZmYiLz4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXBfMSkiPgo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwxNjUuNDE0NywyNC40MDA0OTgpIiBkPSJNMCAwLTEyMy4yNDItLjAwNEMtMTIzLjI4OS0uMDA0LTEyMy4zMzYtLjAwOC0xMjMuMzg2LS4wMTZMLTEyMy42NjEtLjA2SC0xMjMuODU4Vi0uMTU3TC0xMjMuOTQ5LS41NDZDLTEyMy45NjUtLjYxMy0xMjMuOTczLS42OC0xMjMuOTc0LS43NUwtMTIzLjA1Mi0xMDcuMzUyVi0xMDcuMzgzQy0xMjMuMDUzLTEwNy40MTktMTIzLjA1NC0xMDcuNDc0LTEyMy4wNTUtMTA3LjU0NEwtMTIzLjA1Ni0xMDcuNTc1Qy0xMjMuMDU5LTEwNy43NDctMTIzLjA2NC0xMDguMDEzLTEyMy4wNjYtMTA4LjM1OC0xMjMuMDgxLTExMC42Mi0xMjIuOTU4LTExMi4zMDEtMTIyLjkyOS0xMTIuNjc3LTEyMi45MjktMTEyLjY3Ny0xMjIuODIzLTExNC4wNjgtMTIyLjYyMS0xMTUuNTM1LTExOC41NzktMTQ0LjgyNC05OS4wMTQtMTU3LjY1Mi05OS4wMTQtMTU3LjY1Mi04Ni44NTUtMTY1LjYyNS03My45MDUtMTY1Ljk3NC03MC4wMjgtMTY1Ljk1OS02OC4yMDQtMTY1Ljk1Mi02Ni41OC0xNjUuODQxLTY1LjIwMi0xNjUuNjk0LTY1LjMwNi0xNjMuMzkyLTY1LjQxLTE2MS4wODktNjUuNTE0LTE1OC43ODctNjguOTE0LTE1OS4wNDUtNzEuNzU0LTE1OC45NDctNzMuODI2LTE1OC43ODctNzUuNjgtMTU4LjY0NC03Ny42MjYtMTU4LjQ4Ni04MC4wNi0xNTcuOTA0LTgxLjM4OS0xNTcuNTg2LTgzLjc3Mi0xNTYuODItODcuNDc5LTE1NS4xMjEtODkuMzgxLTE1NC4yNDktOTQuMjctMTUxLjk2Ni05OC44MDQtMTQ3Ljc5My0xMDQuNzItMTQyLjM0OC0xMDcuNTcxLTEzNS45NTItMTA4Ljk1Ni0xMzEuODE2TC02My41ODMtMTMxLjgxMy0zNy45OC0xMDEuMTczLTEyLjIwMi0xMDEuMTIzLTEyLjIzMy03NS45NTUtNTEuMDUxLTc1Ljk3Ny03Ni43MDgtMTA2LjY1Ni0xMTYuMzQ3LTEwNi42NzktMTE2LjM1OC03NS44MTgtODIuNzk5LTc1Ljc4My02My4yNzUtNTAuNTgtMTE2LjM1OC01MC41NjlWLTcuODY4SC42NzhWLS44MjhMLjY4MS0uNjM4Qy40NTQtLjQyNSAuMjI3LS4yMTMgMCAwIiBmaWxsPSIjZmZmZmZmIi8+CjwvZz4KPC9nPgo8L3N2Zz4K" alt="Forward Academy" width="30" height="31">
-    <button class="trilho-btn" data-vista-equipe="hoje" aria-current="page"><span data-icone="house-line"></span>Hoje</button>
-    <button class="trilho-btn" data-vista-equipe="alunos"><span data-icone="users"></span>Alunos</button>
+    <button class="trilho-btn" data-vista-equipe="pastas" aria-current="page"><span data-icone="folders"></span>Pastas</button>
+    <button class="trilho-btn" data-vista-equipe="hoje"><span data-icone="house-line"></span>Hoje</button>
     <button class="trilho-btn" data-vista-equipe="agenda"><span data-icone="calendar-blank"></span>Agenda</button>
     <button class="trilho-btn" data-vista-equipe="licoes"><span data-icone="notebook"></span>Lições</button>
-    <button class="trilho-btn" data-vista-equipe="biblioteca"><span data-icone="books"></span>Biblioteca</button>
-    <button class="trilho-btn" data-vista-equipe="cursos"><span data-icone="graduation-cap"></span>Cursos</button>
     <button class="trilho-btn" data-vista-equipe="contatos" hidden><span data-icone="address-book"></span>Contatos</button>
   </aside>
   <div class="app-corpo">
@@ -1482,17 +1516,28 @@ button.aviso:focus-visible{outline-offset:-3px}
       </div>
     </header>
 
-    <section class="vista" id="e-hoje" aria-label="Hoje">
+    <section class="vista" id="e-pastas" aria-label="Pastas">
+      <div class="secao-topo"><h2>Pastas</h2></div>
+      <div class="pastas-capas">
+        <button class="pasta-capa marinho" data-pasta-capa="alunos" data-vista-equipe="alunos" data-pastas-grupo="ativos"><span data-icone="users"></span><b>Alunos</b><small id="pastas-conta-alunos"></small></button>
+        <button class="pasta-capa bege" data-pasta-capa="biblioteca" data-vista-equipe="biblioteca"><span data-icone="books"></span><b>Biblioteca da escola</b><small id="pastas-conta-biblioteca"></small></button>
+        <button class="pasta-capa grafite" data-pasta-capa="cursos" data-vista-equipe="cursos"><span data-icone="graduation-cap"></span><b>Cursos</b><small id="pastas-conta-cursos"></small></button>
+      </div>
+    </section>
+
+    <section class="vista" id="e-hoje" aria-label="Hoje" hidden>
       <div class="prof">
         <article class="painel"><div class="painel-topo"><h2>Aulas de hoje</h2><span class="ajuda" id="hoje-resumo"></span></div><ul class="lista" id="hoje-aulas"></ul></article>
         <article class="painel"><div class="painel-topo"><h2>Para corrigir</h2><span class="ajuda" id="corrigir-resumo"></span></div><ul class="lista" id="hoje-corrigir"></ul></article>
       </div>
     </section>
 
-    <section class="vista" id="e-alunos" aria-label="Alunos" hidden>
-      <div class="secao-topo"><h2>Alunos</h2><button class="btn btn-primario" data-novo="aluno"><span data-icone="plus"></span>Novo aluno</button></div>
-      <article class="painel"><ul class="lista" id="lista-alunos"></ul></article>
+    <section class="vista" id="e-alunos" aria-label="Alunos" data-grupo="ativos" hidden>
+      <div class="estudo-topo" id="alunos-voltar"></div>
+      <div class="secao-topo"><h2 id="alunos-titulo">Alunos</h2><button class="btn btn-primario" data-novo="aluno"><span data-icone="plus"></span>Novo aluno</button></div>
+      <ul class="pastas" id="lista-alunos"></ul>
     </section>
+    <section class="vista" id="e-pasta" aria-label="Pasta" hidden></section>
 
     <section class="vista" id="e-agenda" aria-label="Agenda" hidden>
       <div class="secao-topo"><h2>Agenda</h2><button class="btn btn-primario" data-novo="aula"><span data-icone="plus"></span>Nova aula</button></div>
@@ -1523,10 +1568,7 @@ button.aviso:focus-visible{outline-offset:-3px}
       <article class="painel" style="margin-top:16px"><ul class="lista" id="lista-licoes"></ul></article>
     </section>
 
-    <section class="vista" id="e-biblioteca" aria-label="Biblioteca" hidden>
-      <div class="secao-topo"><h2>Biblioteca</h2><button class="btn btn-primario" data-novo="material"><span data-icone="plus"></span>Novo material</button></div>
-      <div id="lista-materiais"></div>
-    </section>
+    <section class="vista" id="e-biblioteca" aria-label="Biblioteca da escola" data-subpasta="" hidden></section>
 
     <section class="vista" id="e-cursos" aria-label="Cursos" hidden>
       <div class="secao-topo"><h2>Cursos</h2>
@@ -1569,7 +1611,7 @@ button.aviso:focus-visible{outline-offset:-3px}
 <script src="supabase-2.49.4.js"></script>
 <script>
 const CONFIG = {"url": "https://xxlxuxilbgkwaaawnpov.supabase.co", "publicavel": "sb_publishable_Wo5DJaddMFwTZkU5KB9RVw_KbdSkJTT", "vapid": "BGVGyg6QUeiS1eHVJnR-uDMO3if01LOc4ZHMxZER1VjY2EZHAlbW3Ly9KaOdBmioXbc7IHtDOr4FHUyEktQRLUQ", "whatsapp": "5511932332456"};
-const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "article": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42Zm2,158a2,2,0,0,1-2,2H40a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2ZM182,96a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,96Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,128Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,160Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "bookmark-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M184,34H72A14,14,0,0,0,58,48V224a6,6,0,0,0,9.18,5.09l60.81-38,60.83,38A6,6,0,0,0,198,224V48A14,14,0,0,0,184,34Zm2,179.17-54.83-34.26a6,6,0,0,0-6.36,0L70,213.17V48a2,2,0,0,1,2-2H184a2,2,0,0,1,2,2Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "caret-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M212.24,164.24a6,6,0,0,1-8.48,0L128,88.49,52.24,164.24a6,6,0,0,1-8.48-8.48l80-80a6,6,0,0,1,8.48,0l80,80A6,6,0,0,1,212.24,164.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "corners-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154,96V48a6,6,0,0,1,12,0V90h42a6,6,0,0,1,0,12H160A6,6,0,0,1,154,96ZM96,154H48a6,6,0,0,0,0,12H90v42a6,6,0,0,0,12,0V160A6,6,0,0,0,96,154Zm112,0H160a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V166h42a6,6,0,0,0,0-12ZM96,42a6,6,0,0,0-6,6V90H48a6,6,0,0,0,0,12H96a6,6,0,0,0,6-6V48A6,6,0,0,0,96,42Z\"/></svg>", "corners-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M214,48V88a6,6,0,0,1-12,0V54H168a6,6,0,0,1,0-12h40A6,6,0,0,1,214,48ZM88,202H54V168a6,6,0,0,0-12,0v40a6,6,0,0,0,6,6H88a6,6,0,0,0,0-12Zm120-40a6,6,0,0,0-6,6v34H168a6,6,0,0,0,0,12h40a6,6,0,0,0,6-6V168A6,6,0,0,0,208,162ZM88,42H48a6,6,0,0,0-6,6V88a6,6,0,0,0,12,0V54H88a6,6,0,0,0,0-12Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "dots-three": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "film-strip": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM38,86h84v84H38Zm96-12V54h36V74Zm-12,0H86V54h36Zm0,108v20H86V182Zm12,0h36v20H134Zm0-12V86h84v84ZM218,56V74H182V54h34A2,2,0,0,1,218,56ZM40,54H74V74H38V56A2,2,0,0,1,40,54ZM38,200V182H74v20H40A2,2,0,0,1,38,200Zm178,2H182V182h36v18A2,2,0,0,1,216,202Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "keyboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224,50H32A14,14,0,0,0,18,64V192a14,14,0,0,0,14,14H224a14,14,0,0,0,14-14V64A14,14,0,0,0,224,50Zm2,142a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V64a2,2,0,0,1,2-2H224a2,2,0,0,1,2,2Zm-20-64a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,128Zm0-32a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,96ZM70,160a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12h8A6,6,0,0,1,70,160Zm96,0a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,160Zm40,0a6,6,0,0,1-6,6h-8a6,6,0,0,1,0-12h8A6,6,0,0,1,206,160Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "minus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "speaker-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66ZM206,128a37.94,37.94,0,0,1-9.5,25.14,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93A38,38,0,0,1,206,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "translate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M245.37,213.32l-56-112a6,6,0,0,0-10.74,0l-22.3,44.6A90,90,0,0,1,105,127.19,101.73,101.73,0,0,0,133.82,62H160a6,6,0,0,0,0-12H102V32a6,6,0,0,0-12,0V50H32a6,6,0,0,0,0,12h89.79A89.71,89.71,0,0,1,96,119.23,89.81,89.81,0,0,1,75.11,86,6,6,0,1,0,63.8,90,101.66,101.66,0,0,0,87,127.2,89.56,89.56,0,0,1,32,146a6,6,0,0,0,0,12,101.55,101.55,0,0,0,64-22.63,102.11,102.11,0,0,0,54.53,22.17l-27.89,55.78a6,6,0,0,0,10.74,5.36L147.71,190h72.58l14.34,28.68A6,6,0,0,0,240,222a5.87,5.87,0,0,0,2.68-.64A6,6,0,0,0,245.37,213.32ZM153.71,178,184,117.42,214.29,178Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
+const ICONES = {"address-book": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M159.11,142.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,83.2,164.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,159.11,142.13ZM110,112a26,26,0,1,1,26,26A26,26,0,0,1,110,112Zm98-86H64A14,14,0,0,0,50,40V66H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v44H32a6,6,0,0,0,0,12H50v26a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V40A14,14,0,0,0,208,26Zm2,190a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z\"/></svg>", "arrow-counter-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg>", "arrow-square-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,104a6,6,0,0,1-12,0V54.49l-69.75,69.75a6,6,0,0,1-8.48-8.48L201.51,46H152a6,6,0,0,1,0-12h64a6,6,0,0,1,6,6Zm-38,26a6,6,0,0,0-6,6v72a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V80a2,2,0,0,1,2-2h72a6,6,0,0,0,0-12H48A14,14,0,0,0,34,80V208a14,14,0,0,0,14,14H176a14,14,0,0,0,14-14V136A6,6,0,0,0,184,130Z\"/></svg>", "arrows-clockwise": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,48V96a6,6,0,0,1-6,6H168a6,6,0,0,1,0-12h33.52L183.47,72a81.51,81.51,0,0,0-57.53-24h-.46A81.5,81.5,0,0,0,68.19,71.28a6,6,0,1,1-8.38-8.58,93.38,93.38,0,0,1,65.67-26.76H126a93.45,93.45,0,0,1,66,27.53l18,18V48a6,6,0,0,1,12,0ZM187.81,184.72a81.5,81.5,0,0,1-57.29,23.34h-.46a81.51,81.51,0,0,1-57.53-24L54.48,166H88a6,6,0,0,0,0-12H40a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V174.48l18,18.05a93.45,93.45,0,0,0,66,27.53h.52a93.38,93.38,0,0,0,65.67-26.76,6,6,0,1,0-8.38-8.58Z\"/></svg>", "article": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42Zm2,158a2,2,0,0,1-2,2H40a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2ZM182,96a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,96Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,128Zm0,32a6,6,0,0,1-6,6H80a6,6,0,0,1,0-12h96A6,6,0,0,1,182,160Z\"/></svg>", "bell": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M220.07,176.94C214.41,167.2,206,139.73,206,104a78,78,0,1,0-156,0c0,35.74-8.42,63.2-14.08,72.94A14,14,0,0,0,48,198H90.48a38,38,0,0,0,75,0H208a14,14,0,0,0,12.06-21.06ZM128,218a26,26,0,0,1-25.29-20h50.58A26,26,0,0,1,128,218Zm81.71-33a1.9,1.9,0,0,1-1.7,1H48a1.9,1.9,0,0,1-1.7-1,2,2,0,0,1,0-2C53.87,170,62,139.69,62,104a66,66,0,1,1,132,0c0,35.68,8.14,65.95,15.71,79A2,2,0,0,1,209.71,185Z\"/></svg>", "bookmark-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M184,34H72A14,14,0,0,0,58,48V224a6,6,0,0,0,9.18,5.09l60.81-38,60.83,38A6,6,0,0,0,198,224V48A14,14,0,0,0,184,34Zm2,179.17-54.83-34.26a6,6,0,0,0-6.36,0L70,213.17V48a2,2,0,0,1,2-2H184a2,2,0,0,1,2,2Z\"/></svg>", "books": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M104,34H56A14,14,0,0,0,42,48V208a14,14,0,0,0,14,14h48a14,14,0,0,0,14-14V48A14,14,0,0,0,104,34ZM54,78h52V178H54Zm2-32h48a2,2,0,0,1,2,2V66H54V48A2,2,0,0,1,56,46Zm48,164H56a2,2,0,0,1-2-2V190h52v18A2,2,0,0,1,104,210Zm125.7-15L196.51,37.16a14,14,0,0,0-16.63-10.85L133.07,36.37A14.09,14.09,0,0,0,122.3,53l33.19,157.81a14,14,0,0,0,6.1,8.9,13.85,13.85,0,0,0,7.57,2.26,13.55,13.55,0,0,0,3-.32l46.81-10.05A14.09,14.09,0,0,0,229.7,195Zm-82.81-83.32,50.73-10.9,14.12,67.16L161,178.81Zm-6.63-31.56L191,69.19,195.15,89l-50.73,10.9Zm-4.66-32,46.8-10.05a2.18,2.18,0,0,1,.42,0,1.89,1.89,0,0,1,1.05.32,2,2,0,0,1,.89,1.31l3.75,17.82L137.79,68.34l-3.74-17.78A2.07,2.07,0,0,1,135.6,48.1Zm80.81,151.8L169.6,210a1.92,1.92,0,0,1-1.47-.27,2,2,0,0,1-.89-1.31l-3.75-17.82,50.72-10.9L218,197.43A2.07,2.07,0,0,1,216.41,199.9Z\"/></svg>", "calendar-blank": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Z\"/></svg>", "caret-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.24,203.76a6,6,0,1,1-8.48,8.48l-80-80a6,6,0,0,1,0-8.48l80-80a6,6,0,0,1,8.48,8.48L88.49,128Z\"/></svg>", "caret-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z\"/></svg>", "caret-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M212.24,164.24a6,6,0,0,1-8.48,0L128,88.49,52.24,164.24a6,6,0,0,1-8.48-8.48l80-80a6,6,0,0,1,8.48,0l80,80A6,6,0,0,1,212.24,164.24Z\"/></svg>", "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z\"/></svg>", "check-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z\"/></svg>", "clock": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z\"/></svg>", "corners-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154,96V48a6,6,0,0,1,12,0V90h42a6,6,0,0,1,0,12H160A6,6,0,0,1,154,96ZM96,154H48a6,6,0,0,0,0,12H90v42a6,6,0,0,0,12,0V160A6,6,0,0,0,96,154Zm112,0H160a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V166h42a6,6,0,0,0,0-12ZM96,42a6,6,0,0,0-6,6V90H48a6,6,0,0,0,0,12H96a6,6,0,0,0,6-6V48A6,6,0,0,0,96,42Z\"/></svg>", "corners-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M214,48V88a6,6,0,0,1-12,0V54H168a6,6,0,0,1,0-12h40A6,6,0,0,1,214,48ZM88,202H54V168a6,6,0,0,0-12,0v40a6,6,0,0,0,6,6H88a6,6,0,0,0,0-12Zm120-40a6,6,0,0,0-6,6v34H168a6,6,0,0,0,0,12h40a6,6,0,0,0,6-6V168A6,6,0,0,0,208,162ZM88,42H48a6,6,0,0,0-6,6V88a6,6,0,0,0,12,0V54H88a6,6,0,0,0,0-12Z\"/></svg>", "device-mobile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z\"/></svg>", "dots-three": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z\"/></svg>", "download-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0Zm-98.24,4.24a6,6,0,0,0,8.48,0l40-40a6,6,0,0,0-8.48-8.48L134,129.51V32a6,6,0,0,0-12,0v97.51L92.24,99.76a6,6,0,0,0-8.48,8.48Z\"/></svg>", "eraser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M223.57,81.81,182.19,40.43a22,22,0,0,0-31.12,0L32.43,159.07a22,22,0,0,0,0,31.11L62.5,220.24A6,6,0,0,0,66.74,222H216a6,6,0,0,0,0-12H126.49l97.08-97.08A22,22,0,0,0,223.57,81.81ZM109.51,210H69.22l-28.3-28.3a10,10,0,0,1,0-14.15L96,112.48,151.52,168ZM215.08,104.44,160,159.51,104.48,104l55.08-55.07a10,10,0,0,1,14.14,0l41.38,41.37A10,10,0,0,1,215.08,104.44Z\"/></svg>", "file-pdf": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,152a6,6,0,0,1-6,6H190v20h18a6,6,0,0,1,0,12H190v18a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6h32A6,6,0,0,1,222,152ZM90,172a26,26,0,0,1-26,26H54v10a6,6,0,0,1-12,0V152a6,6,0,0,1,6-6H64A26,26,0,0,1,90,172Zm-12,0a14,14,0,0,0-14-14H54v28H64A14,14,0,0,0,78,172Zm84,8a34,34,0,0,1-34,34H112a6,6,0,0,1-6-6V152a6,6,0,0,1,6-6h16A34,34,0,0,1,162,180Zm-12,0a22,22,0,0,0-22-22H118v44h10A22,22,0,0,0,150,180ZM42,112V40A14,14,0,0,1,56,26h96a6,6,0,0,1,4.25,1.76l56,56A6,6,0,0,1,214,88v24a6,6,0,0,1-12,0V94H152a6,6,0,0,1-6-6V38H56a2,2,0,0,0-2,2v72a6,6,0,0,1-12,0ZM158,82h35.52L158,46.48Z\"/></svg>", "film-strip": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM38,86h84v84H38Zm96-12V54h36V74Zm-12,0H86V54h36Zm0,108v20H86V182Zm12,0h36v20H134Zm0-12V86h84v84ZM218,56V74H182V54h34A2,2,0,0,1,218,56ZM40,54H74V74H38V56A2,2,0,0,1,40,54ZM38,200V182H74v20H40A2,2,0,0,1,38,200Zm178,2H182V182h36v18A2,2,0,0,1,216,202Z\"/></svg>", "folders": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224,66H154L125.73,44.8a14,14,0,0,0-8.4-2.8H72A14,14,0,0,0,58,56V74H40A14,14,0,0,0,26,88V200a14,14,0,0,0,14,14H192.89A13.12,13.12,0,0,0,206,200.89V182h18.89A13.12,13.12,0,0,0,238,168.89V80A14,14,0,0,0,224,66ZM194,200.89a1.11,1.11,0,0,1-1.11,1.11H40a2,2,0,0,1-2-2V88a2,2,0,0,1,2-2H85.33a2,2,0,0,1,1.2.4l29.87,22.4A6,6,0,0,0,120,110h72a2,2,0,0,1,2,2Zm32-32a1.11,1.11,0,0,1-1.11,1.11H206V112a14,14,0,0,0-14-14H122L93.73,76.8a14,14,0,0,0-8.4-2.8H70V56a2,2,0,0,1,2-2h45.33a2,2,0,0,1,1.2.4L148.4,76.8A6,6,0,0,0,152,78h72a2,2,0,0,1,2,2Z\"/></svg>", "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.82,90.71l-120-64a5.94,5.94,0,0,0-5.64,0l-120,64a6,6,0,0,0,0,10.58L34,116.67v49.62a14,14,0,0,0,3.55,9.32C50.42,189.94,79.29,214,128,214a127.21,127.21,0,0,0,50-9.73V240a6,6,0,0,0,12,0V198.35a113.18,113.18,0,0,0,28.45-22.75,13.91,13.91,0,0,0,3.55-9.31V116.67l28.82-15.38a6,6,0,0,0,0-10.58ZM128,202c-44,0-70-21.56-81.52-34.41a2,2,0,0,1-.48-1.3V123.07l79.18,42.22a6,6,0,0,0,5.64,0L178,140.13v51C165,197.35,148.45,202,128,202Zm82-35.71a2,2,0,0,1-.48,1.3A100.25,100.25,0,0,1,190,184.3V133.73l20-10.66Zm-22.15-45a6.27,6.27,0,0,0-1-.71l-56-29.86a6,6,0,0,0-5.64,10.58L175.25,128,128,153.2,20.75,96,128,38.8,235.25,96Z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200.47,56.07A101.37,101.37,0,0,0,128.77,26H128A102,102,0,0,0,26,128v56a22,22,0,0,0,22,22H64a22,22,0,0,0,22-22V144a22,22,0,0,0-22-22H38.2A90.12,90.12,0,0,1,192,64.52,89.41,89.41,0,0,1,217.81,122H192a22,22,0,0,0-22,22v40a22,22,0,0,0,22,22h16a22,22,0,0,0,22-22V128A101.44,101.44,0,0,0,200.47,56.07ZM64,134a10,10,0,0,1,10,10v40a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V134Zm154,50a10,10,0,0,1-10,10H192a10,10,0,0,1-10-10V144a10,10,0,0,1,10-10h26Z\"/></svg>", "house-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M240,210H222V131.17l5.76,5.76a6,6,0,0,0,8.48-8.49L137.9,30.09a14,14,0,0,0-19.8,0L19.76,128.44a6,6,0,0,0,8.48,8.49L34,131.17V210H16a6,6,0,0,0,0,12H240a6,6,0,0,0,0-12ZM46,119.17l80.58-80.59a2,2,0,0,1,2.84,0L210,119.17V210H158V152a6,6,0,0,0-6-6H104a6,6,0,0,0-6,6v58H46ZM146,210H110V158h36Z\"/></svg>", "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A14,14,0,0,0,216,42ZM40,54H216a2,2,0,0,1,2,2V163.57L188.53,134.1a14,14,0,0,0-19.8,0l-21.42,21.42L101.9,110.1a14,14,0,0,0-19.8,0L38,154.2V56A2,2,0,0,1,40,54ZM38,200V171.17l52.58-52.58a2,2,0,0,1,2.84,0L176.83,202H40A2,2,0,0,1,38,200Zm178,2H193.8l-38-38,21.41-21.42a2,2,0,0,1,2.83,0l38,38V200A2,2,0,0,1,216,202ZM146,100a10,10,0,1,1,10,10A10,10,0,0,1,146,100Z\"/></svg>", "keyboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224,50H32A14,14,0,0,0,18,64V192a14,14,0,0,0,14,14H224a14,14,0,0,0,14-14V64A14,14,0,0,0,224,50Zm2,142a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V64a2,2,0,0,1,2-2H224a2,2,0,0,1,2,2Zm-20-64a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,128Zm0-32a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12H200A6,6,0,0,1,206,96ZM70,160a6,6,0,0,1-6,6H56a6,6,0,0,1,0-12h8A6,6,0,0,1,70,160Zm96,0a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,160Zm40,0a6,6,0,0,1-6,6h-8a6,6,0,0,1,0-12h8A6,6,0,0,1,206,160Z\"/></svg>", "link-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z\"/></svg>", "magnifying-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z\"/></svg>", "microphone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,174a46.06,46.06,0,0,0,46-46V64a46,46,0,0,0-92,0v64A46.06,46.06,0,0,0,128,174ZM94,64a34,34,0,0,1,68,0v64a34,34,0,0,1-68,0Zm40,141.75V240a6,6,0,0,1-12,0V205.75A78.09,78.09,0,0,1,50,128a6,6,0,0,1,12,0,66,66,0,0,0,132,0,6,6,0,0,1,12,0A78.09,78.09,0,0,1,134,205.75Z\"/></svg>", "minus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M182,112a6,6,0,0,1-6,6H112a6,6,0,0,1,0-12h64A6,6,0,0,1,182,112Zm-6,26H112a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12Zm46-90V208a14,14,0,0,1-14,14H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34H208A14,14,0,0,1,222,48ZM48,210H74V46H48a2,2,0,0,0-2,2V208A2,2,0,0,0,48,210ZM210,48a2,2,0,0,0-2-2H86V210H208a2,2,0,0,0,2-2Z\"/></svg>", "notepad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M166,128a6,6,0,0,1-6,6H96a6,6,0,0,1,0-12h64A6,6,0,0,1,166,128Zm-6,26H96a6,6,0,0,0,0,12h64a6,6,0,0,0,0-12ZM214,40V200a30,30,0,0,1-30,30H72a30,30,0,0,1-30-30V40a6,6,0,0,1,6-6H74V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h36V24a6,6,0,0,1,12,0V34h26A6,6,0,0,1,214,40Zm-12,6H182V56a6,6,0,0,1-12,0V46H134V56a6,6,0,0,1-12,0V46H86V56a6,6,0,0,1-12,0V46H54V200a18,18,0,0,0,18,18H184a18,18,0,0,0,18-18Z\"/></svg>", "paper-plane-tilt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z\"/></svg>", "pencil-simple-line": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z\"/></svg>", "seal-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z\"/></svg>", "speaker-high": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66Zm50.53-108.85a38,38,0,0,1,0,50.24,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93ZM246,128a77.86,77.86,0,0,1-19.86,52,6,6,0,1,1-8.94-8,66,66,0,0,0,0-88,6,6,0,1,1,8.94-8A77.86,77.86,0,0,1,246,128Z\"/></svg>", "speaker-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M154.64,26.61a6,6,0,0,0-6.32.65L77.94,82H32A14,14,0,0,0,18,96v64a14,14,0,0,0,14,14H77.94l70.38,54.74A6,6,0,0,0,158,224V32A6,6,0,0,0,154.64,26.61ZM30,160V96a2,2,0,0,1,2-2H74v68H32A2,2,0,0,1,30,160Zm116,51.73L86,165.07V90.93l60-46.66ZM206,128a37.94,37.94,0,0,1-9.5,25.14,6,6,0,1,1-9-7.94,26,26,0,0,0,0-34.37,6,6,0,0,1,9-7.93A38,38,0,0,1,206,128Z\"/></svg>", "stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M200,42H56A14,14,0,0,0,42,56V200a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V56A14,14,0,0,0,200,42Zm2,158a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V56a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2Z\"/></svg>", "translate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M245.37,213.32l-56-112a6,6,0,0,0-10.74,0l-22.3,44.6A90,90,0,0,1,105,127.19,101.73,101.73,0,0,0,133.82,62H160a6,6,0,0,0,0-12H102V32a6,6,0,0,0-12,0V50H32a6,6,0,0,0,0,12h89.79A89.71,89.71,0,0,1,96,119.23,89.81,89.81,0,0,1,75.11,86,6,6,0,1,0,63.8,90,101.66,101.66,0,0,0,87,127.2,89.56,89.56,0,0,1,32,146a6,6,0,0,0,0,12,101.55,101.55,0,0,0,64-22.63,102.11,102.11,0,0,0,54.53,22.17l-27.89,55.78a6,6,0,0,0,10.74,5.36L147.71,190h72.58l14.34,28.68A6,6,0,0,0,240,222a5.87,5.87,0,0,0,2.68-.64A6,6,0,0,0,245.37,213.32ZM153.71,178,184,117.42,214.29,178Z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M216,50H174V40a22,22,0,0,0-22-22H104A22,22,0,0,0,82,40V50H40a6,6,0,0,0,0,12H50V208a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V62h10a6,6,0,0,0,0-12ZM94,40a10,10,0,0,1,10-10h48a10,10,0,0,1,10,10V50H94ZM194,208a2,2,0,0,1-2,2H64a2,2,0,0,1-2-2V62H194ZM110,104v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Zm48,0v64a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z\"/></svg>", "upload-simple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M222,144v64a6,6,0,0,1-6,6H40a6,6,0,0,1-6-6V144a6,6,0,0,1,12,0v58H210V144a6,6,0,0,1,12,0ZM92.24,76.24,122,46.49V144a6,6,0,0,0,12,0V46.49l29.76,29.75a6,6,0,0,0,8.48-8.48l-40-40a6,6,0,0,0-8.48,0l-40,40a6,6,0,0,0,8.48,8.48Z\"/></svg>", "user-plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M254,136a6,6,0,0,1-6,6H230v18a6,6,0,0,1-12,0V142H200a6,6,0,0,1,0-12h18V112a6,6,0,0,1,12,0v18h18A6,6,0,0,1,254,136Zm-57.41,60.14a6,6,0,1,1-9.18,7.72C166.9,179.45,138.69,166,108,166s-58.89,13.45-79.41,37.86a6,6,0,0,1-9.18-7.72C35.14,177.41,55,164.48,77,158.25a66,66,0,1,1,62,0C161,164.48,180.86,177.41,196.59,196.14ZM108,154a54,54,0,1,0-54-54A54.06,54.06,0,0,0,108,154Z\"/></svg>", "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M112.6,158.43a58,58,0,1,0-57.2,0A93.83,93.83,0,0,0,5.21,196.72a6,6,0,0,0,10.05,6.56,82,82,0,0,1,137.48,0,6,6,0,0,0,10-6.56A93.83,93.83,0,0,0,112.6,158.43ZM38,108a46,46,0,1,1,46,46A46.06,46.06,0,0,1,38,108Zm211,97a6,6,0,0,1-8.3-1.74A81.8,81.8,0,0,0,172,166a6,6,0,0,1,0-12,46,46,0,1,0-17.08-88.73,6,6,0,1,1-4.46-11.14,58,58,0,0,1,50.14,104.3,93.83,93.83,0,0,1,50.19,38.29A6,6,0,0,1,249,205Z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M250.83,74.71a6,6,0,0,0-6.16.3L206,100.79V72a14,14,0,0,0-14-14H32A14,14,0,0,0,18,72V184a14,14,0,0,0,14,14H192a14,14,0,0,0,14-14V155.21L244.67,181a6,6,0,0,0,9.33-5V80A6,6,0,0,0,250.83,74.71ZM194,184a2,2,0,0,1-2,2H32a2,2,0,0,1-2-2V72a2,2,0,0,1,2-2H192a2,2,0,0,1,2,2Zm48-19.21-36-24V115.21l36-24Z\"/></svg>", "warning-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm-6-82V80a6,6,0,0,1,12,0v56a6,6,0,0,1-12,0Zm16,36a10,10,0,1,1-10-10A10,10,0,0,1,138,172Z\"/></svg>", "whatsapp-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z\"/></svg>", "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z\"/></svg>", "youtube-logo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M163.33,123l-48-32A6,6,0,0,0,106,96v64a6,6,0,0,0,9.33,5l48-32a6,6,0,0,0,0-10ZM118,148.79V107.21L149.18,128ZM232.4,70a22,22,0,0,0-13.28-15C185,41.79,130.27,42,128,42s-57-.21-91.16,13A22,22,0,0,0,23.6,70C21.05,79.89,18,98,18,128s3.05,48.11,5.6,58a22,22,0,0,0,13.28,15C71,214.21,125.72,214,128,214h.71c6.91,0,58-.44,90.45-13a22,22,0,0,0,13.28-15c2.55-9.87,5.6-27.93,5.6-58S235,79.89,232.4,70ZM220.78,183a10,10,0,0,1-6,6.86C182.78,202.19,128.58,202,128,202s-54.71.2-86.75-12.17a10,10,0,0,1-6-6.86C32.84,173.78,30,156.78,30,128s2.84-45.78,5.22-55a10,10,0,0,1,6-6.86C72.06,54.26,123.53,54,127.76,54H128c.54,0,54.71-.2,86.75,12.17a10,10,0,0,1,6,6.86c2.38,9.19,5.22,26.19,5.22,55S223.16,173.78,220.78,183Z\"/></svg>"};
 </script>
 <script>
 /* base: utilidades de tela, sem banco. Mesmas funções do protótipo, sem o relógio fixo da demonstração. */
@@ -2255,10 +2297,10 @@ const db = {
     if (alunos.length) ok(await sb.from('midia_alunos').insert(alunos.map(a => ({ midia_id: id, aluno_id: a }))));
     return m;
   },
-  // apagar o material apaga o arquivo: o plano grátis tem 1 GB
+  // apagar o material apaga o arquivo (o plano grátis tem 1 GB), só depois de a linha sair: o Storage deixa toda a equipe apagar
   async excluirMaterial(m) {
+    if (!ok(await sb.from('midias').delete().eq('id', m.id).select('id')).length) throw new Error('Você não pode excluir este material, ou ele já tinha saído da biblioteca.');
     if (m.arquivo_path) ok(await sb.storage.from('materiais').remove([m.arquivo_path]));
-    ok(await sb.from('midias').delete().eq('id', m.id));
   },
   _urls: new Map(),
   // URL assinada de 1 hora, reaproveitada enquanto vale
@@ -2364,7 +2406,7 @@ const db = {
     if (!ok(await sb.from('midias').delete().eq('id', id).select('id')).length) throw new Error('Este link não foi apagado: ele já tinha saído ou você não tem permissão.');
   },
   async linksDoAluno(aluno) {
-    return ok(await sb.from('midias').select('id,tipo,titulo,url,capa,criado_em').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
+    return ok(await sb.from('midias').select('id,tipo,titulo,url,capa,criado_em,secao_id').eq('pessoal_de', aluno).order('criado_em', { ascending: false }));
   },
   // ordem não é única: o id desempata, nas páginas e nas fileiras
   async paginas(aluno) {
@@ -5671,7 +5713,7 @@ $('#tela-aluno').addEventListener('submit', ev => {
 <script>
 /* painel da equipe (admin e professor) com dado real */
 const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], cursos: [], mes: null, filtroLicao: 'entregue', contatos: [], filtroContato: 'todos', pedidoContatos: 0 };
-const VISTAS_EQUIPE = ['hoje', 'alunos', 'agenda', 'licoes', 'biblioteca', 'cursos', 'curso', 'aplicar', 'legenda', 'estudo', 'contatos'];
+const VISTAS_EQUIPE = ['pastas', 'hoje', 'alunos', 'pasta', 'agenda', 'licoes', 'biblioteca', 'cursos', 'curso', 'aplicar', 'legenda', 'estudo', 'contatos'];
 const ehAdmin = () => eq.perfil?.papel === 'admin';
 const alunos = () => eq.pessoas.filter(p => p.papel === 'aluno');
 const alunosAtivos = () => alunos().filter(p => p.ativo);
@@ -5704,9 +5746,13 @@ function renderEquipe() {
   $('#equipe-data').textContent = maiuscula(fLonga(new Date()));
   $('#equipe-ola').textContent = `${saudacao()}, ${primeiroNome(eq.perfil.nome)}`;
   $('#equipe-avatar').textContent = iniciais(eq.perfil.nome);
-  renderHoje(); renderAlunos(); renderAgendaEquipe(); renderLicoesEquipe(); renderBibliotecaEquipe(); renderCursos();
+  renderHoje(); renderPastas(); renderAgendaEquipe(); renderLicoesEquipe(); renderBibliotecaEquipe(); renderCursos();
 }
-const vistaEquipe = v => { if (v !== 'legenda') fecharLegenda(); if (v !== 'estudo') fecharEstudoEquipe(); mostrarVista('e', 'data-vista-equipe', v, VISTAS_EQUIPE); };
+const vistaEquipe = v => {
+  if (v !== 'legenda') fecharLegenda(); if (v !== 'estudo') fecharEstudoEquipe(); mostrarVista('e', 'data-vista-equipe', v, VISTAS_EQUIPE);
+  // vista sem botão próprio no menu fica dentro de Pastas
+  if (!$(`.trilho [data-vista-equipe="${v}"]`)) $('.trilho [data-vista-equipe="pastas"]').setAttribute('aria-current', 'page');
+};
 
 /* ---------- hoje ---------- */
 function renderHoje() {
@@ -5723,20 +5769,6 @@ function renderHoje() {
 const linhaCorrigir = t => `<li><span class="quem"><b>${esc(t.titulo)}</b><small>${esc(nomeDe(t.aluno_id))}, enviada ${quandoRelativo(new Date(t.entregue_em))}</small></span><button class="btn btn-primario" data-corrigir="${t.id}">Corrigir</button></li>`;
 
 /* ---------- alunos ---------- */
-function renderAlunos() {
-  const lista = ehAdmin() ? eq.pessoas.filter(p => p.id !== eq.perfil.id) : alunos();
-  $('#lista-alunos').innerHTML = lista.length ? lista.map(p => `<li class="${p.ativo ? '' : 'inativo'}" data-pessoa-linha="${p.id}">
-      <span class="avatar${p.papel === 'aluno' ? '' : ' p'}" aria-hidden="true">${esc(iniciais(p.nome))}</span>
-      <span class="quem"><b>${esc(p.nome)}</b><small>${esc(p.email)} · ${p.papel === 'aluno' ? (p.nivel ? `nível ${esc(p.nivel)}` : 'sem nível') : esc(p.papel)}${p.menor ? ` · <span class="menor-tag">menor</span>${p.responsavel_nome ? ` · responsável: ${esc(p.responsavel_nome)}` : ''}` : ''}${p.ativo ? '' : ' · desativado'}</small></span>
-      <span class="acoes-linha">
-        ${p.papel === 'aluno' ? `<button class="btn btn-linha" data-vocab-pessoa="${p.id}">Vocabulário</button><button class="btn btn-linha" data-pron-pessoa="${p.id}">Pronúncia</button><button class="btn btn-linha" data-dit-pessoa="${p.id}">Ditado</button><button class="btn btn-linha" data-anot-pessoa="${p.id}">Lousa</button><button class="btn btn-linha" data-bib-pessoa="${p.id}">Biblioteca</button><button class="btn btn-linha" data-prog-pessoa="${p.id}">Progresso</button>` : ''}
-        <button class="btn btn-linha" data-editar-pessoa="${p.id}">Editar</button>
-        <button class="btn btn-linha" data-senha-pessoa="${p.id}">Nova senha</button>
-        <button class="btn btn-linha" data-ativo-pessoa="${p.id}">${p.ativo ? 'Desativar' : 'Reativar'}</button>
-        ${ehAdmin() ? `<button class="btn btn-linha" data-excluir-pessoa="${p.id}">Excluir</button>` : ''}
-      </span></li>`).join('')
-    : `<li><span class="quem vazio-linha">Nenhum aluno ainda. Use “Novo aluno”.</span></li>`;
-}
 function formNovaPessoa() {
   const senha = senhaProvisoria();
   const g = gavetaForm('Cadastro', 'Novo aluno', `
@@ -5997,7 +6029,7 @@ function verLinkAluno(id) {
   const yt = l && idYoutube(l.url);
   if (!yt) return;
   fecharCamadas();
-  estudarMaterial(l, yt, 'alunos');
+  estudarMaterial(l, yt, 'pasta');
 }
 function avisoAparelho(id) {
   const aviso = $(`#aviso-ap-${id}`), b = $(`#bib-aluno [data-ver-link="${id}"]`); if (!aviso || !b) return;
@@ -6141,40 +6173,31 @@ function paraQuem(m) {
   if (m.oficial) return 'Todos os alunos';
   return ids.length ? `Só para ${ids.map(i => primeiroNome(nomeDe(i))).join(', ')}` : 'Sem aluno escolhido';
 }
-function renderBibliotecaEquipe() {
-  const blocos = eq.fileiras.map(f => {
-    const itens = eq.midias.filter(m => m.fileira_id === f.id && !m.pessoal_de);
-    if (!itens.length) return '';
-    return `<section class="fileira" style="margin-top:22px"><div class="fileira-topo"><h3>${esc(f.titulo)}</h3><span>${itens.length} ${itens.length === 1 ? 'item' : 'itens'}</span></div>
-      <article class="painel"><ul class="lista">${itens.map(m => `<li class="mat-linha">
-        <span class="mat-ico">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}</span>
-        <span class="quem"><b>${esc(m.titulo)}</b><small>${esc(NOME_TIPO[m.tipo])}${m.nivel ? ` · ${esc(m.nivel)}` : ''}${m.fonte ? ` · ${esc(m.fonte)}` : ''}</small><span class="para-quem">${esc(paraQuem(m))}</span>${estadoVideo(m)}</span>
-        <span class="acoes-linha">${['youtube', 'video'].includes(m.tipo) ? `<button class="btn btn-linha" data-legenda-material="${m.id}">Legenda</button>` : ''}${m.tipo !== 'video' || m.video_estado === 'pronto' ? `<button class="btn btn-linha" data-ver-material="${m.id}">Ver</button>` : ''}<button class="btn btn-linha" data-editar-material="${m.id}">Editar</button><button class="btn btn-linha" data-excluir-material="${m.id}">Excluir</button></span>
-      </li>`).join('')}</ul></article></section>`;
-  }).join('');
-  $('#lista-materiais').innerHTML = blocos || `<div class="vazio">${ico('books')}<b>A biblioteca está vazia</b><span>Use “Novo material” para pôr um PDF, um vídeo do YouTube ou um link.</span></div>`;
-}
-function formMaterial(id) {
+// novo = { tipo, aluno, nivel }: o "Criar" das pastas; com aluno, o "Quem vê" fica fixo nele
+function formMaterial(id, novo = {}) {
   const m = id ? eq.midias.find(x => x.id === id) : null;
+  const fixo = m ? null : pessoa(novo.aluno);
   const escolhidos = new Set(m ? eq.midiaAlunos.filter(x => x.midia_id === m.id).map(x => x.aluno_id) : []);
-  const todos = ehAdmin() && (m ? !!m.oficial : true);
-  const g = gavetaForm('Biblioteca', m ? 'Editar material' : 'Novo material', `
+  const todos = !fixo && ehAdmin() && (m ? !!m.oficial : true);
+  const g = gavetaForm(fixo ? fixo.nome : 'Biblioteca', m ? 'Editar material' : 'Novo material', `
     <form class="form-gaveta" novalidate>
       <div class="duas">
-        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link', 'video'].filter(t => t !== 'video' || m?.tipo === 'video').map(t => `<option value="${t}" ${m?.tipo === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
-        <div class="campo"><label for="ma-fileira">Fileira</label><select id="ma-fileira">${eq.fileiras.map(f => `<option value="${f.id}" ${m?.fileira_id === f.id ? 'selected' : ''}>${esc(f.titulo)}</option>`).join('')}</select></div>
+        <div class="campo"><label for="ma-tipo">Tipo</label><select id="ma-tipo" ${m ? 'disabled' : 'data-foco'}>${['pdf', 'youtube', 'link', 'video'].filter(t => t !== 'video' || m?.tipo === 'video').map(t => `<option value="${t}" ${(m ? m.tipo : novo.tipo) === t ? 'selected' : ''}>${NOME_TIPO[t]}</option>`).join('')}</select></div>
+        <div class="campo"><label for="ma-fileira">Fileira</label><select id="ma-fileira">${fixo ? '<option value="">Escolha a fileira</option>' : ''}${eq.fileiras.map(f => `<option value="${f.id}" ${m?.fileira_id === f.id ? 'selected' : ''}>${esc(f.titulo)}</option>`).join('')}</select></div>
       </div>
       <div class="campo"><label for="ma-titulo">Título</label><input id="ma-titulo" value="${esc(m?.titulo || '')}" ${m ? 'data-foco' : ''}></div>
       <div class="campo" id="ma-campo-arquivo"><label for="ma-arquivo">Arquivo PDF</label><input id="ma-arquivo" type="file" accept="application/pdf"><span class="ajuda">Até 50 MB. Livro escaneado pesado: comprima antes.</span></div>${camposVideo()}
       <div class="campo" id="ma-campo-url"><label for="ma-url">Link</label><input id="ma-url" type="url" inputmode="url" value="${esc(m?.url || '')}" placeholder="https://"></div>
       <div class="duas">
-        <div class="campo"><label for="ma-nivel">Nível</label><select id="ma-nivel">${opcoesNivel(m?.nivel)}</select></div>
+        <div class="campo"><label for="ma-nivel">Nível</label><select id="ma-nivel">${opcoesNivel(m ? m.nivel : novo.nivel)}</select></div>
         <div class="campo"><label for="ma-fonte">Fonte</label><input id="ma-fonte" value="${esc(m?.fonte || '')}" placeholder="Forward, BBC, TED…"></div>
       </div>
       <div class="campo"><label for="ma-desc">Descrição (opcional)</label><textarea id="ma-desc" style="min-height:80px">${esc(m?.descricao || '')}</textarea></div>
       <div class="campo"><span class="rotulo">Quem vê</span>
+        ${fixo ? `<div class="escolha-alunos"><label><input type="radio" name="ma-para" value="alguns" checked disabled>Só os alunos escolhidos</label></div>
+        <div class="escolha-alunos" id="ma-alunos"><label><input type="checkbox" value="${fixo.id}" checked disabled>${esc(fixo.nome)}</label></div>` : `
         ${ehAdmin() ? `<div class="escolha-alunos"><label><input type="radio" name="ma-para" value="todos" ${todos ? 'checked' : ''}>Todos os alunos (biblioteca da Forward)</label><label><input type="radio" name="ma-para" value="alguns" ${todos ? '' : 'checked'}>Só os alunos escolhidos</label></div>` : '<span class="ajuda">Escolha os alunos que vão ver este material.</span>'}
-        <div class="escolha-alunos" id="ma-alunos" ${todos ? 'hidden' : ''}>${alunos().map(a => `<label><input type="checkbox" value="${a.id}" ${escolhidos.has(a.id) ? 'checked' : ''}>${esc(a.nome)}</label>`).join('') || '<span class="ajuda">Nenhum aluno cadastrado.</span>'}</div>
+        <div class="escolha-alunos" id="ma-alunos" ${todos ? 'hidden' : ''}>${alunos().map(a => `<label><input type="checkbox" value="${a.id}" ${escolhidos.has(a.id) ? 'checked' : ''}>${esc(a.nome)}</label>`).join('') || '<span class="ajuda">Nenhum aluno cadastrado.</span>'}</div>`}
       </div>
       <span class="erro-msg" id="ma-erro" role="alert"></span>
     </form>`, [`<button class="btn btn-primario btn-g" id="ma-salvar">${m ? 'Salvar' : 'Pôr na biblioteca'}</button>`]);
@@ -6186,7 +6209,7 @@ function formMaterial(id) {
     const t = tipo(); const titulo = $('#ma-titulo').value.trim(); const url = $('#ma-url').value.trim(); const arquivo = $('#ma-arquivo').files[0];
     const alguns = !ehAdmin() || $('input[name=ma-para]:checked', g).value === 'alguns';
     const lista = alguns ? $$('#ma-alunos input:checked', g).map(c => c.value) : [];
-    let erro = !titulo ? 'Dê um título.' : '';
+    let erro = !titulo ? 'Dê um título.' : !$('#ma-fileira').value ? 'Escolha a fileira.' : '';
     if (!erro && t === 'pdf' && !m && !arquivo) erro = 'Escolha o arquivo PDF.';
     if (!erro && t === 'pdf' && arquivo && arquivo.size > 50 * 1024 * 1024) erro = 'O PDF passa de 50 MB. Comprima e tente de novo.';
     if (!erro && !['pdf', 'video'].includes(t) && !/^https:\/\//i.test(url)) erro = 'O link precisa começar com https://';
@@ -6201,10 +6224,10 @@ function formMaterial(id) {
     if (feito) { fecharCamadas(); recarregar('midias', 'midiaAlunos'); } else { $('#ma-salvar').disabled = false; $('#ma-salvar').textContent = m ? 'Salvar' : 'Pôr na biblioteca'; }
   });
 }
-async function verMaterial(id) {
+async function verMaterial(id, volta) {
   const m = eq.midias.find(x => x.id === id); if (!m) return;
   const yt = m.tipo === 'youtube' && idYoutube(m.url);
-  if (yt || (m.tipo === 'pdf' && m.arquivo_path)) return estudarMaterial(m, yt);
+  if (yt || (m.tipo === 'pdf' && m.arquivo_path)) return estudarMaterial(m, yt, volta);
   const url = m.arquivo_path ? await tentar(() => db.urlArquivo(m.arquivo_path)) : m.url;
   if (url) window.open(url, '_blank', 'noopener');
 }
@@ -6225,7 +6248,7 @@ async function estudarMaterial(m, yt, volta = 'biblioteca') {
   const pedido = ee.pedido;
   $('#e-estudo').innerHTML = `
     <div class="estudo-topo">
-      <button class="btn-texto" data-vista-equipe="${volta}">${ico('caret-left')}${volta === 'alunos' ? 'Alunos' : 'Biblioteca'}</button>
+      <button class="btn-texto" data-vista-equipe="${volta}">${ico('caret-left')}${volta === 'pasta' ? 'Pasta' : 'Biblioteca'}</button>
       <h2>${esc(m.titulo)}</h2>
       <div class="etiquetas">${m.nivel ? `<span class="etq">${ico('graduation-cap')}Nível ${esc(m.nivel)}</span>` : ''}<span class="etq">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo])}</span></div>
     </div>
@@ -6261,10 +6284,15 @@ async function estudarMaterial(m, yt, volta = 'biblioteca') {
   lousa.folha($('#eq-lousa-lugar', box), $('#eq-pdf-lado', box));
   desenharAoChegar(box, async canvas => { await desenharPaginaPdf(doc, canvas); lousa.pagina(canvas.parentElement, canvas.dataset.pagina); });
 }
-async function excluirMaterial(id) {
+const juntarNomes = l => (l.length > 1 ? `${l.slice(0, -1).join(', ')} e ${l[l.length - 1]}` : l.join(''));
+// aluno: a pasta de onde veio o pedido; os outros alunos ligados ao material entram na confirmação
+async function excluirMaterial(id, aluno) {
   const m = eq.midias.find(x => x.id === id); if (!m) return;
-  if (!confirm(`Tirar “${m.titulo}” da biblioteca?${m.tipo === 'video' ? ' O vídeo é apagado do Internet Archive.' : m.arquivo_path ? ' O arquivo é apagado.' : ''}`)) return;
-  if (await tentar(() => (m.tipo === 'video' ? excluirVideo(m) : db.excluirMaterial(m)), 'Material removido.')) recarregar('midias', 'midiaAlunos');
+  const outros = aluno ? eq.midiaAlunos.filter(x => x.midia_id === id && x.aluno_id !== aluno).map(x => nomeDe(x.aluno_id)) : [];
+  const deixam = outros.length ? ` ${juntarNomes(outros)} também ${outros.length === 1 ? 'deixa' : 'deixam'} de ver.` : '';
+  if (!confirm(`Tirar “${m.titulo}” da biblioteca?${deixam}${m.tipo === 'video' ? ' O vídeo é apagado do Internet Archive.' : m.arquivo_path ? ' O arquivo é apagado.' : ''}`)) return;
+  await tentar(() => (m.tipo === 'video' ? excluirVideo(m) : db.excluirMaterial(m)), 'Material removido.');
+  recarregar('midias', 'midiaAlunos');
 }
 
 /* ---------- eventos do painel ---------- */
@@ -6285,7 +6313,6 @@ document.addEventListener('click', ev => {
   if (ds.novo === 'aluno') return formNovaPessoa();
   if (ds.novo === 'aula') return formAula();
   if (ds.novo === 'licao') return formLicao();
-  if (ds.novo === 'material') return formMaterial();
   if (ds.novo === 'curso') return formCurso();
   if (ds.aplicarCurso !== undefined) return abrirAplicar();
   if (ds.abrirCurso) return abrirCurso(ds.abrirCurso);
@@ -6326,10 +6353,260 @@ document.addEventListener('click', ev => {
   if (ds.excluirLicao) return excluirLicao(ds.excluirLicao);
   if (ds.baixarAnexo) return baixarAnexo(ds.baixarAnexo);
   if (ds.abrirAnexo) return abrirAnexo(ds.abrirAnexo);
-  if (ds.legendaMaterial) return abrirLegenda(ds.legendaMaterial);
-  if (ds.verMaterial) return verMaterial(ds.verMaterial);
+  if (ds.legendaMaterial) return abrirLegenda(ds.legendaMaterial, ds.volta);
+  if (ds.verMaterial) return verMaterial(ds.verMaterial, ds.volta);
   if (ds.editarMaterial) return formMaterial(ds.editarMaterial);
-  if (ds.excluirMaterial) return excluirMaterial(ds.excluirMaterial);
+  if (ds.excluirMaterial) return excluirMaterial(ds.excluirMaterial, ds.pastaDe);
+});
+
+</script>
+<script>
+/* ---------- pastas da equipe: capas da vista inicial, uma pasta por pessoa (na do aluno, o material para ele e as páginas dele) e a biblioteca da escola por nível ---------- */
+const pastas = { grupo: 'ativos', id: null, paginas: [], links: [], comLegenda: new Set(), vistos: new Map(), lendo: false, erro: '', pedido: 0, menu: false };
+const NOME_GRUPO = { ativos: 'Alunos', inativos: 'Inativos', equipe: 'Equipe' };
+const grupoDe = p => (p.papel !== 'aluno' ? 'equipe' : p.ativo ? 'ativos' : 'inativos');
+const alunosInativos = () => alunos().filter(p => !p.ativo);
+const equipeSemMim = () => eq.pessoas.filter(p => p.papel !== 'aluno' && p.id !== eq.perfil.id);
+const contagem = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+// o mesmo conjunto que o aluno vê em "Do <professor> para você": material da escola ligado a ele
+function paraAluno(id) {
+  const ligados = new Set(eq.midiaAlunos.filter(x => x.aluno_id === id).map(x => x.midia_id));
+  return eq.midias.filter(m => !m.pessoal_de && ligados.has(m.id));
+}
+
+function renderPastas() {
+  $('#pastas-conta-alunos').textContent = contagem(alunosAtivos().length, 'aluno ativo', 'alunos ativos');
+  $('#pastas-conta-biblioteca').textContent = contagem(eq.midias.filter(m => !m.pessoal_de).length, 'material', 'materiais');
+  $('#pastas-conta-cursos').textContent = contagem(eq.cursos.length, 'curso', 'cursos');
+  renderAlunos();
+  desenharPasta();
+}
+
+/* ---------- Pastas › Alunos, Inativos e Equipe ---------- */
+function capaPessoa(p) {
+  const aluno = p.papel === 'aluno';
+  return `<li><button class="pasta" data-abrir-pasta="${p.id}" style="--cor:${aluno ? corDe(p.id) : 'var(--marinho)'}">
+    <b class="pasta-nome">${esc(p.nome)}</b>
+    <span class="pasta-sub">${aluno ? esc(p.nivel || 'Sem nível') : `${esc(maiuscula(p.papel))}${p.ativo ? '' : ' · desativado'}`}</span>
+    ${aluno ? `<span class="pasta-conta">${contagem(paraAluno(p.id).length, 'material', 'materiais')}</span>` : ''}
+  </button></li>`;
+}
+const capaGrupo = (g, n, um, varios) => `<li><button class="pasta pasta-grupo" data-pastas-grupo="${g}"><b class="pasta-nome">${NOME_GRUPO[g]}</b><span class="pasta-conta">${contagem(n, um, varios)}</span></button></li>`;
+function renderAlunos() {
+  const g = pastas.grupo === 'equipe' && !ehAdmin() ? 'ativos' : pastas.grupo;
+  const lista = g === 'equipe' ? equipeSemMim() : g === 'inativos' ? alunosInativos() : alunosAtivos();
+  $('#e-alunos').dataset.grupo = g;
+  $('#e-alunos').setAttribute('aria-label', NOME_GRUPO[g]);
+  $('#alunos-titulo').textContent = NOME_GRUPO[g];
+  $('#alunos-voltar').innerHTML = g === 'ativos'
+    ? `<button class="btn-texto" data-vista-equipe="pastas">${ico('caret-left')}Pastas</button>`
+    : `<button class="btn-texto" data-pastas-grupo="ativos">${ico('caret-left')}Alunos</button>`;
+  const vazio = { ativos: 'Nenhum aluno ativo. Use “Novo aluno”.', inativos: 'Nenhum aluno inativo.', equipe: 'Ninguém mais na equipe.' }[g];
+  const grupos = g !== 'ativos' ? ''
+    : capaGrupo('inativos', alunosInativos().length, 'aluno', 'alunos') + (ehAdmin() ? capaGrupo('equipe', equipeSemMim().length, 'pessoa', 'pessoas') : '');
+  $('#lista-alunos').innerHTML = (lista.length ? lista.map(capaPessoa).join('') : `<li class="pastas-vazio">${vazio}</li>`) + grupos;
+}
+
+/* ---------- pasta da pessoa ---------- */
+async function abrirPasta(id) {
+  const p = pessoa(id); if (!p) return;
+  const pedido = ++pastas.pedido;
+  Object.assign(pastas, { id, paginas: [], links: [], comLegenda: new Set(), vistos: new Map(), lendo: p.papel === 'aluno', erro: '', menu: false });
+  vistaEquipe('pasta');
+  desenharPasta();
+  if (p.papel !== 'aluno') return;
+  try {
+    const [paginas, links] = await Promise.all([db.paginas(id), db.linksDoAluno(id)]);
+    const aparelhos = links.filter(l => l.tipo === 'aparelho').map(l => l.id);
+    const [comLegenda, vistos] = aparelhos.length ? await Promise.all([db.comLegenda(aparelhos), db.vistos(id)]) : [new Set(), []];
+    if (pedido !== pastas.pedido) return;
+    Object.assign(pastas, { paginas, links, comLegenda, vistos: new Map(vistos.map(v => [v.midia_id, v.visto_em])) });
+  } catch (e) {
+    console.warn(e);
+    if (pedido !== pastas.pedido) return;
+    pastas.erro = e.message || 'Não deu para abrir as páginas.';
+  }
+  pastas.lendo = false;
+  desenharPasta();
+}
+const fatosPessoa = p => [p.email, p.papel === 'aluno' ? (p.nivel ? `nível ${p.nivel}` : 'sem nível') : maiuscula(p.papel),
+  p.menor && 'menor de idade', p.menor && p.responsavel_nome && `responsável: ${p.responsavel_nome}`, !p.ativo && 'desativado'].filter(Boolean).map(esc).join(' · ');
+function acoesDaPessoa(p) {
+  const b = (acao, txt) => `<button class="btn btn-linha" data-${acao}-pessoa="${p.id}">${txt}</button>`;
+  const doEstudo = p.papel === 'aluno' ? [b('vocab', 'Vocabulário'), b('pron', 'Pronúncia'), b('dit', 'Ditado'), b('anot', 'Lousa'), b('bib', 'Biblioteca'), b('prog', 'Progresso')] : [];
+  return [b('editar', 'Editar'), b('senha', 'Nova senha'), b('ativo', p.ativo ? 'Desativar' : 'Reativar'), ...doEstudo, ...(ehAdmin() ? [b('excluir', 'Excluir')] : [])].join('');
+}
+function desenharPasta() {
+  const box = $('#e-pasta'), p = pessoa(pastas.id);
+  if (!p) { box.innerHTML = ''; if (!box.hidden) vistaEquipe('alunos'); return; }
+  const aluno = p.papel === 'aluno', g = grupoDe(p);
+  box.dataset.pasta = p.id;
+  box.innerHTML = `
+    <div class="estudo-topo"><button class="btn-texto" data-pastas-grupo="${g}">${ico('caret-left')}${NOME_GRUPO[g]}</button></div>
+    <div class="pasta-cab" style="--cor:${aluno ? corDe(p.id) : 'var(--marinho)'}">
+      <div class="pasta-quem"><h2>${esc(p.nome)}</h2><p class="ajuda">${fatosPessoa(p)}</p></div>
+      <button class="btn btn-linha" data-pasta-menu aria-expanded="${pastas.menu}" aria-controls="pasta-acoes">${ico('dots-three')}Ações</button>
+    </div>
+    <div class="pasta-acoes" id="pasta-acoes" role="group" aria-label="Ações sobre ${esc(p.nome)}" ${pastas.menu ? '' : 'hidden'}>${acoesDaPessoa(p)}</div>
+    ${aluno ? fileiraPara(p) + paginasDoAluno(p) : ''}`;
+}
+
+/* fileira "Para <nome>": Criar e o material da escola ligado ao aluno */
+function fileiraPara(p) {
+  const itens = paraAluno(p.id);
+  return `<section class="fileira" data-pasta-para="${p.id}"><div class="fileira-topo"><h3>Para ${esc(primeiroNome(p.nome))}</h3><span>${contagem(itens.length, 'material', 'materiais')}</span></div>
+    <div class="trilha"><button class="card card-criar" data-pasta-criar="${p.id}" aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>${itens.map(m => cardPara(m, p)).join('')}</div></section>`;
+}
+// Legenda e Ver para todos; Editar e Excluir só no material que o papel pode mudar
+function acoesMaterial(m, volta, aluno) {
+  const t = esc(m.titulo), v = volta ? ` data-volta="${volta}"` : '';
+  const legenda = ['youtube', 'video'].includes(m.tipo) ? `<button class="btn btn-linha" data-legenda-material="${m.id}"${v} aria-label="Legenda de ${t}">Legenda</button>` : '';
+  const ver = m.tipo !== 'video' || m.video_estado === 'pronto' ? `<button class="btn btn-linha" data-ver-material="${m.id}"${v} aria-label="Ver ${t}">Ver</button>` : '';
+  const mudar = podeEditarMaterial(m) ? `<button class="btn btn-linha" data-editar-material="${m.id}" aria-label="Editar ${t}">Editar</button><button class="btn btn-linha" data-excluir-material="${m.id}"${aluno ? ` data-pasta-de="${aluno}"` : ''} aria-label="Excluir ${t}">Excluir</button>` : '';
+  return legenda + ver + mudar;
+}
+function cardPara(m, p) {
+  return `<article class="card card-eq" data-pasta-material="${m.id}">
+    <span class="card-capa">${capaMaterial(m)}</span>
+    <span class="card-titulo">${esc(m.titulo)}</span>
+    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo] || '')}${m.nivel ? `, ${esc(m.nivel)}` : ''}</span>
+    <span class="card-acoes">${acoesMaterial(m, 'pasta', p.id)}</span>
+  </article>`;
+}
+function menuCriar(titulo, idMenu, marca) {
+  $('#modal').innerHTML = `<div class="modal-corpo criar">
+      <button class="gaveta-fechar" data-fechar aria-label="Fechar">${ico('x')}</button>
+      <h2 id="modal-titulo">${titulo}</h2>
+      <div class="criar-menu" id="${idMenu}" role="group" aria-label="O que criar">
+        <button class="criar-opcao" ${marca}="youtube" data-foco>${ico(ICONE_TIPO.youtube)}Link do YouTube</button>
+        <button class="criar-opcao" ${marca}="pdf">${ico(ICONE_TIPO.pdf)}PDF</button>
+        <button class="criar-opcao" ${marca}="link">${ico(ICONE_TIPO.link)}Link</button>
+      </div>
+    </div>`;
+  abrirCamada($('#modal'));
+}
+function abrirCriarPasta(id) {
+  const p = pessoa(id); if (!p) return;
+  menuCriar(`Criar para ${esc(primeiroNome(p.nome))}`, 'pasta-criar-menu', 'data-pasta-criar-tipo');
+}
+
+/* páginas do aluno: só para ver, com Ver e Tirar */
+function paginasDoAluno(p) {
+  const nome = esc(primeiroNome(p.nome));
+  const corpo = pastas.lendo ? '<p class="ajuda" role="status">Abrindo as páginas…</p>'
+    : pastas.erro ? `<div class="caixa-aviso erro">${esc(pastas.erro)}</div>`
+    : pastas.paginas.length ? pastas.paginas.map(pg => `<section class="pasta-pagina" data-pasta-pagina="${pg.id}"><h3>${esc(pg.titulo)}</h3>
+        ${pg.secoes.length ? pg.secoes.map(s => secaoDoAluno(s, p)).join('') : '<p class="ajuda">Esta página ainda não tem fileiras.</p>'}</section>`).join('')
+    : `<p class="ajuda">${nome} ainda não tem páginas.</p>`;
+  return `<section class="pasta-paginas" data-pasta-paginas><div class="secao-topo"><h2>Páginas de ${nome}</h2><span class="ajuda">Só para ver</span></div>${corpo}</section>`;
+}
+function secaoDoAluno(s, p) {
+  const itens = pastas.links.filter(l => l.secao_id === s.id);
+  return `<section class="fileira" data-pasta-secao="${s.id}"><div class="fileira-topo"><h4>${esc(s.titulo)}</h4><span>${contagem(itens.length, 'item', 'itens')}</span></div>
+    ${itens.length ? `<div class="trilha">${itens.map(l => cardItem(l, p)).join('')}</div>` : '<p class="ajuda">Nada nesta fileira.</p>'}</section>`;
+}
+function cardItem(l, p) {
+  const t = esc(l.titulo), aparelho = l.tipo === 'aparelho';
+  const ver = aparelho
+    ? `<button class="btn btn-linha" data-pasta-ver="${l.id}" aria-label="Ver ${t}" aria-expanded="false" aria-controls="pasta-ap-${l.id}">Ver</button>`
+    : l.tipo === 'youtube' ? `<button class="btn btn-linha" data-pasta-ver="${l.id}" aria-label="Ver ${t}">Ver</button>`
+    : /^https:\/\//.test(l.url || '') ? `<a class="btn btn-linha" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${t} em outra aba">Abrir</a>` : '';
+  const estado = aparelho ? `<span class="card-meta">${pastas.comLegenda.has(l.id) ? 'com legenda' : 'sem legenda'} · ${pastas.vistos.has(l.id) ? `visto em ${dataSP(pastas.vistos.get(l.id))}` : 'não visto'}</span>` : '';
+  return `<article class="card card-eq" data-pasta-item="${l.id}">
+    <span class="card-capa">${capaMaterial(l)}</span>
+    <span class="card-titulo">${t}</span>
+    <span class="card-meta">${ico(ICONE_TIPO[l.tipo] || 'link-simple')}${esc(NOME_TIPO[l.tipo] || '')}</span>${estado}
+    <span class="card-acoes">${ver}<button class="btn btn-linha" data-pasta-tirar="${l.id}" aria-label="Tirar ${t}">Tirar</button></span>
+    ${aparelho ? `<p class="caixa-aviso aviso-aparelho" id="pasta-ap-${l.id}" hidden>O vídeo está no aparelho de ${esc(primeiroNome(p.nome))} e só abre lá: ele não vai para a internet.</p>` : ''}
+  </article>`;
+}
+function verItemPasta(id) {
+  const l = pastas.links.find(x => x.id === id); if (!l) return;
+  if (l.tipo === 'aparelho') {
+    const aviso = $(`#pasta-ap-${id}`), b = $(`#e-pasta [data-pasta-ver="${id}"]`); if (!aviso || !b) return;
+    aviso.hidden = !aviso.hidden;
+    b.setAttribute('aria-expanded', String(!aviso.hidden));
+    return;
+  }
+  const yt = idYoutube(l.url);
+  if (yt) estudarMaterial(l, yt, 'pasta');
+}
+// a confirmação e o apagar são os da Biblioteca do aluno na gaveta
+async function tirarDaPasta(id) {
+  const p = pessoa(pastas.id); if (!p) return;
+  Object.assign(bibAluno, { aluno: p, links: pastas.links });
+  await tirarLinkAluno(id);
+  if (bibAluno.links.some(x => x.id === id)) return;
+  pastas.links = pastas.links.filter(x => x.id !== id);
+  desenharPasta();
+}
+
+/* ---------- Pastas › Biblioteca da escola: uma subpasta por nível ---------- */
+const biblio = { nivel: null };
+const SUBPASTAS = [...NIVEIS, 'sem'];
+const nomeNivel = n => (n === 'sem' ? 'Sem nível' : n);
+const doNivel = n => eq.midias.filter(m => !m.pessoal_de && (m.nivel || 'sem') === n);
+function renderBibliotecaEquipe() {
+  const box = $('#e-biblioteca'), n = biblio.nivel;
+  box.dataset.subpasta = n || '';
+  if (!n) {
+    box.innerHTML = `<div class="estudo-topo"><button class="btn-texto" data-vista-equipe="pastas">${ico('caret-left')}Pastas</button></div>
+      <div class="secao-topo"><h2>Biblioteca da escola</h2></div>
+      <ul class="pastas" id="nivel-pastas">${SUBPASTAS.map(x => `<li><button class="pasta" data-nivel-pasta="${x}" style="--cor:var(--bege)"><b class="pasta-nome">${nomeNivel(x)}</b><span class="pasta-conta">${contagem(doNivel(x).length, 'material', 'materiais')}</span></button></li>`).join('')}</ul>`;
+    return;
+  }
+  const itens = doNivel(n);
+  box.innerHTML = `<div class="estudo-topo"><button class="btn-texto" data-nivel-pasta="">${ico('caret-left')}Biblioteca da escola</button></div>
+    <div class="secao-topo"><h2>${nomeNivel(n)}</h2><span class="ajuda">${contagem(itens.length, 'material', 'materiais')}</span></div>
+    <div class="trilha nivel-capas"><button class="card card-criar" data-nivel-criar="${n}" aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>${itens.map(cardNivel).join('')}</div>`;
+}
+function cardNivel(m) {
+  return `<article class="card card-eq" data-nivel-material="${m.id}">
+    <span class="card-capa">${capaMaterial(m)}</span>
+    <span class="card-titulo">${esc(m.titulo)}</span>
+    <span class="card-meta">${ico(ICONE_TIPO[m.tipo] || 'link-simple')}${esc(NOME_TIPO[m.tipo] || '')}${m.fonte ? ` · ${esc(m.fonte)}` : ''}</span>
+    <span class="para-quem">${esc(paraQuem(m))}</span>${estadoVideo(m)}
+    <span class="card-acoes">${acoesMaterial(m)}</span>
+  </article>`;
+}
+
+document.addEventListener('click', ev => {
+  if (!eq.perfil) return;
+  const b = ev.target.closest('button'); if (!b) return;
+  const ds = b.dataset;
+  if (ds.pastasGrupo) {
+    pastas.grupo = ds.pastasGrupo;
+    renderAlunos();
+    if (!ds.vistaEquipe) vistaEquipe('alunos');
+    return;
+  }
+  if (ds.abrirPasta) return abrirPasta(ds.abrirPasta);
+  if (ds.pastaMenu !== undefined) {
+    pastas.menu = !pastas.menu;
+    b.setAttribute('aria-expanded', String(pastas.menu));
+    $('#pasta-acoes').hidden = !pastas.menu;
+    return;
+  }
+  if (ds.pastaCriar) return abrirCriarPasta(ds.pastaCriar);
+  if (ds.pastaCriarTipo) {
+    const aluno = pastas.id;
+    fecharCamadas();
+    return formMaterial(null, { tipo: ds.pastaCriarTipo, aluno });
+  }
+  if (ds.pastaVer) return verItemPasta(ds.pastaVer);
+  if (ds.pastaTirar) return tirarDaPasta(ds.pastaTirar);
+  if (ds.pastaCapa === 'biblioteca') { biblio.nivel = null; return renderBibliotecaEquipe(); }
+  if (ds.nivelPasta !== undefined) {
+    biblio.nivel = SUBPASTAS.includes(ds.nivelPasta) ? ds.nivelPasta : null;
+    renderBibliotecaEquipe();
+    return vistaEquipe('biblioteca');
+  }
+  if (ds.nivelCriar && biblio.nivel) return menuCriar(`Criar · ${nomeNivel(biblio.nivel)}`, 'nivel-criar-menu', 'data-nivel-criar-tipo');
+  if (ds.nivelCriarTipo) {
+    const nivel = biblio.nivel === 'sem' ? null : biblio.nivel;
+    fecharCamadas();
+    return formMaterial(null, { tipo: ds.nivelCriarTipo, nivel });
+  }
 });
 
 </script>
@@ -6539,7 +6816,6 @@ function renderCurso() {
 async function abrirCurso(id) {
   Object.assign(cur, { id, aulas: [], carregado: false });
   vistaEquipe('curso');
-  $('.trilho [data-vista-equipe="cursos"]').setAttribute('aria-current', 'page');
   renderCurso();
   await recarregarCurso();
   $('#e-curso .curso-topo h2')?.setAttribute('tabindex', '-1');
@@ -6668,7 +6944,6 @@ function abrirAplicar() {
   Object.assign(apl, { modelos: {}, feito: null, ocupado: false });
   const cursos = aplicaveis(); const ini = new Date(); ini.setDate(ini.getDate() + 1);
   vistaEquipe('aplicar');
-  $('.trilho [data-vista-equipe="cursos"]').setAttribute('aria-current', 'page');
   $('#e-aplicar').innerHTML = `
     <div class="estudo-topo curso-topo"><button class="btn-texto" data-vista-equipe="cursos">${ico('caret-left')}Cursos</button></div>
     <div class="aplicar">
@@ -6756,7 +7031,7 @@ function fecharLegenda() {
   if (ed.player) ed.player.destruir();
   Object.assign(ed, { m: null, linhas: [], player: null });
 }
-async function abrirLegenda(id) {
+async function abrirLegenda(id, volta = 'biblioteca') {
   const m = eq.midias.find(x => x.id === id); const yt = m && idYoutube(m.url);
   if (!yt && m?.tipo !== 'video') return;
   fecharLegenda();
@@ -6764,7 +7039,7 @@ async function abrirLegenda(id) {
   Object.assign(ed, { m, pode: podeEditarMaterial(m) });
   $('#e-legenda').innerHTML = `
     <div class="estudo-topo">
-      <button class="btn-texto" data-vista-equipe="biblioteca">${ico('caret-left')}Biblioteca</button>
+      <button class="btn-texto" data-vista-equipe="${volta}">${ico('caret-left')}${volta === 'pasta' ? 'Pasta' : 'Biblioteca'}</button>
       <h2>Legenda · ${esc(m.titulo)}</h2>
     </div>
     <div class="leg-player"><div class="video-yt" id="leg-video"></div><div id="leg-aviso"></div></div>
@@ -7359,7 +7634,7 @@ async function abrirSessao() {
     if (perfil.privacidade_versao !== PRIVACIDADE_VERSAO) await pedirAceitePrivacidade();
     if (perfil.trocar_senha) avisar('Senha criada. Use ela das próximas vezes.');
     if (perfil.papel === 'aluno') { await carregarAluno(perfil); mostrarTela('aluno'); vistaAluno('agenda'); }
-    else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('hoje'); }
+    else { await carregarEquipe(perfil); mostrarTela('equipe'); vistaEquipe('pastas'); }
     conferirVideos(perfil);
     hidratar();
     iniciarPush(perfil);

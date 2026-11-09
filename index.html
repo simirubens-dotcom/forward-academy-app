@@ -1327,6 +1327,10 @@ button.aviso:focus-visible{outline-offset:-3px}
 .card-eq .card-acoes .btn{padding:8px 10px;font-size:11.5px;letter-spacing:.05em}
 .card-eq .aviso-aparelho{margin:0;font-size:13px}
 .trilha.nivel-capas{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr));overflow-x:visible}
+.card-eq[data-canal] .card-titulo{overflow-wrap:anywhere}
+.canal-porque{font-size:12.5px;color:var(--fg-2);overflow-wrap:anywhere}
+a.card[data-canal-sugerido]{text-decoration:none}
+[data-canal-sugerido] .card-titulo{overflow-wrap:anywhere}
 .pasta-paginas{margin-top:44px}
 .pasta-paginas>.secao-topo{margin-bottom:6px}
 .pasta-pagina{margin-top:26px}
@@ -1769,6 +1773,21 @@ function capaMaterial(m) {
   return `<div class="capa-tipo ${esc(CORES_CAPA.includes(m.capa) ? m.capa : m.tipo)}"><small>${esc(NOME_TIPO[m.tipo] || '')}${m.nivel ? `, nível ${esc(m.nivel)}` : ''}</small><b>${esc(m.titulo)}</b></div>`;
 }
 
+/* canal sugerido: a mesma regra de link do banco */
+const LINK_CANAL = /^https:\/\/(www|m)\.youtube\.com\/(@[A-Za-z0-9._%-]{1,100}|channel\/UC[A-Za-z0-9_-]{22}|(c|user)\/[A-Za-z0-9._%-]{1,100})\/?$/;
+const ehLinkCanal = url => LINK_CANAL.test(String(url || ''));
+// link colado do YouTube: ganha https://, youtube.com vira www.youtube.com e saem consulta, âncora e o que vem depois do canal
+function normalizarLinkCanal(texto) {
+  let s = String(texto || '').trim().replace(/[?#][\s\S]*$/, '');
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(s)) s = `https://${s}`;
+  const m = s.match(/^([a-z][a-z0-9+.-]*:\/\/)([^/]*)(.*)$/i);
+  if (!m) return s;
+  const dominio = m[2].toLowerCase() === 'youtube.com' ? 'www.youtube.com' : m[2].toLowerCase();
+  const canal = m[3].match(/^\/(@[^/]+|(?:channel|c|user)\/[^/]+)/);
+  return m[1].toLowerCase() + dominio + (canal ? `/${canal[1]}` : m[3]);
+}
+const capaCanal = c => `<div class="capa-tipo marinho"><small>Canal do YouTube${c.nivel ? `, nível ${esc(c.nivel)}` : ''}</small><b>${esc(c.nome)}</b></div>`;
+
 // camada obrigatória (troca da senha provisória) não fecha por Esc nem por clique fora
 let camadaObrigatoria = false;
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !$('#fundo').hidden && !camadaObrigatoria) fecharCamadas(); });
@@ -2124,6 +2143,20 @@ function erroContato(e, status) {
   return traduzirErro(e);
 }
 const CONTATO_SEM_EFEITO = 'Nada mudou: o contato não existe mais ou você não tem permissão.';
+// recusa de canal sugerido: o banco diz no texto qual regra falhou
+const CANAL_LINK_ERRO = 'Cole o link da página do canal no YouTube, como https://www.youtube.com/@bbclearningenglish. Link de vídeo ou de outro site não serve.';
+const CANAL_SEM_EFEITO = 'Nada mudou: o canal já tinha saído ou só quem o cadastrou e o admin podem mudá-lo.';
+function erroCanal(e) {
+  const m = String(e?.message || '');
+  if (e?.code === '23514' && /canais_url_check/.test(m)) return CANAL_LINK_ERRO;
+  if (e?.code === '23514' && /canais_nome_check/.test(m)) return 'O nome do canal precisa ter de 1 a 160 caracteres.';
+  if (e?.code === '23514' && /canais_porque_check/.test(m)) return 'A frase do porquê precisa ter de 1 a 500 caracteres.';
+  if (e?.code === '23514' && /canais_nivel_check/.test(m)) return 'Escolha um nível de A1 a C2, ou “Sem nível”.';
+  if (e?.code === '23514') return 'O banco recusou este canal. Confira os campos.';
+  if (e?.code === '23502') return 'Preencha o link do canal, o nome e a frase do porquê.';
+  if (e?.code === '42501') return 'Sem permissão: só quem cadastrou o canal e o admin podem mudá-lo.';
+  return traduzirErro(e);
+}
 // recusa da inscrição de aviso no celular; o endereço repetido a tela resolve
 function erroPush(e) {
   if (e?.code === '23514') return 'Este navegador não recebe avisos do app.';
@@ -2310,6 +2343,25 @@ const db = {
     const { signedUrl } = ok(await sb.storage.from('materiais').createSignedUrl(caminho, 3600));
     this._urls.set(caminho, { url: signedUrl, expira: Date.now() + 3600 * 1000 });
     return signedUrl;
+  },
+
+  /* ---------- canais sugeridos: todo papel ativo lê todos; muda e apaga quem cadastrou ou o admin ---------- */
+  async canais() { return ok(await sb.from('canais').select('id, url, nome, nivel, porque, criado_por').order('nome')); },
+  async criarCanal(linha) {
+    const { data, error } = await sb.from('canais').insert(linha).select('id').single();
+    if (error) throw new Error(erroCanal(error));
+    return data;
+  },
+  // sem permissão a API responde 200 com a lista vazia
+  async editarCanal(id, campos) {
+    const { data, error } = await sb.from('canais').update(campos).eq('id', id).select('id');
+    if (error) throw new Error(erroCanal(error));
+    if (!data.length) throw new Error(CANAL_SEM_EFEITO);
+  },
+  async apagarCanal(id) {
+    const { data, error } = await sb.from('canais').delete().eq('id', id).select('id');
+    if (error) throw new Error(erroCanal(error));
+    if (!data.length) throw new Error(CANAL_SEM_EFEITO);
   },
 
   /* ---------- cursos: a equipe lê todos; muda e apaga quem criou o curso ou o admin ---------- */
@@ -3688,16 +3740,17 @@ async function abrirAnexo(c) {
 </script>
 <script>
 /* área do aluno com dado real: agenda, lições, biblioteca e estudo */
-const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), posicoes: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [], paginas: [], pagina: 'forward' };
+const al = { perfil: null, professor: null, aulas: [], tarefas: [], fileiras: [], midias: [], matriculas: [], cursos: [], meus: new Set(), vistos: new Map(), posicoes: new Map(), mes: null, licaoSel: null, listaLicoes: true, busca: '', nivel: null, vocab: [], paginas: [], pagina: 'forward', canais: [] };
 const VISTAS_ALUNO = ['agenda', 'biblioteca', 'licoes', 'estudo'];
 
 async function carregarAluno(perfil) {
   al.perfil = perfil;
   const hoje = new Date(); al.mes = al.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes, paginas] = await Promise.all([
-    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(), db.paginas(perfil.id), carregarAparelho(),
+  const [aulas, tarefas, fileiras, midias, meus, professor, vistos, matriculas, cursos, posicoes, paginas, canais] = await Promise.all([
+    db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.meuProfessor(), db.vistos(perfil.id), db.matriculas(), db.cursosPublicados(), db.posicoes(), db.paginas(perfil.id),
+    db.canais().catch(e => { console.warn('canais', e); return []; }), carregarAparelho(),
   ]);
-  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, paginas, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
+  Object.assign(al, { aulas, tarefas, fileiras, midias, professor, matriculas, cursos, paginas, canais, meus: new Set(meus.map(x => x.midia_id)), vistos: new Map(vistos.map(x => [x.midia_id, x.visto_em])), posicoes: new Map(posicoes.map(p => [p.midia_id, { posicao_s: Number(p.posicao_s), duracao_s: p.duracao_s == null ? null : Number(p.duracao_s) }])) });
   al.pagina = paginaGuardada();
   renderAluno();
   iniciarSino($('#tela-aluno .app-acoes'), levarAlunoAoAviso);
@@ -4096,6 +4149,16 @@ function fileiraCursos(cursos) {
   if (!cursos.length) return '';
   return `<section class="fileira"><div class="fileira-topo"><h3>Cursos da Forward</h3><span>${cursos.length} ${cursos.length === 1 ? 'curso' : 'cursos'}</span></div><div class="trilha">${cursos.map(cardCurso).join('')}</div></section>`;
 }
+/* canais sugeridos pela escola: a capa abre o canal no YouTube, fora do app */
+function cardCanalAluno(c) {
+  const corpo = `<span class="card-capa">${capaCanal(c)}</span><span class="card-titulo" data-canal-nome>${esc(c.nome)}</span><span class="canal-porque" data-canal-porque>${esc(c.porque)}</span>`;
+  const marca = `class="card" data-canal-sugerido="${esc(c.id)}" data-canal-nivel="${esc(c.nivel || '')}"`;
+  return ehLinkCanal(c.url) ? `<a ${marca} href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${corpo}</a>` : `<div ${marca}>${corpo}</div>`;
+}
+function fileiraCanais(canais) {
+  if (!canais.length) return '';
+  return `<section class="fileira" data-fileira-canais aria-labelledby="fileira-canais"><div class="fileira-topo"><h3 id="fileira-canais">Canais sugeridos pela Forward</h3><span>${canais.length} ${canais.length === 1 ? 'canal' : 'canais'}</span></div><div class="trilha">${canais.map(cardCanalAluno).join('')}</div></section>`;
+}
 async function abrirCursoAluno(id) {
   const c = al.cursos.find(x => x.id === id); if (!c) return;
   const meu = al.matriculas.some(m => m.cursos?.id === c.id);
@@ -4122,10 +4185,12 @@ function renderBibliotecaAluno() {
   const passa = m => (!al.nivel || m.nivel === al.nivel) && (!q || m.titulo.toLowerCase().includes(q) || (m.fonte || '').toLowerCase().includes(q));
   const lista = escola.filter(passa);
   const paraMim = lista.filter(m => al.meus.has(m.id));
+  const canais = paginaCanais() ? [] : al.canais;
   const blocos = fileiraHtml(`Do ${primeiroNome(al.professor?.nome) || 'professor'} para você`, paraMim)
+    + fileiraCanais(canais.filter(c => (!al.nivel || c.nivel === al.nivel) && (!q || c.nome.toLowerCase().includes(q))))
     + fileiraCursos(al.cursos.filter(passa))
     + al.fileiras.map(f => fileiraHtml(f.titulo, lista.filter(m => m.fileira_id === f.id && !al.meus.has(m.id)))).join('');
-  $('#bib-conteudo').innerHTML = blocos || (escola.length || al.cursos.length
+  $('#bib-conteudo').innerHTML = blocos || (escola.length || al.cursos.length || canais.length
     ? `<div class="vazio">${ico('magnifying-glass')}<b>Nada encontrado</b><span>Tente outro termo ou limpe o filtro de nível.</span></div>`
     : `<div class="vazio">${ico('books')}<b>A biblioteca ainda está vazia</b><span>Os materiais que o Pedro puser aparecem aqui.</span></div>`);
   renderPaginasAluno();
@@ -4471,6 +4536,8 @@ $('#modal').addEventListener('submit', ev => {
 const FORWARD = 'forward';
 const CHAVE_PAGINA = 'forward-bib-pagina:';
 const idsPaginas = () => [FORWARD, ...al.paginas.map(p => p.id)];
+// a fileira dos canais vai para a primeira página "YouTube"; sem ela, fica na Forward
+const paginaCanais = () => al.paginas.find(p => p.titulo === 'YouTube');
 
 function paginaGuardada() {
   let id = null;
@@ -4508,7 +4575,7 @@ function renderPagina() {
   box.hidden = !p;
   if (!p) { box.innerHTML = ''; return; }
   box.setAttribute('aria-labelledby', `aba-${p.id}`);
-  box.innerHTML = topoPagina(p) + (p.secoes.length ? p.secoes.map(secaoHtml).join('')
+  box.innerHTML = topoPagina(p) + (p === paginaCanais() ? fileiraCanais(al.canais) : '') + (p.secoes.length ? p.secoes.map(secaoHtml).join('')
     : `<div class="vazio">${ico('books')}<b>Esta página ainda não tem fileiras</b></div>`);
 }
 function renderPaginasAluno() {
@@ -4554,7 +4621,7 @@ function novaPagina() {
   pedirNome('Nova página', 'Nome da página', async nome => {
     const p = await db.criarPagina(nome, al.paginas.reduce((n, x) => Math.max(n, x.ordem + 1), 0));
     al.paginas.push(p);
-    renderPaginasAluno();
+    renderBibliotecaAluno();
     abrirPagina(p.id);
   });
 }
@@ -4570,14 +4637,14 @@ async function umaVez(fazer) {
 }
 async function recarregarPaginas() {
   try { al.paginas = await db.paginas(al.perfil.id); } catch (e) { console.warn('páginas', e); }
-  renderPaginasAluno();
+  renderBibliotecaAluno();
 }
 function renomear(tabela, alvo) {
   const pagina = tabela === 'paginas';
   pedirNome(pagina ? 'Renomear página' : 'Renomear fileira', pagina ? 'Nome da página' : 'Nome da fileira', async nome => {
     await db.mudarNaPagina(tabela, alvo.id, { titulo: nome });
     alvo.titulo = nome;
-    renderPaginasAluno();
+    renderBibliotecaAluno();
   }, alvo.titulo);
 }
 function novaFileira(p) {
@@ -4633,7 +4700,7 @@ async function apagarPagina(p) {
   al.pagina = ids[ids.indexOf(p.id) - 1];
   guardarPagina(al.pagina);
   al.paginas = al.paginas.filter(x => x !== p);
-  renderPaginasAluno();
+  renderBibliotecaAluno();
   mostrarAbaAtual();
 }
 async function apagarFileira(s) {
@@ -5712,7 +5779,7 @@ $('#tela-aluno').addEventListener('submit', ev => {
 </script>
 <script>
 /* painel da equipe (admin e professor) com dado real */
-const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], cursos: [], mes: null, filtroLicao: 'entregue', contatos: [], filtroContato: 'todos', pedidoContatos: 0 };
+const eq = { perfil: null, pessoas: [], aulas: [], tarefas: [], fileiras: [], midias: [], midiaAlunos: [], cursos: [], canais: [], mes: null, filtroLicao: 'entregue', contatos: [], filtroContato: 'todos', pedidoContatos: 0 };
 const VISTAS_EQUIPE = ['pastas', 'hoje', 'alunos', 'pasta', 'agenda', 'licoes', 'biblioteca', 'cursos', 'curso', 'aplicar', 'legenda', 'estudo', 'contatos'];
 const ehAdmin = () => eq.perfil?.papel === 'admin';
 const alunos = () => eq.pessoas.filter(p => p.papel === 'aluno');
@@ -5727,17 +5794,17 @@ const opcoesNivel = sel => `<option value="">Sem nível</option>` + NIVEIS.map(n
 async function carregarEquipe(perfil) {
   eq.perfil = perfil;
   const hoje = new Date(); eq.mes = eq.mes || new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const [pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos] = await Promise.all([
-    db.pessoas(), db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.cursos(),
+  const [pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos, canais] = await Promise.all([
+    db.pessoas(), db.aulas(), db.tarefas(), db.fileiras(), db.midias(), db.midiaAlunos(), db.cursos(), db.canais(),
   ]);
-  Object.assign(eq, { pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos });
+  Object.assign(eq, { pessoas, aulas, tarefas, fileiras, midias, midiaAlunos, cursos, canais });
   $('#tela-equipe [data-vista-equipe="contatos"]').hidden = !ehAdmin();
   renderEquipe();
   iniciarSino($('#tela-equipe .app-acoes'), levarEquipeAoAviso);
   iniciarGoogle();
 }
 async function recarregar(...quais) {
-  const fontes = { pessoas: db.pessoas, aulas: db.aulas, tarefas: db.tarefas, midias: db.midias, midiaAlunos: db.midiaAlunos, cursos: db.cursos };
+  const fontes = { pessoas: db.pessoas, aulas: db.aulas, tarefas: db.tarefas, midias: db.midias, midiaAlunos: db.midiaAlunos, cursos: db.cursos, canais: db.canais };
   const dados = await Promise.all(quais.map(q => fontes[q].call(db)));
   quais.forEach((q, i) => { eq[q] = dados[i]; });
   renderEquipe();
@@ -6552,9 +6619,11 @@ function renderBibliotecaEquipe() {
   if (!n) {
     box.innerHTML = `<div class="estudo-topo"><button class="btn-texto" data-vista-equipe="pastas">${ico('caret-left')}Pastas</button></div>
       <div class="secao-topo"><h2>Biblioteca da escola</h2></div>
-      <ul class="pastas" id="nivel-pastas">${SUBPASTAS.map(x => `<li><button class="pasta" data-nivel-pasta="${x}" style="--cor:var(--bege)"><b class="pasta-nome">${nomeNivel(x)}</b><span class="pasta-conta">${contagem(doNivel(x).length, 'material', 'materiais')}</span></button></li>`).join('')}</ul>`;
+      <ul class="pastas" id="nivel-pastas">${SUBPASTAS.map(x => `<li><button class="pasta" data-nivel-pasta="${x}" style="--cor:var(--bege)"><b class="pasta-nome">${nomeNivel(x)}</b><span class="pasta-conta">${contagem(doNivel(x).length, 'material', 'materiais')}</span></button></li>`).join('')}
+        <li><button class="pasta" data-pasta-canais style="--cor:var(--marinho)"><b class="pasta-nome">Canais sugeridos</b><span class="pasta-conta">${contagem(eq.canais.length, 'canal', 'canais')}</span></button></li></ul>`;
     return;
   }
+  if (n === 'canais') return desenharCanais(box);
   const itens = doNivel(n);
   box.innerHTML = `<div class="estudo-topo"><button class="btn-texto" data-nivel-pasta="">${ico('caret-left')}Biblioteca da escola</button></div>
     <div class="secao-topo"><h2>${nomeNivel(n)}</h2><span class="ajuda">${contagem(itens.length, 'material', 'materiais')}</span></div>
@@ -6568,6 +6637,62 @@ function cardNivel(m) {
     <span class="para-quem">${esc(paraQuem(m))}</span>${estadoVideo(m)}
     <span class="card-acoes">${acoesMaterial(m)}</span>
   </article>`;
+}
+
+/* ---------- Biblioteca da escola › Canais sugeridos ---------- */
+function desenharCanais(box) {
+  box.innerHTML = `<div class="estudo-topo"><button class="btn-texto" data-nivel-pasta="">${ico('caret-left')}Biblioteca da escola</button></div>
+    <div class="secao-topo"><h2>Canais sugeridos</h2><span class="ajuda">${contagem(eq.canais.length, 'canal', 'canais')}</span></div>
+    <div class="trilha nivel-capas" data-canais><button class="card card-criar" data-canal-criar aria-haspopup="dialog"><span class="criar-mais" aria-hidden="true">+</span>Criar</button>${eq.canais.map(cardCanal).join('')}</div>`;
+}
+function cardCanal(c) {
+  const n = esc(c.nome);
+  const mudar = ehAdmin() || c.criado_por === eq.perfil.id
+    ? `<span class="card-acoes" data-canal-acoes><button class="btn btn-linha" data-editar-canal="${c.id}" aria-label="Editar ${n}">Editar</button><button class="btn btn-linha" data-excluir-canal="${c.id}" aria-label="Excluir ${n}">Excluir</button></span>` : '';
+  return `<article class="card card-eq" data-canal="${c.id}">
+    <span class="card-capa">${capaCanal(c)}</span>
+    <span class="card-titulo" data-canal-nome>${n}</span>
+    <span class="card-meta" data-canal-nivel>${ico('youtube-logo')}${esc(c.nivel || 'Sem nível')}</span>
+    <span class="canal-porque" data-canal-porque>${esc(c.porque)}</span>${mudar}
+  </article>`;
+}
+function formCanal(id) {
+  const c = id ? eq.canais.find(x => x.id === id) : null;
+  if (id && !c) return;
+  const rotulo = c ? 'Salvar' : 'Cadastrar canal';
+  const g = gavetaForm('Canais sugeridos', c ? 'Editar canal' : 'Novo canal', `
+    <form class="form-gaveta" data-canal-form novalidate>
+      <div class="campo"><label for="ca-url">Link do canal</label><input id="ca-url" data-canal-campo="url" type="url" inputmode="url" autocomplete="off" value="${esc(c?.url || '')}" placeholder="https://www.youtube.com/@canal" data-foco><span class="ajuda">O link da página do canal no YouTube, não o de um vídeo.</span></div>
+      <div class="campo"><label for="ca-nome">Nome</label><input id="ca-nome" data-canal-campo="nome" autocomplete="off" maxlength="160" value="${esc(c?.nome || '')}"></div>
+      <div class="campo"><label for="ca-nivel">Nível</label><select id="ca-nivel" data-canal-campo="nivel">${opcoesNivel(c?.nivel)}</select></div>
+      <div class="campo"><label for="ca-porque">Por que este canal</label><textarea id="ca-porque" data-canal-campo="porque" maxlength="500" style="min-height:80px">${esc(c?.porque || '')}</textarea><span class="ajuda">Uma frase para o aluno: o que ele encontra no canal.</span></div>
+      <span class="erro-msg" id="ca-erro" data-canal-erro role="alert"></span>
+    </form>`, [`<button class="btn btn-primario btn-g" id="ca-salvar" data-canal-salvar>${rotulo}</button>`]);
+  $('#ca-salvar', g).addEventListener('click', async () => {
+    const url = normalizarLinkCanal($('#ca-url', g).value), nome = $('#ca-nome', g).value.trim(), porque = $('#ca-porque', g).value.trim();
+    const nivel = NIVEIS.includes($('#ca-nivel', g).value) ? $('#ca-nivel', g).value : null;
+    const erro = !ehLinkCanal(url) ? CANAL_LINK_ERRO
+      : !nome ? 'Escreva o nome do canal.' : nome.length > 160 ? 'O nome do canal tem no máximo 160 caracteres.'
+      : !porque ? 'Escreva a frase do porquê: o que o aluno encontra no canal.' : porque.length > 500 ? 'A frase do porquê tem no máximo 500 caracteres.' : '';
+    $('#ca-erro', g).textContent = erro; if (erro) return;
+    const b = $('#ca-salvar', g); b.disabled = true; b.textContent = 'Salvando…';
+    try {
+      await (c ? db.editarCanal(c.id, { url, nome, nivel, porque }) : db.criarCanal({ url, nome, nivel, porque }));
+    } catch (e) {
+      console.warn(e);
+      $('#ca-erro', g).textContent = e.message || 'Não deu para salvar o canal. Tente de novo.';
+      b.disabled = false; b.textContent = rotulo;
+      return;
+    }
+    fecharCamadas();
+    avisar(c ? 'Canal salvo.' : 'Canal nos canais sugeridos.');
+    recarregar('canais');
+  });
+}
+async function excluirCanal(id) {
+  const c = eq.canais.find(x => x.id === id); if (!c) return;
+  if (!confirm(`Tirar “${c.nome}” dos canais sugeridos? Os alunos deixam de ver este canal.`)) return;
+  if (await tentar(() => db.apagarCanal(id), 'Canal removido.')) recarregar('canais');
 }
 
 document.addEventListener('click', ev => {
@@ -6601,6 +6726,10 @@ document.addEventListener('click', ev => {
     renderBibliotecaEquipe();
     return vistaEquipe('biblioteca');
   }
+  if (ds.pastaCanais !== undefined) { biblio.nivel = 'canais'; renderBibliotecaEquipe(); return vistaEquipe('biblioteca'); }
+  if (ds.canalCriar !== undefined) return formCanal(null);
+  if (ds.editarCanal) return formCanal(ds.editarCanal);
+  if (ds.excluirCanal) return excluirCanal(ds.excluirCanal);
   if (ds.nivelCriar && biblio.nivel) return menuCriar(`Criar · ${nomeNivel(biblio.nivel)}`, 'nivel-criar-menu', 'data-nivel-criar-tipo');
   if (ds.nivelCriarTipo) {
     const nivel = biblio.nivel === 'sem' ? null : biblio.nivel;

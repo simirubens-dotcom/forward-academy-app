@@ -1833,7 +1833,9 @@ function montarPlayer(caixa, motor) {
 function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = false, tocar = false, semCC = false } = {}) {
   const alvo = document.createElement('div');
   caixa.replaceChildren(alvo);
-  let yt = null, pronto = false, comecou = false, ccVisto = !semCC;
+  let yt = null, pronto = false, comecou = false, tocou = false;
+  // o YouTube religa a CC quando recarrega o módulo de legendas (também no fim do anúncio); o toque do aluno no botão CC não dispara onApiChange
+  const desligarCC = () => { if (semCC && yt.getOptions().includes('captions')) yt.setOption('captions', 'track', {}); };
   const motor = {
     tipo: 'youtube',
     pronto: () => pronto,
@@ -1859,10 +1861,13 @@ function playerYoutube(caixa, idVideo, { aoErro, inicio = 0, semTelaCheia = fals
       events: {
         onReady: () => { pronto = true; resolve(ctl); },
         onError: ev => { const msg = mensagemDoPlayer(ev.data); deuErro(msg); if (aoErro) aoErro(ev.data, msg); },
-        onStateChange: ev => { if (ev.data === 1 || ev.data === 2) comecou = true; mudouEstado(ESTADO_YT[ev.data] || 'parado'); },
+        onStateChange: ev => {
+          if (ev.data === 1 && !tocou) { tocou = true; desligarCC(); }
+          if (ev.data === 1 || ev.data === 2) comecou = true;
+          mudouEstado(ESTADO_YT[ev.data] || 'parado');
+        },
         onPlaybackRateChange: ev => mudouTaxa(ev.data),
-        // só a 1ª carga do módulo de legendas: depois o botão CC do player volta a ser do aluno
-        onApiChange: () => { if (!ccVisto && yt.getOptions().includes('captions')) { ccVisto = true; yt.setOption('captions', 'track', {}); } },
+        onApiChange: desligarCC,
       },
     });
   }));
